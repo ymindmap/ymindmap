@@ -1,4 +1,6 @@
 {
-  "extends": "@repo/typescript-config/vite.json",
-  "include": ["src"]
+  "extends": "@mimindmap/typescript-config/vite.json",
+  "include": [
+    "src"
+  ]
 }

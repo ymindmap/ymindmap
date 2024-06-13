@@ -1,5 +1,9 @@
 {
-  "extends": "@repo/typescript-config/base.json",
-  "include": ["."],
-  "exclude": ["node_modules"]
+  "extends": "@mimindmap/typescript-config/base.json",
+  "include": [
+    "."
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

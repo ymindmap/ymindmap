@@ -8,7 +8,7 @@ importers:
 
   .:
     devDependencies:
-      '@repo/eslint-config':
+      '@mimindmap/eslint-config':
         specifier: workspace:*
         version: link:packages/config-eslint
       eslint:
@@ -23,14 +23,14 @@ importers:
 
   apps/docs:
     dependencies:
-      '@repo/ui':
+      '@mimindmap/ui':
         specifier: workspace:*
         version: link:../../packages/ui
     devDependencies:
-      '@repo/eslint-config':
+      '@mimindmap/eslint-config':
         specifier: workspace:*
         version: link:../../packages/config-eslint
-      '@repo/typescript-config':
+      '@mimindmap/typescript-config':
         specifier: workspace:*
         version: link:../../packages/config-typescript
       eslint:
@@ -45,14 +45,14 @@ importers:
 
   apps/web:
     dependencies:
-      '@repo/ui':
+      '@mimindmap/ui':
         specifier: workspace:*
         version: link:../../packages/ui
     devDependencies:
-      '@repo/eslint-config':
+      '@mimindmap/eslint-config':
         specifier: workspace:*
         version: link:../../packages/config-eslint
-      '@repo/typescript-config':
+      '@mimindmap/typescript-config':
         specifier: workspace:*
         version: link:../../packages/config-typescript
       eslint:
@@ -81,10 +81,10 @@ importers:
 
   packages/ui:
     devDependencies:
-      '@repo/eslint-config':
+      '@mimindmap/eslint-config':
         specifier: workspace:*
         version: link:../config-eslint
-      '@repo/typescript-config':
+      '@mimindmap/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
       eslint:
