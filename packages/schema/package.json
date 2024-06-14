@@ -1,9 +1,7 @@
 {
-  "name": "@mimindmap/ui",
+  "name": "@mimindmap/schema",
   "version": "0.0.0",
-  "exports": {
-    ".": "./index.ts"
-  },
+  "exports": {},
   "license": "MIT",
   "scripts": {
     "lint": "eslint \"**/*.ts\""
@@ -13,5 +11,8 @@
     "@mimindmap/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
     "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "immer": "^10.1.1"
   }
 }
