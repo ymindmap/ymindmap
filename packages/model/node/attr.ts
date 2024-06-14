@@ -7,5 +7,5 @@ export interface IAttrs {
 }
 
 export interface IAttrSpec {
-    default?: string;
+    default?: string | (() => string);
 }

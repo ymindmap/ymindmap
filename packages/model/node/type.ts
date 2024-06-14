@@ -24,7 +24,12 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                 if (!_attrs[key]) {
                     const attrSpec = this.spec.attrs || {};
                     if (attrSpec[key] && typeof attrSpec[key].default !== 'undefined') {
-                        _attrs[key] = attrSpec[key].default as string;
+                        const defaultVal = attrSpec[key].default;
+                        if (typeof defaultVal === 'function') {
+                            _attrs[key]  = defaultVal();
+                        } else {
+                            _attrs[key]  = defaultVal as string;
+                        }
                     }
                 }
                 return attrs;
