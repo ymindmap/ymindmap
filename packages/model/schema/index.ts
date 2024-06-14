@@ -1,4 +1,10 @@
-import { NodeType } from '../node'
+import { XmlElement } from 'yjs'
+import {
+    NodeType,
+    Node,
+    IAttrs,
+    INodeContent
+} from '../node'
 
 export interface ISchemaSpec {
     nodes: {
@@ -18,11 +24,7 @@ export class Schema {
             })
         };
 
-        const nodes = Object.keys(this.spec.nodes).reduce((list, key) => {
-            list.push(this.spec.nodes[key]);
-            return list;
-        }, [this.topNodeType])
-        nodes.forEach((node) => this.registerNode(node));
+        this.allNodes.forEach((node) => this.registerNode(node));
     }
 
     private registerNode(node: NodeType) {
@@ -36,5 +38,26 @@ export class Schema {
 
     get nodes(): { [key: string]: NodeType } {
         return this.spec.nodes;
+    }
+    
+    private get allNodes() {
+        return Object.keys(this.spec.nodes).reduce<NodeType[]>((list, key) => {
+            list.push(this.spec.nodes[key]);
+            return list;
+        }, [this.topNodeType])
+    }
+
+    /** parseNode from xmlElement */
+    parseNode(xml: XmlElement): Node | null {
+        const nodeName = xml.nodeName;
+        const nodeType = this.nodes[nodeName];
+        if (nodeType) return nodeType.parse(xml);
+        return null;
+    }
+
+    /** createNode */
+    createNode(type: string | NodeType, attrs: IAttrs, content: INodeContent) {
+        const nodeType = typeof type ==='string'? this.spec.nodes[type] : type;
+        return nodeType.create(attrs, content)
     }
 }
