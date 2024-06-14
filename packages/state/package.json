@@ -1,7 +1,9 @@
 {
   "name": "@ymindmap/state",
   "version": "0.0.0",
-  "exports": {},
+  "exports": {
+    ".": "./index.ts"
+  },
   "license": "MIT",
   "scripts": {
     "lint": "eslint \"**/*.ts\""
@@ -13,6 +15,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@ymindmap/model": "workspace:*",
     "immer": "^10.1.1"
   }
 }
