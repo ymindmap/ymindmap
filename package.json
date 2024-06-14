@@ -7,7 +7,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@mimindmap/eslint-config": "workspace:*",
+    "@ymindmap/eslint-config": "workspace:*",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
     "turbo": "latest"

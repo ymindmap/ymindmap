@@ -1,5 +1,5 @@
 {
-  "name": "@mimindmap/eslint-config",
+  "name": "@ymindmap/eslint-config",
   "version": "0.0.0",
   "main": "index.js",
   "license": "MIT",

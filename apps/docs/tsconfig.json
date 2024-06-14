@@ -1,5 +1,5 @@
 {
-  "extends": "@mimindmap/typescript-config/vite.json",
+  "extends": "@ymindmap/typescript-config/vite.json",
   "include": [
     "src"
   ]

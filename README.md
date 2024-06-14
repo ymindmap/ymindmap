@@ -18,9 +18,9 @@ This Turborepo includes the following packages and apps:
 
 - `docs`: a vanilla [vite](https://vitejs.dev) ts app
 - `web`: another vanilla [vite](https://vitejs.dev) ts app
-- `@mimindmap/ui`: a stub component & utility library shared by both `web` and `docs` applications
-- `@mimindmap/eslint-config`: shared `eslint` configurations
-- `@mimindmap/typescript-config`: `tsconfig.json`s used throughout the monorepo
+- `@ymindmap/ui`: a stub component & utility library shared by both `web` and `docs` applications
+- `@ymindmap/eslint-config`: shared `eslint` configurations
+- `@ymindmap/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
 Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
 

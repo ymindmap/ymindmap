@@ -1,5 +1,5 @@
 {
-  "name": "@mimindmap/schema",
+  "name": "@ymindmap/schema",
   "version": "0.0.0",
   "exports": {},
   "license": "MIT",
@@ -7,8 +7,8 @@
     "lint": "eslint \"**/*.ts\""
   },
   "devDependencies": {
-    "@mimindmap/eslint-config": "workspace:*",
-    "@mimindmap/typescript-config": "workspace:*",
+    "@ymindmap/eslint-config": "workspace:*",
+    "@ymindmap/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
     "typescript": "^5.3.3"
   },
