@@ -1,16 +1,19 @@
 import { Node } from './node';
 import { NodeSpec } from './spec';
-import type { IAttrs } from './attr';
+import { Schema } from '../schema'
+import { IAttrs } from './attr';
 export class NodeType<T extends NodeSpec = NodeSpec> {
     name: string;
-
-    // schema?: any;
-
+    schema: Schema | null = null;
     spec: T;
 
     constructor(name: string, spec: T) {
         this.name = name;
         this.spec = spec;
+    }
+
+    setSchema(schema: Schema): void {
+        this.schema = schema;
     }
 
     create(attrs: IAttrs): Node {
@@ -26,5 +29,9 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                 return attrs;
             }, { ...attrs });
         return new Node(this, nodeAttrs);
+    }
+
+    static createNode<T extends NodeSpec = NodeSpec>(options: { name: string } & T) {
+        return new NodeType<T>(options.name, options);
     }
 }

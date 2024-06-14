@@ -1,15 +1,15 @@
 import { Node } from './node';
 import { IAttrSpec } from './attr';
-export abstract class NodeSpec<T = Node, G = { [key: string]: IAttrSpec }, K = unknown> {
+export interface NodeSpec<T = Node, G = { [key: string]: IAttrSpec }, K = unknown> {
     content?: string;
 
     group?: string;
 
     attrs?: G;
 
-    selectable?: boolean = false;
+    selectable?: boolean;
 
-    draggable?: boolean = false;
+    draggable?: boolean;
 
-    toFabric: (node: T) => K;
+    toFabric?: (node: T) => K;
 }
