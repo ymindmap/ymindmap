@@ -1,11 +1,10 @@
 import { State, StateConfig } from '@ymindmap/state'
 import { fabric } from 'fabric'
 import { theme as defaultTheme } from '@ymindmap/view'
-import { schema as defaultSchema } from './schema';
 
 import { yjs2string, string2Yjs } from './bridge'
 
-import type { Schema, Theme } from '@ymindmap/model'
+import type { Theme } from '@ymindmap/model'
 
 export type Options = {
     data: string | Uint8Array;
@@ -24,8 +23,6 @@ export class Mindmap {
     canvas: fabric.Canvas;
 
     state: State;
-
-    schema: Schema;
 
     constructor(options: Options) {
         const { data, theme, themeList } = options;
