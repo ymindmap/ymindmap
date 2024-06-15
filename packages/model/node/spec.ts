@@ -1,10 +1,8 @@
 import { Node } from './node';
-import { IAttrSpec, IAttrs } from './attr';
+import type { IAttrSpec, IAttrs } from './attr.d';
 import type { fabric } from 'fabric'
 
-export interface NodeSpec<
-    K extends IAttrs = IAttrs
-> {
+export interface NodeSpec<K extends IAttrs = any> {
     content?: string;
 
     group?: string;
@@ -17,5 +15,5 @@ export interface NodeSpec<
 
     draggable?: boolean;
 
-    toFabric?: (node: Node) => fabric.Object;
+    toFabric?: (node: Node<K>, storage: Map<string, any>) => fabric.Object;
 }

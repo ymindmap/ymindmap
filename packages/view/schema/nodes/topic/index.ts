@@ -8,7 +8,8 @@ export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
     attrs: {
         id: {
             default: nanoid,
-        }
+        },
+        parentId: {},
     },
 
     /**

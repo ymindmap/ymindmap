@@ -1,9 +1,9 @@
 import { Node, INodeContent } from './node';
 import { NodeSpec } from './spec';
 import { Schema } from '../schema'
-import { IAttrs } from './attr';
 import { XmlElement } from 'yjs';
-export class NodeType<T extends NodeSpec = NodeSpec> {
+import type { IAttrs } from './attr.d';
+export class NodeType<T extends NodeSpec = any> {
     name: string;
     schema: Schema | null = null;
     spec: T;
@@ -26,9 +26,9 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                     if (attrSpec[key] && typeof attrSpec[key].default !== 'undefined') {
                         const defaultVal = attrSpec[key].default;
                         if (typeof defaultVal === 'function') {
-                            _attrs[key]  = defaultVal();
+                            _attrs[key] = defaultVal();
                         } else {
-                            _attrs[key]  = defaultVal as string;
+                            _attrs[key] = defaultVal as string;
                         }
                     }
                 }
@@ -41,7 +41,7 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
         return Node.parseFromXml(this, xml);
     }
 
-    static createNode<T extends NodeSpec = NodeSpec>(options: { name: string } & T) {
+    static createNode<T extends NodeSpec>(options: { name: string } & T) {
         return new NodeType<T>(options.name, options);
     }
 }

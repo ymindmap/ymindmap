@@ -1,5 +1,6 @@
-import { IAttrs } from '@ymindmap/model';
+import type { IAttrs } from '@ymindmap/model';
 
 export interface ITopicNodeAttrs extends IAttrs {
-    text?: string;
+    id: string;
+    parentId?: string;
 }

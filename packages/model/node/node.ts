@@ -1,9 +1,9 @@
 import { XmlElement, XmlText } from 'yjs';
 import { NodeType } from './type';
 import { Schema } from '../schema';
-import type { IAttrs } from './attr';
+import type { IAttrs } from './attr.d';
 
-export type INodeContent = Array<XmlElement|XmlText|Node> | XmlElement | XmlText | null;
+export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | null;
 
 /**
  * 一个基础的node
