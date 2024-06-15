@@ -3,7 +3,7 @@
  * 基于yjs
  */
 export interface IAttrs {
-    [key: string]: string;
+    [key: string]: string | undefined;
 }
 
 export interface IAttrSpec {

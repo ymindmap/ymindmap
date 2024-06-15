@@ -9,7 +9,7 @@ export type INodeContent = Array<XmlElement|XmlText|Node> | XmlElement | XmlText
  * 一个基础的node
  * 作为定义转为yjs的代理
  */
-export class Node {
+export class Node<T extends IAttrs = {}> {
     type: NodeType;
     private xmlElement: XmlElement;
     constructor(
@@ -28,7 +28,7 @@ export class Node {
 
         this.xmlElement = new XmlElement(this.type.name);
         Object.keys(attrs).forEach(key => {
-            this.xmlElement.setAttribute(key, attrs[key]);
+            if (attrs[key]) this.xmlElement.setAttribute(key, attrs[key] as string);
         });
         if (content) {
             const list = Array.isArray(content) ? content : [content];
@@ -43,8 +43,8 @@ export class Node {
         return this.xmlElement;
     }
 
-    get attrs() {
-        return this.data.getAttributes();
+    get attributes(): T {
+        return this.data.getAttributes() as T;
     }
 
     static parseFromXml(schemaOrType: NodeType | Schema, xml: XmlElement): Node {

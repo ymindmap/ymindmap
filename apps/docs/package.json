@@ -9,9 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.ts\""
   },
-  "dependencies": {
-    "@ymindmap/ui": "workspace:*"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@ymindmap/eslint-config": "workspace:*",
     "@ymindmap/typescript-config": "workspace:*",

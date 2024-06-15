@@ -1,15 +1,21 @@
 import { Node } from './node';
-import { IAttrSpec } from './attr';
-export interface NodeSpec<T = Node, G = { [key: string]: IAttrSpec }, K = unknown> {
+import { IAttrSpec, IAttrs } from './attr';
+import type { fabric } from 'fabric'
+
+export interface NodeSpec<
+    K extends IAttrs = IAttrs
+> {
     content?: string;
 
     group?: string;
 
-    attrs?: G;
+    attrs?: {
+        [key in keyof K]: IAttrSpec
+    };
 
     selectable?: boolean;
 
     draggable?: boolean;
 
-    toFabric?: (node: T) => K;
+    toFabric?: (node: Node) => fabric.Object;
 }
