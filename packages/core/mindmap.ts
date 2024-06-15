@@ -8,7 +8,7 @@ import type { Theme } from '@ymindmap/model'
 
 export type Options = {
     data: string | Uint8Array;
-    theme: string;
+    theme?: string;
     themeList?: { [key: string]: Theme };
 } & Omit<StateConfig, 'doc' | 'activeClients'>
 

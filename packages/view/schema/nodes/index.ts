@@ -1,2 +1,2 @@
-export * from './doc'
+export * from './mindmap'
 export * from './topic'

@@ -3,8 +3,8 @@
  */
 import { NodeType } from '@ymindmap/model';
 
-export const doc = NodeType.createNode({
-    name: 'doc',
+export const mindmap = NodeType.createNode({
+    name: 'mindmap',
     attrs: {
         marginHeight: {
             default: '20'
@@ -30,4 +30,4 @@ export const doc = NodeType.createNode({
     },
 })
 
-export default doc;
+export default mindmap;

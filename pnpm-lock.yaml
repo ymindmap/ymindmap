@@ -26,6 +26,10 @@ importers:
         version: 2.0.3
 
   apps/docs:
+    dependencies:
+      '@ymindmap/core':
+        specifier: workspace:^
+        version: link:../../packages/core
     devDependencies:
       '@ymindmap/eslint-config':
         specifier: workspace:*

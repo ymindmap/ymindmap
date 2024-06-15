@@ -2,7 +2,13 @@
  * 处理数据和yjs的转换逻辑
  */
 import xmljs from 'xml-js';
-import { Doc, XmlElement, XmlFragment, XmlText, encodeStateVector } from 'yjs';
+import {
+    Doc,
+    XmlElement,
+    XmlFragment,
+    XmlText,
+    encodeStateAsUpdateV2
+} from 'yjs';
 
 /**
  * @see https://discuss.yjs.dev/t/how-to-convert-xml-string-to-y-xmlfragment/666/2
@@ -10,32 +16,33 @@ import { Doc, XmlElement, XmlFragment, XmlText, encodeStateVector } from 'yjs';
  */
 export function string2Yjs(xmlString: string) {
     const doc = new Doc();
-    const result = xmljs.xml2js(xmlString);
+    // 需要使用compact为false来保证顺序
+    const result = xmljs.xml2js(xmlString, { compact: false }) as xmljs.Element;
     const root = doc.getXmlFragment('default');
 
-    function parse(element: xmljs.Element | xmljs.ElementCompact, parent: XmlElement | XmlFragment) {
+    function parse(element: xmljs.Element, parent: XmlElement | XmlFragment) {
         const { name, attributes, elements, type } = element;
         if (type === 'text') {
-            parent.insert(parent.length, [new XmlText(element.text)])
+            parent.insert(parent.length, [new XmlText(element.text as '')])
         } else {
             const YElement = new XmlElement(name);
             if (typeof attributes === 'object') {
                 Object.keys(attributes).forEach(key => {
-                    YElement.setAttribute(key, attributes[key]);
+                    YElement.setAttribute(key, attributes[key] as string);
                 })
             }
             parent.insert(parent.length, [YElement]);
             if (elements) {
-                elements.forEach((element: (xmljs.Element | xmljs.ElementCompact)[]) => {
+                elements.forEach((element: xmljs.Element) => {
                     parse(element, YElement);
                 })
             }
         }
     }
 
-    parse(result, root);
+    parse((result.elements as xmljs.Element[])[0], root);
 
-    return encodeStateVector(doc)
+    return encodeStateAsUpdateV2(doc)
 }
 
 export function yjs2string(doc: Doc) {
