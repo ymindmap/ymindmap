@@ -48,6 +48,17 @@ export class Node<T extends IAttrs = any> {
         return this.data.getAttributes() as T;
     }
 
+    get depth() {
+        const rootName = this.type.schema?.topNodeType.name;
+        function getDepth(xmlElement: XmlElement, depth = 0) {
+            if (!xmlElement.parent) return depth
+            if (!(xmlElement.parent instanceof XmlElement)) return depth;
+            if (xmlElement.parent.nodeName === rootName) return depth;
+            return getDepth(xmlElement.parent, depth + 1);
+        }
+        return getDepth(this.data);
+    }
+
     static parseFromXml(schemaOrType: NodeType | Schema, xml: XmlElement): Node {
         const type = schemaOrType instanceof Schema ? schemaOrType.nodes[xml.nodeName] : schemaOrType;
         if (!type) throw Error(`no node type ${xml.nodeName}`);

@@ -6,7 +6,7 @@ export type TopicStyle = {
     borderRadius?: number;
     color?: string;
     fontSize?: number;
-    padding?: string;
+    padding?: number | [number, number];
     lineStyle?: {
         lineType?: LineType;
         lineWidth?: number;

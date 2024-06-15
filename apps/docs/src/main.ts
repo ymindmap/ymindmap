@@ -6,7 +6,7 @@ const mindmap = new Mindmap({
   schema,
 });
 
-document.querySelector<HTMLDivElement>("#app")!.appendChild(mindmap.canvas.getElement());
+document.querySelector<HTMLDivElement>("#app")?.appendChild(mindmap.canvas.toCanvasElement())
 
 console.log(mindmap);
 Reflect.set(window, 'mindmap', mindmap);

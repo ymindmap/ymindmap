@@ -13,9 +13,3 @@ html,body,#app {
     align-items: center;
     justify-content: center;
 }
-
-#app > canvas {
-    position: static!important;
-    width: 100%!important;
-    height: 100%!important;
-}

@@ -46,6 +46,7 @@ export class View {
         const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme);
         if (fabricObject) {
             this.canvas.add(fabricObject);
+
             this.xmlElementFabricObjectMap.set(xmlElement, fabricObject);
         }
 
