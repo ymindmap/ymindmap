@@ -43,6 +43,20 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
 
     const autoScrollIntoview = debounce(() => {
         // 判断canvas的所有元素是否都不可见
+        const canvasWidth = canvas.getWidth();
+        const canvasHeight = canvas.getHeight();
+        const objects = canvas.getObjects();
+        const isAllInView = objects.every((item) => {
+            const { left, top, width, height } = item.getBoundingRect();
+            return left >= -width
+                && left <= canvasWidth
+                && top >= -height
+                && top <= canvasHeight
+        })
+        // 需要缓存最近的变换距离升级算法
+        if (!isAllInView) {
+            canvas.viewportCenterObject(objects[0]);
+        }
     }, 1000)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
