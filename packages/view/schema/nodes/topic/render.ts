@@ -1,31 +1,12 @@
 /**
  * 创建一个topic节点
- * fabric的padding需要修改
- * @see https://github.com/fabricjs/fabric.js/issues/4347
+ * @todo 支持latex https://jsfiddle.net/3aHQc/39/
  */
 
 import { fabric } from 'fabric';
 import { XmlText } from 'yjs';
 import { Node, Theme, TopicStyle } from '@ymindmap/model';
 import { ITopicNodeAttrs } from './attr.d';
-
-class TopicFabricObject extends fabric.Rect {
-    paddingX?: number;
-    paddingY?: number;
-
-    constructor(options: fabric.IRectOptions & {
-        padding?: [number, number] | number
-    }) {
-        super(options);
-
-        if (Array.isArray(options.padding)) {
-            const [paddingY, paddingX] = options.padding;
-            this.paddingX = paddingX;
-            this.paddingY = paddingY;
-            this.padding = undefined;
-        }
-    }
-}
 
 function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
     let topicTheme = theme.childTopic;
@@ -46,22 +27,21 @@ export function renderTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
         node.attributes,
     );
 
-    const rect = new TopicFabricObject({
-        width: 20,
-        height: 20,
-        padding: topicStyle.padding,
-        fill: topicStyle.backgroundColor,
-        hasControls: false,
-    });
-
-    // 文字
-    if (node.data.firstChild instanceof XmlText) {
-        const text = node.data.firstChild.toString();
-        const textBox = new fabric.Textbox(text, {
-            fontSize: topicStyle.fontSize
-        });
-        return textBox;
-    }
-
-    return rect;
+    const content: fabric.Object[] = [];
+    // 生成内容 需要之后增加layout布局
+    node.data.forEach((dataItem) => {
+        if (dataItem instanceof XmlText) {
+            const text = new fabric.Text(dataItem.toString(), {
+                fontSize: topicStyle.fontSize
+            })
+            content.push(text);
+        } else {
+            const subNode = node.type.schema?.parseNode(dataItem);
+            if (subNode && subNode.type.spec.toFabric) {
+                content.push(subNode.type.spec.toFabric(subNode, theme));
+            }
+        }
+    })
+    const group = new fabric.Group(content);
+    return group;
 }
