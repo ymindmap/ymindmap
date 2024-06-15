@@ -39,7 +39,9 @@ export class Mindmap {
         const themeConfig = this.theme;
 
         // 生成canvas
-        this.canvas = new fabric.Canvas("canvas", { backgroundColor: themeConfig.background });
+        this.canvas = new fabric.Canvas("canvas", {
+            backgroundColor: themeConfig.background,
+        });
 
         // 开始生成基础数据
         const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
