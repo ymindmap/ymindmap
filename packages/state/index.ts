@@ -8,7 +8,7 @@ import { Schema } from '@ymindmap/model';
 
 export interface StateConfig {
     schema: Schema;
-    doc?: Doc;
+    doc: Doc;
     activeClients?: Set<ID>;
     plugins?: unknown[];
 }
@@ -38,11 +38,20 @@ export class State {
     }
 
     constructor(config: StateConfig) {
-        this.doc = config.doc || new Doc();
+        this.doc = config.doc;
         this.schema = config.schema;
         this.activeClients = config.activeClients || new Set<ID>();
         this.plugins = config.plugins || [];
     }
 
-    static create() {}
+    static create(data: Uint8Array, config: Omit<StateConfig, 'doc'>) {
+        const doc = new Doc();
+        applyUpdateV2(doc, data);
+        return new State({
+            schema: config.schema,
+            activeClients: config.activeClients || new Set<ID>(),
+            plugins: config.plugins || [],
+            doc
+        });
+    }
 }

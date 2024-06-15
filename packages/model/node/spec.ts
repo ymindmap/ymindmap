@@ -1,7 +1,9 @@
 import { Node } from './node';
+import type { Theme } from '../theme'
 import type { IAttrSpec, IAttrs } from './attr.d';
 import type { fabric } from 'fabric'
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface NodeSpec<K extends IAttrs = any> {
     content?: string;
 
@@ -15,5 +17,5 @@ export interface NodeSpec<K extends IAttrs = any> {
 
     draggable?: boolean;
 
-    toFabric?: (node: Node<K>, storage: Map<string, any>) => fabric.Object;
+    toFabric?: (node: Node<K>, theme: Theme) => fabric.Object;
 }

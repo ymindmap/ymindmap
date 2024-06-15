@@ -3,10 +3,11 @@
  */
 
 import { fabric } from 'fabric';
-import { Node } from '@ymindmap/model';
+import { Node, Theme } from '@ymindmap/model';
 import { ITopicNodeAttrs } from './attr.d';
 
-export function renderTopic(node: Node<ITopicNodeAttrs>, storage: Map<string, any>) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function renderTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
     const rect = new fabric.Rect({
         width: 20,
         height: 20,
