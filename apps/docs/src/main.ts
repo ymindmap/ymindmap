@@ -9,3 +9,4 @@ const mindmap = new Mindmap({
 document.querySelector<HTMLDivElement>("#app")!.appendChild(mindmap.canvas.getElement());
 
 console.log(mindmap);
+Reflect.set(window, 'mindmap', mindmap);

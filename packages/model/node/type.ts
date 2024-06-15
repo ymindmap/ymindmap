@@ -3,7 +3,8 @@ import { NodeSpec } from './spec';
 import { Schema } from '../schema'
 import { XmlElement } from 'yjs';
 import type { IAttrs } from './attr.d';
-export class NodeType<T extends NodeSpec = any> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class NodeType<T extends NodeSpec = NodeSpec> {
     name: string;
     schema: Schema | null = null;
     spec: T;

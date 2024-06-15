@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@ymindmap/model": "workspace:*",
+    "@ymindmap/state": "workspace:^",
     "fabric": "^5.3.0",
     "nanoid": "^5.0.7"
   }

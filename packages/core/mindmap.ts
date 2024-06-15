@@ -1,6 +1,5 @@
 import { State, StateConfig } from '@ymindmap/state'
-import { fabric } from 'fabric'
-import { theme as defaultTheme } from '@ymindmap/view'
+import { theme as defaultTheme, View } from '@ymindmap/view'
 
 import { yjs2string, string2Yjs } from './bridge'
 
@@ -20,9 +19,7 @@ export class Mindmap {
 
     themeName = 'default'
 
-    canvas: fabric.Canvas;
-
-    state: State;
+    view: View;
 
     constructor(options: Options) {
         const { data, theme, themeList } = options;
@@ -38,20 +35,17 @@ export class Mindmap {
         }
         const themeConfig = this.theme;
 
-        // 生成canvas
-        this.canvas = new fabric.Canvas("canvas", {
-            backgroundColor: themeConfig.background,
-        });
-
         // 开始生成基础数据
         const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
 
-        this.state = State.create(yjsUpdate, {
-            plugins: [],
-            schema: options.schema,
-        });
-
-        this.render();
+        // 创建绑定view层
+        this.view = View.create(
+            State.create(yjsUpdate, {
+                plugins: [],
+                schema: options.schema,
+            }),
+            themeConfig
+        )
     }
 
     get theme(): Theme {
@@ -75,6 +69,14 @@ export class Mindmap {
             }
         }
         this.render();
+    }
+
+    get state() {
+        return this.view.state;
+    }
+
+    get canvas() {
+        return this.view.canvas;
     }
 
     toString() {

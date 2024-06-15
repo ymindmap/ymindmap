@@ -9,7 +9,8 @@ export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | Xml
  * 一个基础的node
  * 作为定义转为yjs的代理
  */
-export class Node<T extends IAttrs = {}> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class Node<T extends IAttrs = any> {
     type: NodeType;
     private xmlElement: XmlElement;
     constructor(
