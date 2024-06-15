@@ -38,6 +38,11 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
     const valideAndReZoom = debounce(() => {
         const scale = Math.max(options.minZoom, Math.min(canvas.getZoom(), options.maxZoom));
         if (scale !== canvas.getZoom()) zoomWithDamping(scale);
+        autoScrollIntoview();
+    }, 1000)
+
+    const autoScrollIntoview = debounce(() => {
+        // 判断canvas的所有元素是否都不可见
     }, 1000)
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -74,14 +79,15 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
             // 缩放
             const { deltaX, deltaY, ctrlKey } = e as WheelEvent;
             if (ctrlKey) {
-                const delta = damping(deltaY, options.maxZoom * 100 * 1.5, 10);
-                canvas.setZoom(Math.max(canvas.getZoom() - delta, 0.1));
+                const delta = damping(deltaY, options.maxZoom * 100 * 1.5, 10) / 100;
+                canvas.setZoom(Math.max(canvas.getZoom() - delta, options.minZoom));
                 valideAndReZoom();
             } else {
                 canvas.relativePan({
                     x: -deltaX,
                     y: -deltaY
                 })
+                autoScrollIntoview();
             }
         },
         options: {
