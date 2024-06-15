@@ -6,10 +6,6 @@ const mindmap = new Mindmap({
   schema,
 });
 
-document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
-  <div>
-    11
-  </div>
-`;
+document.querySelector<HTMLDivElement>("#app")!.appendChild(mindmap.canvas.getElement());
 
 console.log(mindmap);
