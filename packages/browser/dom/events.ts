@@ -94,7 +94,10 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
             const { deltaX, deltaY, ctrlKey } = e as WheelEvent;
             if (ctrlKey) {
                 const delta = damping(deltaY, options.maxZoom * 100 * 1.5, 10) / 100;
-                canvas.setZoom(Math.max(canvas.getZoom() - delta, options.minZoom));
+
+                canvas.zoomToPoint(canvas.getPointer(e, false), Math.max(canvas.getZoom() - delta, options.minZoom));
+                // canvas.setZoom(Math.max(canvas.getZoom() - delta, options.minZoom));
+
                 valideAndReZoom();
             } else {
                 canvas.relativePan({
