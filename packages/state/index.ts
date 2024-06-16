@@ -14,7 +14,7 @@ export type Awareness = {
 export interface StateConfig {
     schema: Schema;
     doc: Doc;
-    awareness: Awareness, // 感知数据
+    awareness?: Awareness, // 感知数据
     plugins?: unknown[];
 }
 

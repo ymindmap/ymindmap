@@ -45,7 +45,7 @@ export class ObjectView<
         this.data = options.data as T;
         this.yoga = options.yoga;
         this.parent = options.parent;
-        const layoutNode = options.yoga.Node.create();
+        const layoutNode = options.yoga.Node.createDefault();
         this.layout = layoutNode;
         if (this.parent && this.parent.layout) {
             this.parent.children.push(this);
@@ -101,22 +101,13 @@ export class ObjectView<
     updateView(notifyParent = false) {
         if (!this.layout || !this.view) return;
         this.layout.calculateLayout(undefined, undefined);
-        const updateList: { prop: keyof fabric.Object, methodName: keyof YogaNode }[] = [
-            { prop: 'width', methodName: 'getComputedWidth' },
-            { prop: 'height', methodName: 'getComputedHeight' },
-            { prop: 'left', methodName: 'getComputedLeft' },
-            { prop: 'top', methodName: 'getComputedTop' }
-        ]
-
         const { layout, view } = this;
-        const newProperty = updateList.reduce<fabric.Object[keyof fabric.Object]>((obj, { prop, methodName }) => {
-            if (Reflect.has(layout, methodName)) {
-                const value = (layout[methodName] as YogaNodeCallbackToFabricValue)();
-                obj[prop] = value
-            };
-            return obj;
-        }, {})
-        view.set(newProperty)
+        view.set({
+            width: layout.getComputedWidth(),
+            height: layout.getComputedHeight(),
+            left: layout.getComputedTop(),
+            top: layout.getComputedTop(),
+        } as any)
 
         this.children.forEach(child => child.updateView());
 
