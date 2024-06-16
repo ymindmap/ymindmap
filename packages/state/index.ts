@@ -3,20 +3,25 @@
  * Doc, Transaction的状态管理
  * 参考了prosemirror的api接口实现
  */
-import { Transaction, Doc, ID, applyUpdateV2, encodeStateAsUpdateV2 } from 'yjs';
+import { Transaction, Doc, applyUpdateV2, encodeStateAsUpdateV2, XmlElement } from 'yjs';
 import { Schema } from '@ymindmap/model';
+
+export type Awareness = {
+    selectedObjects: XmlElement[],
+    [key: string]: any
+}
 
 export interface StateConfig {
     schema: Schema;
     doc: Doc;
-    activeClients?: Set<ID>;
+    awareness: Awareness, // 感知数据
     plugins?: unknown[];
 }
 
 export class State {
     doc: Doc;
     /** 选中的id */
-    activeClients: Set<ID> = new Set<ID>();
+    awareness: Awareness;
 
     schema: Schema;
 
@@ -28,9 +33,15 @@ export class State {
         return new State({
             doc: tr.doc,
             schema: this.schema,
-            activeClients: this.activeClients,
-            plugins: this.plugins
+            plugins: this.plugins,
+            awareness: {
+                selectedObjects: []
+            }
         });
+    }
+
+    updateAwareness(key: keyof Awareness, value: any) {
+        this.awareness[key] = value;
     }
 
     tr() {
@@ -40,8 +51,8 @@ export class State {
     constructor(config: StateConfig) {
         this.doc = config.doc;
         this.schema = config.schema;
-        this.activeClients = config.activeClients || new Set<ID>();
         this.plugins = config.plugins || [];
+        this.awareness = config.awareness;
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc'>) {
@@ -49,8 +60,10 @@ export class State {
         applyUpdateV2(doc, data);
         return new State({
             schema: config.schema,
-            activeClients: config.activeClients || new Set<ID>(),
             plugins: config.plugins || [],
+            awareness: {
+                selectedObjects: []
+            },
             doc
         });
     }

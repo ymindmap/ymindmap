@@ -83,6 +83,12 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
     const group = new fabric.Group(
         [containerObject, ...content],
     );
+    ElementObjectView.create({
+        ...context,
+        view: group,
+        data: node.data,
+        parent: context.parent,
+    })
 
     return group;
 }

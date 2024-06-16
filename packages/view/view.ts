@@ -4,6 +4,7 @@
 import { XmlElement } from 'yjs'
 import { fabric } from 'fabric'
 import { Yoga, loadYoga } from 'yoga-layout/load';
+import { FABRIC_OBJECT_VIEW_KEY, ObjectView } from './object'
 import type { Theme } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 
@@ -26,7 +27,11 @@ export class View {
             backgroundColor: this.theme.background,
             ...options
         });
+        // 禁止group的时候拥有control
+        fabric.Group.prototype.hasControls = false;
 
+        this.bindAwareness();
+        // 加载yoga进行排版
         loadYoga()
             .then((yoga) => {
                 this.yoga = yoga;
@@ -48,6 +53,23 @@ export class View {
 
     get schema() {
         return this.state.schema;
+    }
+
+    bindAwareness() {
+        /**
+         * 订阅当前选中节点
+         */
+        const onCanvasSelectionChange = () => {
+            const selectedObjects = this.canvas.getActiveObjects()
+                .map(item => {
+                    const viewObject: ObjectView | undefined = Reflect.get(item, FABRIC_OBJECT_VIEW_KEY);
+                    return viewObject?.data
+                }).filter((item) => item)
+            this.state.updateAwareness('selectedObjects', selectedObjects);
+        }
+        this.canvas.on('selection:cleared', onCanvasSelectionChange);
+        this.canvas.on('selection:created', onCanvasSelectionChange);
+        this.canvas.on('selection:updated', onCanvasSelectionChange);
     }
 
     drawXmlElement(xmlElement: XmlElement) {
@@ -83,7 +105,7 @@ export class View {
     setTheme(theme: Theme) {
         if (theme !== this.theme) {
             this.theme = theme;
-            // 重新绘制
+            // 重新绘制 需要所有节点重新绘制
             this.canvas.renderAll();
         }
     }
