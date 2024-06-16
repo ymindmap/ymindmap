@@ -7,8 +7,6 @@ import { Yoga, loadYoga } from 'yoga-layout/load';
 import type { Theme } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 
-export const FABRIC_NODE_KEY = '__node__';
-
 export type Options = {
     width?: number,
     height?: number
@@ -18,7 +16,6 @@ export class View {
     state: State
     canvas: fabric.Canvas
     private theme: Theme
-    private xmlElementFabricObjectMap: WeakMap<XmlElement, fabric.Object> = new WeakMap();
     private yoga: Yoga | null = null;
     constructor(state: State, theme: Theme, options: Options = {}) {
         // 订阅state变化
@@ -29,11 +26,6 @@ export class View {
             backgroundColor: this.theme.background,
             ...options
         });
-
-        // 订阅转换
-        this.state.doc.on('load', (doc) => {
-            console.log(doc);
-        })
 
         loadYoga()
             .then((yoga) => {
@@ -62,12 +54,12 @@ export class View {
         const node = this.schema.parseNode(xmlElement);
         if (!node) return;
         if (!this.yoga) throw new Error('yoga is not init');
-        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme, this.yoga);
+        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme, {
+            yoga: this.yoga,
+            canvas: this.canvas,
+        });
         if (fabricObject) {
             this.canvas.add(fabricObject);
-            Reflect.set(fabricObject, FABRIC_NODE_KEY, node);
-
-            this.xmlElementFabricObjectMap.set(xmlElement, fabricObject);
         }
 
         xmlElement.forEach(child => {

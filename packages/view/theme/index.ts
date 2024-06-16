@@ -24,7 +24,7 @@ export const theme: Theme = {
     color: "#fff",
     fontSize: 25,
     borderRadius: 5,
-    padding: [14, 12],
+    padding: [14, 12, 14, 12],
   },
   subTopic: {
     backgroundColor: "#ffffff",
@@ -42,7 +42,7 @@ export const theme: Theme = {
   childTopic: {
     fontSize: 13,
     color: "rgb(68,68,68)",
-    padding: [2, 8],
+    padding: [2, 8, 2, 8],
     lineStyle: {
       lineType: "roundBroken",
       lineWidth: 1,

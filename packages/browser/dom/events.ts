@@ -59,7 +59,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
         }
     }, 1000)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line 
     const container: HTMLDivElement = (canvas as any).wrapperEl;
 
     const eventsMap: ZoomEventsMap = new Map();

@@ -8,7 +8,7 @@ import { XmlText, XmlElement } from 'yjs'
 import { QuillBinding } from 'y-quill';
 import { getElement } from './dom';
 import 'quill/dist/quill.snow.css'
-import type { Node } from '@ymindmap/model'
+import type { ObjectView } from '@ymindmap/view'
 
 export class Editor {
     private el: HTMLDivElement;
@@ -41,21 +41,19 @@ export class Editor {
         return this.editor;
     }
 
-    mount(object: fabric.Object, node: Node): void {
+    mount(objectView: ObjectView): void {
+        if (!objectView.data || !objectView.view) return this.unmount();
         let text: XmlText;
-        if (node.data.firstChild instanceof XmlElement) {
+        if (objectView.data.firstChild instanceof XmlElement) {
             text = new XmlText();
-            node.data.insert(0, [text]);
+            objectView.data.insert(0, [text]);
         } else {
-            text = node.data.firstChild as XmlText;
+            text = objectView.data.firstChild as XmlText;
         }
 
         this.binding = new QuillBinding(text, this.editor);
 
-        /**
-         * @todo 考虑缩放问题
-         */
-        const { left, top, height } = object.getBoundingRect();
+        const { left, top, height } = objectView.view.getBoundingRect();
         this.el.style.left = left + 'px';
         this.el.style.top = top + 'px';
         this.el.style.height = height + 'px';

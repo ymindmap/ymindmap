@@ -9,7 +9,7 @@ const KEY = '__ymindmap_events_binded__'
 
 export function getElement(canvas: fabric.Canvas): HTMLDivElement {
     // 自动生成绑定的dom元素
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line 
     const element = (canvas as unknown as any).wrapperEl as HTMLDivElement;
     if (!Reflect.has(element, KEY)) {
         bindEvent(canvas, { minZoom: 0.1, maxZoom: 3 });

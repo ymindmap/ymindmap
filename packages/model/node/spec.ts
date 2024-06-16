@@ -4,7 +4,14 @@ import type { IAttrSpec, IAttrs } from './attr.d';
 import type { fabric } from 'fabric'
 import type Yoga from 'yoga-layout';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type ToFabricContext = {
+    yoga: typeof Yoga,
+    canvas: fabric.Canvas,
+    // eslint-disable-next-line 
+    [key: string]: any
+}
+
+// eslint-disable-next-line 
 export interface NodeSpec<K extends IAttrs = any> {
     content?: string;
 
@@ -18,5 +25,5 @@ export interface NodeSpec<K extends IAttrs = any> {
 
     draggable?: boolean;
 
-    toFabric?: (node: Node<K>, theme: Theme, yoga: typeof Yoga) => fabric.Object;
+    toFabric?: (node: Node<K>, theme: Theme, context: ToFabricContext) => fabric.Object;
 }

@@ -1,5 +1,5 @@
 import { Mindmap as CoreMindmap, Options } from '@ymindmap/core'
-import { FABRIC_NODE_KEY } from '@ymindmap/view'
+import { FABRIC_OBJECT_VIEW_KEY } from '@ymindmap/view'
 import { getElement, destroy as domDestroy } from './dom/index'
 import { Editor } from './editor'
 
@@ -21,8 +21,8 @@ export class Mindmap extends CoreMindmap {
                 /**
                  * @todo view层判断这个对象的node节点以及是否可以编辑
                  */
-                if (this.isEditable && Reflect.has(target, FABRIC_NODE_KEY)) {
-                    this.editor.mount(target, Reflect.get(target, FABRIC_NODE_KEY));
+                if (this.isEditable && Reflect.has(target, FABRIC_OBJECT_VIEW_KEY)) {
+                    this.editor.mount(Reflect.get(target, FABRIC_OBJECT_VIEW_KEY));
                 }
             }
         })
