@@ -1,8 +1,14 @@
 {
   "extends": "@ymindmap/typescript-config/base.json",
   "include": [
-    ".",
+    "."
   ],
+  "compilerOptions": {
+    "lib": [
+      "ESNext",
+      "DOM"
+    ]
+  },
   "exclude": [
     "node_modules"
   ]

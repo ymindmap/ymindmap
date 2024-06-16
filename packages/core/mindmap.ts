@@ -2,7 +2,6 @@ import { State, StateConfig } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
 
 import { yjs2string, string2Yjs } from './bridge'
-import { bindEvent } from './helper/events'
 
 import type { Theme } from '@ymindmap/model'
 
@@ -21,8 +20,6 @@ export class Mindmap {
     themeName = 'default'
 
     view: View;
-
-    private dom: unknown = null;
 
     constructor(options: Options) {
         const { data, theme, themeList } = options;
@@ -82,21 +79,8 @@ export class Mindmap {
         return this.view.canvas;
     }
 
-    /**
-     * 生成domElement
-     * @todo 考虑销毁相关问题
-     */
-    getElement() {
-        if (this.dom) return this.dom;
-        // 自动生成绑定的dom元素
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        this.dom = (this.canvas as unknown as any).wrapperEl;
-        /**
-         * @todo 迁移为单独方法
-         */
-        bindEvent(this.canvas, { minZoom: 0.1, maxZoom: 3 });
-
-        return this.dom;
+    getData() {
+        return this.toString();
     }
 
     toString() {

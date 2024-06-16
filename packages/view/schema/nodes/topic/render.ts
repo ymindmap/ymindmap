@@ -31,7 +31,7 @@ export function renderTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
     // 生成内容 需要之后增加layout布局
     node.data.forEach((dataItem) => {
         if (dataItem instanceof XmlText) {
-            const text = new fabric.Text(dataItem.toString(), {
+            const text = new fabric.IText(dataItem.toString(), {
                 fontSize: topicStyle.fontSize
             })
             content.push(text);
@@ -42,6 +42,9 @@ export function renderTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
             }
         }
     })
-    const group = new fabric.Group(content);
+    const group = new fabric.Group(content, {
+        // padding: topicStyle.padding
+        backgroundColor: 'rgb(0, 255, 136)',
+    });
     return group;
 }

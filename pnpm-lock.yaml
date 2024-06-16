@@ -61,6 +61,31 @@ importers:
 
   configs/config-typescript: {}
 
+  packages/browser:
+    dependencies:
+      lodash-es:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@types/fabric':
+        specifier: ^5.3.7
+        version: 5.3.7
+      '@types/lodash-es':
+        specifier: ^4.17.12
+        version: 4.17.12
+      '@ymindmap/eslint-config':
+        specifier: workspace:*
+        version: link:../../configs/config-eslint
+      '@ymindmap/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/config-typescript
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/core:
     dependencies:
       '@ymindmap/model':
@@ -72,12 +97,6 @@ importers:
       '@ymindmap/view':
         specifier: workspace:*
         version: link:../view
-      fabric:
-        specifier: ^5.3.0
-        version: 5.3.0
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.21
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
@@ -88,9 +107,6 @@ importers:
       '@types/fabric':
         specifier: ^5.3.7
         version: 5.3.7
-      '@types/lodash-es':
-        specifier: ^4.17.12
-        version: 4.17.12
       '@ymindmap/eslint-config':
         specifier: workspace:*
         version: link:../../configs/config-eslint

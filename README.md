@@ -25,7 +25,11 @@
 
 #### packages/core
 
-核心库，生成整个编辑器
+核心库，整合了state/view/model相关的数据
+
+#### packages/browser
+
+核心库，浏览器支持，支持导出dom 放大缩小 大小重制，编辑器等操作
 
 #### packages/model
 

@@ -1,5 +1,5 @@
 {
-  "name": "@ymindmap/core",
+  "name": "@ymindmap/browser",
   "version": "0.0.0",
   "exports": {
     ".": "./index.ts"
@@ -10,16 +10,13 @@
   },
   "devDependencies": {
     "@types/fabric": "^5.3.7",
+    "@types/lodash-es": "^4.17.12",
     "@ymindmap/eslint-config": "workspace:*",
     "@ymindmap/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@ymindmap/model": "workspace:*",
-    "@ymindmap/state": "workspace:*",
-    "@ymindmap/view": "workspace:*",
-    "xml-js": "^1.6.11",
-    "yoga-layout": "^3.0.4"
+    "lodash-es": "^4.17.21"
   }
 }
