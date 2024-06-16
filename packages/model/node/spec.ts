@@ -2,6 +2,7 @@ import { Node } from './node';
 import type { Theme } from '../theme'
 import type { IAttrSpec, IAttrs } from './attr.d';
 import type { fabric } from 'fabric'
+import type Yoga from 'yoga-layout';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface NodeSpec<K extends IAttrs = any> {
@@ -17,5 +18,5 @@ export interface NodeSpec<K extends IAttrs = any> {
 
     draggable?: boolean;
 
-    toFabric?: (node: Node<K>, theme: Theme) => fabric.Object;
+    toFabric?: (node: Node<K>, theme: Theme, yoga: typeof Yoga) => fabric.Object;
 }

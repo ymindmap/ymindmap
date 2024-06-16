@@ -3,6 +3,7 @@
  */
 import { XmlElement } from 'yjs'
 import { fabric } from 'fabric'
+import { Yoga, loadYoga } from 'yoga-layout/load';
 import type { Theme } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 
@@ -13,14 +14,12 @@ export type Options = {
     height?: number
 }
 
-/**
- * @todo 支持yoga
- */
 export class View {
     state: State
     canvas: fabric.Canvas
     private theme: Theme
     private xmlElementFabricObjectMap: WeakMap<XmlElement, fabric.Object> = new WeakMap();
+    private yoga: Yoga | null = null;
     constructor(state: State, theme: Theme, options: Options = {}) {
         // 订阅state变化
         this.state = state;
@@ -36,16 +35,23 @@ export class View {
             console.log(doc);
         })
 
-        // 开始转换
-        const root = this.state.doc.getXmlFragment('default').firstChild;
-        if (root instanceof XmlElement && root.nodeName === this.schema.topNodeType.name) {
-            this.drawXmlElement(root);
-        } else {
-            throw new Error('root is not topNodeType in schema')
-        }
+        loadYoga()
+            .then((yoga) => {
+                this.yoga = yoga;
+                // 开始转换
+                const root = this.state.doc.getXmlFragment('default').firstChild;
+                if (root instanceof XmlElement && root.nodeName === this.schema.topNodeType.name) {
+                    this.drawXmlElement(root);
+                } else {
+                    throw new Error('root is not topNodeType in schema')
+                }
 
-        // 第一次绘制
-        this.renderAll();
+                // 第一次绘制
+                this.renderAll();
+            })
+            .catch((e) => {
+                throw e;
+            })
     }
 
     get schema() {
@@ -55,7 +61,8 @@ export class View {
     drawXmlElement(xmlElement: XmlElement) {
         const node = this.schema.parseNode(xmlElement);
         if (!node) return;
-        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme);
+        if (!this.yoga) throw new Error('yoga is not init');
+        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme, this.yoga);
         if (fabricObject) {
             this.canvas.add(fabricObject);
             Reflect.set(fabricObject, FABRIC_NODE_KEY, node);

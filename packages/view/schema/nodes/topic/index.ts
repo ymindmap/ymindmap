@@ -1,6 +1,6 @@
 import { NodeType, NodeSpec } from '@ymindmap/model'
 import { nanoid } from 'nanoid'
-import { renderTopic } from './render';
+import { createTopic } from './render';
 import type { ITopicNodeAttrs } from './attr.d';
 
 export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
@@ -16,7 +16,7 @@ export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
      * 一个topic节点
      * @param node 
      */
-    toFabric: renderTopic
+    toFabric: createTopic
 })
 
 export default topic;
