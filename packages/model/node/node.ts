@@ -29,7 +29,14 @@ export class Node<T extends IAttrs = any> {
         }
 
         Object.keys(attrs).forEach(key => {
-            if (attrs[key]) this.xmlElement.setAttribute(key, attrs[key] as string);
+            const value = attrs[key];
+            if (value !== this.xmlElement.getAttribute(key)) {
+                if (value) {
+                    this.xmlElement.setAttribute(key, value as string)
+                } else {
+                    this.xmlElement.removeAttribute(key);
+                }
+            }
         });
         if (content) {
             const list = Array.isArray(content) ? content : [content];

@@ -2,7 +2,7 @@ import { Mindmap, getDefaultData, schema } from '@ymindmap/browser';
 import "./style.css";
 
 const mindmap = new Mindmap({
-  data: getDefaultData(),
+  data: localStorage.getItem('data') || getDefaultData(),
   schema,
   editable: true,
 });
