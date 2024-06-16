@@ -54,11 +54,20 @@ export class View {
         const node = this.schema.parseNode(xmlElement);
         if (!node) return;
         if (!this.yoga) throw new Error('yoga is not init');
-        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme, {
-            yoga: this.yoga,
-            canvas: this.canvas,
-        });
+        const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(
+            node,
+            this.theme,
+            {
+                yoga: this.yoga,
+                canvas: this.canvas,
+            }
+        );
         if (fabricObject) {
+            // 设置选择框属性
+            fabricObject.set('borderScaleFactor', 4);
+            fabricObject.set('padding', 2);
+            fabricObject.set('hasControls', false);
+
             this.canvas.add(fabricObject);
         }
 

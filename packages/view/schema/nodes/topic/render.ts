@@ -86,9 +86,6 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
 
     const group = new fabric.Group(
         [containerObject, ...content],
-        {
-            hasControls: false,
-        }
     );
 
     return group;
