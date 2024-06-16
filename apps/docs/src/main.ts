@@ -7,6 +7,10 @@ const mindmap = new Mindmap({
   editable: true,
 });
 
+mindmap.on('change', (change) => {
+  console.log(change);
+})
+
 document.querySelector<HTMLDivElement>("#app")?.appendChild(mindmap.dom as HTMLElement)
 
 console.log(mindmap);

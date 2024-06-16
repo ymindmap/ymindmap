@@ -62,7 +62,7 @@ export class Mindmap {
          * chang事件绑定
          * @todo 如果有更多事件的话，迁移到统一绑定区域
          */
-        this.state.doc.on('afterAllTransactions', () => this.emitter.emit('change', this.toString()))
+        this.state.doc.on('update', () => this.emitter.emit('change', this.toString()))
     }
 
     get theme(): Theme {

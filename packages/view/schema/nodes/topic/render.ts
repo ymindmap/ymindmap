@@ -56,7 +56,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
     // 生成内容 需要之后增加layout布局
     node.data.forEach((dataItem) => {
         if (dataItem instanceof XmlText) {
-            const textObject = new fabric.Text(dataItem.toString(), {
+            const textObject = new fabric.IText(dataItem.toString(), {
                 fontSize: topicStyle.fontSize
             })
             content.push(textObject);
