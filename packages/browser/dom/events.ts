@@ -26,7 +26,7 @@ function damping(source: number, sourceMax: number, rate: number = 100) {
     return Math.floor(Math.round(x < 0 ? -y : y) / rate);
 }
 
-export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number, mindmap: Mindmap }) {
+export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number, mindmap?: Mindmap }) {
     // 校验
     const zoomWithDamping = throttle((targetScale: number) => {
         if (Math.floor(targetScale * 100) === Math.floor(canvas.getZoom() * 100)) return;
