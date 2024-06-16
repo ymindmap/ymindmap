@@ -40,6 +40,10 @@ export class View {
         this.renderAll();
     }
 
+    get schema() {
+        return this.state.schema;
+    }
+
     drawXmlElement(xmlElement: XmlElement) {
         const node = this.schema.parseNode(xmlElement);
         if (!node) return;
@@ -67,8 +71,22 @@ export class View {
         }
     }
 
-    get schema() {
-        return this.state.schema;
+    toDataUrl(options: fabric.IDataURLOptions) {
+        return this.canvas.toDataURL(options)
+    }
+
+    /**
+     * 转为svg的方法
+     * @todo 现在是
+     * @param options 
+     * @returns 
+     */
+    toSvg(options: fabric.IToSVGOptions) {
+        return this.canvas.toSVG(options)
+    }
+
+    destroy() {
+        this.canvas.dispose();
     }
 
     static create(state: State, theme: Theme) {

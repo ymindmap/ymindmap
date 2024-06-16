@@ -1,5 +1,6 @@
 import { State, StateConfig } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
+import mitt from 'mitt';
 
 import { yjs2string, string2Yjs } from './bridge'
 
@@ -20,6 +21,10 @@ export class Mindmap {
     themeName = 'default'
 
     view: View;
+
+    private emitter = mitt<{
+        change: string
+    }>()
 
     constructor(options: Options) {
         const { data, theme, themeList } = options;
@@ -46,6 +51,12 @@ export class Mindmap {
             }),
             themeConfig
         )
+
+        /**
+         * chang事件绑定
+         * @todo 如果有更多事件的话，迁移到统一绑定区域
+         */
+        this.state.doc.on('afterAllTransactions', () => this.emitter.emit('change', this.toString()))
     }
 
     get theme(): Theme {
@@ -79,11 +90,41 @@ export class Mindmap {
         return this.view.canvas;
     }
 
+    get on() {
+        return this.emitter.on
+    }
+
+    get off() {
+        return this.emitter.off
+    }
+
+    toDataUrl(options: fabric.IDataURLOptions) {
+        return this.view.toDataUrl(options)
+    }
+
+    /**
+     * 转为svg的方法
+     * @param options 
+     * @returns 
+     */
+    toSvg(options: fabric.IToSVGOptions) {
+        return this.view.toSvg(options)
+    }
+
     getData() {
         return this.toString();
     }
 
     toString() {
         return yjs2string(this.state.doc);
+    }
+
+    /**
+     * 销毁的办法
+     */
+    destroy() {
+        this.emitter.all.clear();
+        // 销毁dom/数据层
+        this.view.destroy();
     }
 }

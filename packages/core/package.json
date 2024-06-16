@@ -19,6 +19,7 @@
     "@ymindmap/model": "workspace:*",
     "@ymindmap/state": "workspace:*",
     "@ymindmap/view": "workspace:*",
+    "mitt": "^3.0.1",
     "xml-js": "^1.6.11",
     "yoga-layout": "^3.0.4"
   }
