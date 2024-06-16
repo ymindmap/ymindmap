@@ -17,7 +17,7 @@ export class TextObjectView extends ObjectView<XmlText, fabric.IText> {
                 // 设置宽度
                 const width = Math.max(...view.__lineWidths);
                 view.set('width', width)
-                this.updateStyle({ width });
+                this.updateStyle({ width: width });
 
                 this.canvas?.renderAll();
                 // 更新布局

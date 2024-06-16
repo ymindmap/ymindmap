@@ -100,16 +100,18 @@ export class ObjectView<
      */
     updateView(notifyParent = false) {
         if (!this.layout || !this.view) return;
+        this.children.forEach(child => child.updateView());
         this.layout.calculateLayout(undefined, undefined);
         const { layout, view } = this;
+
         view.set({
             width: layout.getComputedWidth(),
             height: layout.getComputedHeight(),
-            left: layout.getComputedTop(),
-            top: layout.getComputedTop(),
+            ...(this.parent && {
+                left: -(layout.getComputedWidth() / 2),
+                top: -(layout.getComputedHeight() / 2)
+            })
         } as any)
-
-        this.children.forEach(child => child.updateView());
 
         if (notifyParent && this.parent) this.parent.updateView(true);
     }

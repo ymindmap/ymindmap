@@ -13,5 +13,4 @@ mindmap.on('change', (value) => {
 
 document.querySelector<HTMLDivElement>("#app")?.appendChild(mindmap.dom as HTMLElement)
 
-console.log(mindmap);
 Reflect.set(window, 'mindmap', mindmap);
