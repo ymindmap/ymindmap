@@ -57,8 +57,8 @@
 
 ## ROADMAP
 
-- [ ] 基于prosemirror完成基础的类型定义
-- [ ] 定义出第一个简单的 Topic
+- [x] 基于prosemirror完成基础的类型定义
+- [x] 定义出第一个简单的 Topic
 - [ ] 渲染出第一个Topic
 - [ ] 一个Command系统
 - [ ] command支持创建Topic
