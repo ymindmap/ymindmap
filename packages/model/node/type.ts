@@ -18,7 +18,7 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
         this.schema = schema;
     }
 
-    create(attrs: IAttrs = {}, content: INodeContent = null): Node {
+    create(attrs: IAttrs = {}, content: INodeContent = null, initXmlElement: XmlElement | null = null): Node {
         const nodeAttrs: IAttrs = Object
             .keys(this.spec.attrs || {})
             .reduce<IAttrs>((_attrs, key) => {
@@ -35,11 +35,11 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                 }
                 return _attrs;
             }, { ...attrs });
-        return new Node(this, nodeAttrs, content);
+        return new Node(this, nodeAttrs, content, initXmlElement);
     }
 
     parse(xml: XmlElement) {
-        return this.create(xml.getAttributes(), xml);
+        return this.create(xml.getAttributes(), null, xml);
     }
 
     static createNode<T extends NodeSpec>(options: { name: string } & T) {

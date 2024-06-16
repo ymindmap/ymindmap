@@ -1,6 +1,6 @@
 import type { Theme } from "@ymindmap/model";
 export const theme: Theme = {
-  background: "#ffffff",
+  background: "rgb(230, 230, 230)",
   thumbUrl: "./assets/images/mind/mr.png",
   title: "默认风格",
   startType: [],

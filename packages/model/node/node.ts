@@ -17,17 +17,17 @@ export class Node<T extends IAttrs = any> {
         type: NodeType,
         attrs: IAttrs = {},
         content: INodeContent = null,
-        initXmlElement?: XmlElement
+        initXmlElement?: XmlElement | null
     ) {
         this.type = type;
 
         // 直接初始化
         if (initXmlElement) {
             this.xmlElement = initXmlElement;
-            return this;
+        } else {
+            this.xmlElement = new XmlElement(this.type.name);
         }
 
-        this.xmlElement = new XmlElement(this.type.name);
         Object.keys(attrs).forEach(key => {
             if (attrs[key]) this.xmlElement.setAttribute(key, attrs[key] as string);
         });
@@ -57,11 +57,5 @@ export class Node<T extends IAttrs = any> {
             return getDepth(xmlElement.parent, depth + 1);
         }
         return getDepth(this.data);
-    }
-
-    static parseFromXml(schemaOrType: NodeType | Schema, xml: XmlElement): Node {
-        const type = schemaOrType instanceof Schema ? schemaOrType.nodes[xml.nodeName] : schemaOrType;
-        if (!type) throw Error(`no node type ${xml.nodeName}`);
-        return new Node(type, {}, null, xml);
     }
 }

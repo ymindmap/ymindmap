@@ -38,17 +38,19 @@ export class ObjectView<
     layout: YogaNode | null = null
     data: T | null = null
     children: ObjectView<any>[] = []
+    parent?: ObjectView | null = null
     constructor(options: ObjectViewConstructorOptions) {
         this.canvas = options.canvas;
         this.view = options.view as K;
         this.data = options.data as T;
         this.yoga = options.yoga;
+        this.parent = options.parent;
         const layoutNode = options.yoga.Node.create();
         this.layout = layoutNode;
-        if (options.parent && options.parent.layout) {
-            options.parent.children.push(this);
-            if (options.parent.layout) {
-                options.parent.layout.insertChild(this.layout, options.parent.layout.getChildCount());
+        if (this.parent && this.parent.layout) {
+            this.parent.children.push(this);
+            if (this.parent.layout) {
+                this.parent.layout.insertChild(this.layout, this.parent.layout.getChildCount());
             }
         }
 
@@ -96,7 +98,7 @@ export class ObjectView<
     /**
      * 更新自己的样式
      */
-    updateView() {
+    updateView(notifyParent = false) {
         if (!this.layout || !this.view) return;
         this.layout.calculateLayout(undefined, undefined);
         const updateList: { prop: keyof fabric.Object, methodName: keyof YogaNode }[] = [
@@ -107,14 +109,18 @@ export class ObjectView<
         ]
 
         const { layout, view } = this;
-
-        updateList.forEach(({ prop, methodName }) => {
+        const newProperty = updateList.reduce<fabric.Object[keyof fabric.Object]>((obj, { prop, methodName }) => {
             if (Reflect.has(layout, methodName)) {
                 const value = (layout[methodName] as YogaNodeCallbackToFabricValue)();
-                view.set(prop, value);
+                obj[prop] = value
             };
-        })
+            return obj;
+        }, {})
+        view.set(newProperty)
+
         this.children.forEach(child => child.updateView());
+
+        if (notifyParent && this.parent) this.parent.updateView(true);
     }
 
     // 从canvas上进行移除

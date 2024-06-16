@@ -57,6 +57,8 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
     node.data.forEach((dataItem) => {
         if (dataItem instanceof XmlText) {
             const textObject = new fabric.IText(dataItem.toString(), {
+                editable: false,
+                fill: topicStyle.color,
                 fontSize: topicStyle.fontSize
             })
             content.push(textObject);
@@ -72,13 +74,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
             })
         } else {
             const subNode = node.type.schema?.parseNode(dataItem);
-            if (subNode && subNode.type.spec.toFabric) {
-                const subElement = subNode.type.spec.toFabric(subNode, theme, {
-                    ...context,
-                    parent: rootView
-                });
-                content.push(subElement);
-            }
+            if (subNode && subNode.type.name === 'topic') return createTopic(subNode, theme, context);
         }
     })
 

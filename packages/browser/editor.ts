@@ -8,6 +8,7 @@ import { XmlText, XmlElement } from 'yjs'
 import { QuillBinding } from 'y-quill';
 import { getElement } from './dom';
 import 'quill/dist/quill.snow.css'
+import { FABRIC_OBJECT_VIEW_KEY } from '@ymindmap/view'
 import type { ObjectView } from '@ymindmap/view'
 
 export class Editor {
@@ -41,7 +42,18 @@ export class Editor {
         return this.editor;
     }
 
-    mount(objectView: ObjectView): void {
+    bind(object: fabric.Object): void {
+        const targetObject = object.type === 'group'
+            ? (object as fabric.Group).getObjects()[0]
+            : object
+        if (targetObject && Reflect.has(targetObject, FABRIC_OBJECT_VIEW_KEY)) {
+            this.mount(Reflect.get(targetObject, FABRIC_OBJECT_VIEW_KEY), object.getBoundingRect());
+        } else {
+            this.unmount();
+        }
+    }
+
+    mount(objectView: ObjectView, referencePoint: { left: number, top: number }): void {
         if (!objectView.data || !objectView.view) return this.unmount();
         let text: XmlText;
         if (objectView.data.firstChild instanceof XmlElement) {
@@ -53,9 +65,9 @@ export class Editor {
 
         this.binding = new QuillBinding(text, this.editor);
 
-        const { left, top, height } = objectView.view.getBoundingRect();
-        this.el.style.left = left + 'px';
-        this.el.style.top = top + 'px';
+        const { height } = objectView.view.getBoundingRect();
+        this.el.style.left = referencePoint.left + 'px';
+        this.el.style.top = referencePoint.top + 'px';
         this.el.style.height = height + 'px';
         this.el.style.transform = `scale(${this.canvas.getZoom()})`;
 

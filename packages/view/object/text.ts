@@ -4,7 +4,7 @@
 import { XmlText } from 'yjs'
 import { ObjectView, ObjectViewConstructorOptions } from './view';
 
-export class TextObjectView extends ObjectView<XmlText, fabric.Text> {
+export class TextObjectView extends ObjectView<XmlText, fabric.IText> {
     constructor(options: ObjectViewConstructorOptions) {
         super(options);
 
@@ -13,9 +13,15 @@ export class TextObjectView extends ObjectView<XmlText, fabric.Text> {
             const { view, data } = this;
             // 更新
             data.observe(() => {
-                view.set({
-                    text: data.toString() as string
-                })
+                view.set('text', data.toString() as string)
+                // 设置宽度
+                const width = Math.max(...view.__lineWidths);
+                view.set('width', width)
+                this.updateStyle({ width });
+
+                this.canvas?.renderAll();
+                // 更新布局
+                this.updateView(true);
             })
         }
     }

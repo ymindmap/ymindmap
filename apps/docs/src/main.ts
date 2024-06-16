@@ -7,8 +7,8 @@ const mindmap = new Mindmap({
   editable: true,
 });
 
-mindmap.on('change', (change) => {
-  console.log(change);
+mindmap.on('change', (value) => {
+  localStorage.setItem('data', value)
 })
 
 document.querySelector<HTMLDivElement>("#app")?.appendChild(mindmap.dom as HTMLElement)
