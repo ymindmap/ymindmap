@@ -6,6 +6,13 @@ import { fabric } from 'fabric'
 import type { Theme } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 
+export const FABRIC_NODE_KEY = '__node__';
+
+export type Options = {
+    width?: number,
+    height?: number
+}
+
 /**
  * @todo 支持yoga
  */
@@ -14,13 +21,14 @@ export class View {
     canvas: fabric.Canvas
     private theme: Theme
     private xmlElementFabricObjectMap: WeakMap<XmlElement, fabric.Object> = new WeakMap();
-    constructor(state: State, theme: Theme) {
+    constructor(state: State, theme: Theme, options: Options = {}) {
         // 订阅state变化
         this.state = state;
         this.theme = theme;
 
         this.canvas = new fabric.Canvas(null, {
-            backgroundColor: this.theme.background
+            backgroundColor: this.theme.background,
+            ...options
         });
 
         // 订阅转换
@@ -50,6 +58,7 @@ export class View {
         const fabricObject = node.type.spec.toFabric && node.type.spec.toFabric(node, this.theme);
         if (fabricObject) {
             this.canvas.add(fabricObject);
+            Reflect.set(fabricObject, FABRIC_NODE_KEY, node);
 
             this.xmlElementFabricObjectMap.set(xmlElement, fabricObject);
         }
@@ -89,7 +98,7 @@ export class View {
         this.canvas.dispose();
     }
 
-    static create(state: State, theme: Theme) {
-        return new View(state, theme);
+    static create(state: State, theme: Theme, options?: Options) {
+        return new View(state, theme, options);
     }
 }

@@ -8,6 +8,8 @@ import type { Theme } from '@ymindmap/model'
 
 export type Options = {
     data: string | Uint8Array;
+    width?: number;
+    height?: number;
     theme?: string;
     themeList?: { [key: string]: Theme };
 } & Omit<StateConfig, 'doc' | 'activeClients'>
@@ -49,7 +51,11 @@ export class Mindmap {
                 plugins: [],
                 schema: options.schema,
             }),
-            themeConfig
+            themeConfig,
+            {
+                width: options.width,
+                height: options.height,
+            }
         )
 
         /**
