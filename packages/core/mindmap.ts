@@ -1,6 +1,6 @@
 import { State, StateConfig } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
-import mitt from 'mitt';
+import mitt, { EventType } from 'mitt';
 
 import { yjs2string, string2Yjs } from './bridge'
 
@@ -14,7 +14,7 @@ export type Options = {
     themeList?: { [key: string]: Theme };
 } & Omit<StateConfig, 'doc' | 'activeClients'>
 
-export class Mindmap {
+export class Mindmap<T extends Record<EventType, unknown> = any> {
     storage: {
         themeList: { [key: string]: Theme }
         [key: string]: unknown;
@@ -24,7 +24,7 @@ export class Mindmap {
 
     view: View;
 
-    private emitter = mitt<{
+    private emitter = mitt<T & {
         change: string
     }>()
 
@@ -62,7 +62,7 @@ export class Mindmap {
          * chang事件绑定
          * @todo 如果有更多事件的话，迁移到统一绑定区域
          */
-        this.state.doc.on('update', () => this.emitter.emit('change', this.toString()))
+        this.state.doc.on('update', () => this.emitter.emit('change', this.toString() as any))
     }
 
     get theme(): Theme {
@@ -85,7 +85,6 @@ export class Mindmap {
                 this.themeName = randomId;
             }
         }
-        this.render();
     }
 
     get state() {
@@ -98,6 +97,10 @@ export class Mindmap {
 
     get on() {
         return this.emitter.on
+    }
+
+    get emit() {
+        return this.emitter.emit
     }
 
     get off() {

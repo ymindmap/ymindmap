@@ -5,17 +5,18 @@
  */
 import { fabric } from 'fabric';
 import { debounce, throttle } from 'lodash-es';
+import type { Mindmap } from '@ymindmap/core'
 
-type ZoomEventsMap = Map<string, {
+type DocumentEventMap = Map<string, {
     handler: (e: Event) => void,
     options?: {
         passive?: boolean
-        capture?: boolean
+        capture?: boolean,
     }
 }>;
-const EVENT_KEY = '_zoomEvents';
+const EVENT_KEY = '__document_event__';
 const ZOOM_RATE = 10;
-const CANVAS_ACTIVE_KEY = 'active'
+const CANVAS_ACTIVE_KEY = '__active__'
 
 // 阻尼函数
 function damping(source: number, sourceMax: number, rate: number = 100) {
@@ -25,7 +26,7 @@ function damping(source: number, sourceMax: number, rate: number = 100) {
     return Math.floor(Math.round(x < 0 ? -y : y) / rate);
 }
 
-export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number }) {
+export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number, mindmap: Mindmap }) {
     // 校验
     const zoomWithDamping = throttle((targetScale: number) => {
         if (Math.floor(targetScale * 100) === Math.floor(canvas.getZoom() * 100)) return;
@@ -67,7 +68,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
     // eslint-disable-next-line 
     const container: HTMLDivElement = (canvas as any).wrapperEl;
 
-    const eventsMap: ZoomEventsMap = new Map();
+    const eventsMap: DocumentEventMap = new Map();
     Reflect.set(canvas, EVENT_KEY, eventsMap);
     // 绑定对应的事件实现缩放效果
 
@@ -87,6 +88,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
                     valideAndReZoom();
                 }
             }
+            if (options.mindmap) options.mindmap.emit('keydown', e);
         }
     })
 
@@ -135,7 +137,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
 
 export function unbindEvent(canvas: fabric.Canvas) {
     if (Reflect.has(canvas, EVENT_KEY)) {
-        const eventsMap: ZoomEventsMap = Reflect.get(canvas, EVENT_KEY);
+        const eventsMap: DocumentEventMap = Reflect.get(canvas, EVENT_KEY);
         Array.from(eventsMap.keys()).forEach((eventKey) => {
             const define = eventsMap.get(eventKey);
             if (define) document.removeEventListener(eventKey, define.handler, define.options);

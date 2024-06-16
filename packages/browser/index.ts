@@ -1,11 +1,12 @@
 import { Mindmap as CoreMindmap, Options } from '@ymindmap/core'
-// import { fabric } from 'fabric'
 import { getElement, destroy as domDestroy } from './dom/index'
 import { Editor } from './editor'
 
 export * from '@ymindmap/core';
 
-export class Mindmap extends CoreMindmap {
+export class Mindmap extends CoreMindmap<{
+    "keydown": KeyboardEvent
+}> {
     private editor: Editor;
     private editable: boolean = false;
 
