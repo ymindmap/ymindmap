@@ -13,8 +13,9 @@ type ZoomEventsMap = Map<string, {
         capture?: boolean
     }
 }>;
-const key = '_zoomEvents';
-const zoomRate = 10;
+const EVENT_KEY = '_zoomEvents';
+const ZOOM_RATE = 10;
+const CANVAS_ACTIVE_KEY = 'active'
 
 // 阻尼函数
 function damping(source: number, sourceMax: number, rate: number = 100) {
@@ -28,7 +29,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
     // 校验
     const zoomWithDamping = throttle((targetScale: number) => {
         if (Math.floor(targetScale * 100) === Math.floor(canvas.getZoom() * 100)) return;
-        const delta = Math.max(damping(zoomRate, (canvas.getZoom() - targetScale) * 100) / 100, 0.01);
+        const delta = Math.max(damping(ZOOM_RATE, (canvas.getZoom() - targetScale) * 100) / 100, 0.01);
 
         requestAnimationFrame(() => {
             canvas.setZoom(canvas.getZoom() + (targetScale > canvas.getZoom() ? delta : -delta));
@@ -59,31 +60,35 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
         }
     }, 1000)
 
+    // canvas是否聚焦基于鼠标
+    canvas.on('mouse:over', () => Reflect.set(canvas, CANVAS_ACTIVE_KEY, true));
+    canvas.on('mouse:out', () => Reflect.set(canvas, CANVAS_ACTIVE_KEY, false));
+
     // eslint-disable-next-line 
     const container: HTMLDivElement = (canvas as any).wrapperEl;
 
     const eventsMap: ZoomEventsMap = new Map();
-    Reflect.set(canvas, key, eventsMap);
+    Reflect.set(canvas, EVENT_KEY, eventsMap);
     // 绑定对应的事件实现缩放效果
 
     // 绑定keydown目前不生效，触发的对象一直是body，需要修复
-    // eventsMap.set('keydown', {
-    //     handler: (e: Event) => {
-    //         if (!container.contains(e.target as HTMLElement)) return;
-    //         const event = e as KeyboardEvent;
-    //         // ctrl +- 改为正常缩放
-    //         if (event.ctrlKey || event.metaKey) {
-    //             // +在 ctrl 下会变成 =
-    //             if (event.key === '+' || event.key === '-' || event.key === '=') {
-    //                 zoomWithDamping.cancel();
-    //                 event.preventDefault();
-    //                 event.stopPropagation();
-    //                 canvas.setZoom(canvas.getZoom() + zoomRate * (event.key === '-' ? -1 : 1));
-    //                 valideAndReZoom();
-    //             }
-    //         }
-    //     }
-    // })
+    eventsMap.set('keydown', {
+        handler: (e: Event) => {
+            if (!Reflect.get(canvas, CANVAS_ACTIVE_KEY)) return;
+            const event = e as KeyboardEvent;
+            // ctrl +- 改为正常缩放
+            if (event.ctrlKey || event.metaKey) {
+                // +在 ctrl 下会变成 =
+                if (event.key === '+' || event.key === '-' || event.key === '=') {
+                    zoomWithDamping.cancel();
+                    event.preventDefault();
+                    event.stopPropagation();
+                    canvas.setZoom(canvas.getZoom() + ZOOM_RATE * (event.key === '-' ? -0.01 : 0.01));
+                    valideAndReZoom();
+                }
+            }
+        }
+    })
 
     eventsMap.set('wheel', {
         handler(e: Event) {
@@ -129,14 +134,14 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
 }
 
 export function unbindEvent(canvas: fabric.Canvas) {
-    if (Reflect.has(canvas, key)) {
-        const eventsMap: ZoomEventsMap = Reflect.get(canvas, key);
+    if (Reflect.has(canvas, EVENT_KEY)) {
+        const eventsMap: ZoomEventsMap = Reflect.get(canvas, EVENT_KEY);
         Array.from(eventsMap.keys()).forEach((eventKey) => {
             const define = eventsMap.get(eventKey);
             if (define) document.removeEventListener(eventKey, define.handler, define.options);
         });
         eventsMap.clear();
-        Reflect.set(canvas, key, undefined);
+        Reflect.set(canvas, EVENT_KEY, undefined);
     };
 
     // 解绑resizeObserver
