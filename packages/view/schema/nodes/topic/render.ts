@@ -30,6 +30,15 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
         node.attributes,
     );
 
+    // 创建分组
+    const group = new fabric.Group([]);
+    const groupView = ElementObjectView.create({
+        ...context,
+        view: group,
+        data: node.data,
+        parent: null,
+    })
+
     // 创建容器
     const containerObject = new fabric.Rect({
         fill: topicStyle.backgroundColor,
@@ -39,11 +48,11 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
     const padding: [number, number, number, number] = Array.isArray(topicStyle.padding)
         ? topicStyle.padding
         : new Array(4).fill(topicStyle.padding || 0) as [number, number, number, number];
-    const rootView = ElementObjectView.create({
+    const containerView = ElementObjectView.create({
         ...context,
         view: containerObject,
         data: node.data,
-        parent: context.parent,
+        parent: groupView,
         style: {
             paddingTop: padding[0],
             paddingRight: padding[1],
@@ -51,8 +60,8 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
             paddingLeft: padding[3]
         },
     })
+    group.addWithUpdate(containerObject);
 
-    const content: fabric.Object[] = [];
     // 生成内容 需要之后增加layout布局
     node.data.forEach((dataItem) => {
         if (dataItem instanceof XmlText) {
@@ -61,12 +70,12 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
                 fill: topicStyle.color,
                 fontSize: topicStyle.fontSize
             })
-            content.push(textObject);
+            group.addWithUpdate(textObject);
             TextObjectView.create({
                 ...context,
                 view: textObject,
                 data: dataItem,
-                parent: rootView,
+                parent: containerView,
                 style: {
                     width: textObject.width,
                     height: textObject.height
@@ -78,17 +87,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
         }
     })
 
-    rootView.updateView();
-
-    const group = new fabric.Group(
-        [containerObject, ...content],
-    );
-    ElementObjectView.create({
-        ...context,
-        view: group,
-        data: node.data,
-        parent: context.parent,
-    })
+    groupView.updateView();
 
     return group;
 }
