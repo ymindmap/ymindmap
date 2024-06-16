@@ -3,7 +3,7 @@ import { NodeSpec } from './spec';
 import { Schema } from '../schema'
 import { XmlElement } from 'yjs';
 import type { IAttrs } from './attr.d';
-// eslint-disable-next-line 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class NodeType<T extends NodeSpec = NodeSpec> {
     name: string;
     schema: Schema | null = null;
@@ -33,13 +33,13 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                         }
                     }
                 }
-                return attrs;
+                return _attrs;
             }, { ...attrs });
         return new Node(this, nodeAttrs, content);
     }
 
     parse(xml: XmlElement) {
-        return Node.parseFromXml(this, xml);
+        return this.create(xml.getAttributes(), xml);
     }
 
     static createNode<T extends NodeSpec>(options: { name: string } & T) {
