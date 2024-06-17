@@ -9,6 +9,9 @@ export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
         id: {
             default: nanoid,
         },
+        title: {
+            default: ''
+        }
     },
 
     /**
