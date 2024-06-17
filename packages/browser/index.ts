@@ -1,6 +1,6 @@
 import { Mindmap as CoreMindmap, Options } from '@ymindmap/core'
 import { getElement, destroy as domDestroy } from './dom/index'
-import { Editor } from './editor'
+// import { Editor } from './editor'
 
 export * from '@ymindmap/core';
 
@@ -12,7 +12,7 @@ export * from '@ymindmap/core';
 export class Mindmap extends CoreMindmap<{
     "keydown": KeyboardEvent
 }> {
-    private editor: Editor | null = null;
+    // private editor: Editor | null = null;
     private editable: boolean = false;
 
     constructor(options: Options & { editable?: boolean }) {
@@ -20,26 +20,26 @@ export class Mindmap extends CoreMindmap<{
         this.setEditable(options.editable);
     }
 
-    initEditor() {
-        if (this.editor) return;
-        const editor = new Editor(this.canvas);
-        this.editor = editor;
-        // 绑定canvas的object的双击事件
-        this.canvas.on('mouse:dblclick', (e) => {
-            const target = e.target;
-            if (target) {
-                if (this.isEditable) {
-                    editor.bind(target);
-                }
-            }
-        })
-    }
+    // initEditor() {
+    //     if (this.editor) return;
+    //     const editor = new Editor(this.canvas);
+    //     this.editor = editor;
+    //     // 绑定canvas的object的双击事件
+    //     this.canvas.on('mouse:dblclick', (e) => {
+    //         const target = e.target;
+    //         if (target) {
+    //             if (this.isEditable) {
+    //                 editor.bind(target);
+    //             }
+    //         }
+    //     })
+    // }
 
     get dom(): HTMLDivElement {
         const element = getElement(this.canvas, this);
 
         // 有人获取了element说明可以进行编辑器的初始化了
-        this.initEditor();
+        // this.initEditor();
 
         return element;
     }
