@@ -2,7 +2,7 @@ import { XmlElement, XmlText } from 'yjs';
 import { NodeType } from './type';
 import type { IAttrs } from './attr.d';
 
-export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | null;
+export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | string | null;
 
 /**
  * 一个基础的node
@@ -11,43 +11,54 @@ export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | Xml
 // eslint-disable-next-line 
 export class Node<T extends IAttrs = any> {
     type: NodeType;
-    private xmlElement: XmlElement;
+    private state: XmlElement | XmlText;
     constructor(
         type: NodeType,
         attrs: IAttrs = {},
         content: INodeContent = null,
-        initXmlElement?: XmlElement | null
+        initState?: XmlElement | null
     ) {
         this.type = type;
 
         // 直接初始化
-        if (initXmlElement) {
-            this.xmlElement = initXmlElement;
+        if (initState) {
+            this.state = initState;
         } else {
-            this.xmlElement = new XmlElement(this.type.name);
+            if (typeof content === 'string') {
+                this.state = new XmlText(content);
+            } else {
+                this.state = new XmlElement(this.type.name);
+            }
         }
 
-        Object.keys(attrs).forEach(key => {
-            const value = attrs[key];
-            if (value !== this.xmlElement.getAttribute(key)) {
-                if (value) {
-                    this.xmlElement.setAttribute(key, value as string)
-                } else {
-                    this.xmlElement.removeAttribute(key);
+        if (this.state instanceof XmlElement) {
+            Object.keys(attrs).forEach(key => {
+                const value = attrs[key];
+                if (value !== this.state.getAttribute(key)) {
+                    if (value) {
+                        this.state.setAttribute(key, value as string)
+                    } else {
+                        this.state.removeAttribute(key);
+                    }
                 }
-            }
-        });
-        if (content) {
+            });
+        }
+        if (
+            content !== null
+            && this.state instanceof XmlElement
+        ) {
             const list = Array.isArray(content) ? content : [content];
-            this.xmlElement.insert(0, list.map(item => {
+            const yContent = list.map(item => {
                 if (item instanceof Node) return item.data;
-                return item;
-            }));
+                return typeof item === 'string' ? new XmlText(item) : item;
+            })
+            this.state.insert(0, yContent);
+
         }
     }
 
     get data() {
-        return this.xmlElement;
+        return this.state;
     }
 
     get attributes(): T {
@@ -56,12 +67,16 @@ export class Node<T extends IAttrs = any> {
 
     get depth() {
         const rootName = this.type.schema?.topNodeType.name;
-        function getDepth(xmlElement: XmlElement, depth = 0) {
-            if (!xmlElement.parent) return depth
-            if (!(xmlElement.parent instanceof XmlElement)) return depth;
-            if (xmlElement.parent.nodeName === rootName) return depth;
-            return getDepth(xmlElement.parent, depth + 1);
+        function getDepth(state: XmlElement | XmlText, depth = 0) {
+            if (!state.parent) return depth
+            if (!(state.parent instanceof XmlElement)) return depth;
+            if (state.parent.nodeName === rootName) return depth;
+            return getDepth(state.parent, depth + 1);
         }
         return getDepth(this.data);
+    }
+
+    get nodeSize() {
+        return this.data.length;
     }
 }
