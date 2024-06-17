@@ -52,7 +52,9 @@ export class State {
         this.doc = config.doc;
         this.schema = config.schema;
         this.plugins = config.plugins || [];
-        this.awareness = config.awareness;
+        this.awareness = config.awareness || {
+            selectedObjects: []
+        };
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc'>) {

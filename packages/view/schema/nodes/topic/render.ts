@@ -85,6 +85,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme, context: 
             const subNode = node.type.schema?.parseNode(dataItem);
             if (subNode && subNode.type.name === 'topic') return createTopic(subNode, theme, context);
         }
+        return;
     })
 
     groupView.updateView();

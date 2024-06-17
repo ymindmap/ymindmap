@@ -1,6 +1,5 @@
 import { XmlElement, XmlText } from 'yjs';
 import { NodeType } from './type';
-import { Schema } from '../schema';
 import type { IAttrs } from './attr.d';
 
 export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | null;
