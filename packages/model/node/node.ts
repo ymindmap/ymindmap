@@ -11,7 +11,7 @@ export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | Xml
 // eslint-disable-next-line 
 export class Node<T extends IAttrs = any> {
     type: NodeType;
-    private state: XmlElement | XmlText;
+    private yAbstractType: XmlElement | XmlText;
     constructor(
         type: NodeType,
         attrs: IAttrs = {},
@@ -22,47 +22,47 @@ export class Node<T extends IAttrs = any> {
 
         // 直接初始化
         if (initState) {
-            this.state = initState;
+            this.yAbstractType = initState;
         } else {
             if (typeof content === 'string') {
-                this.state = new XmlText(content);
+                this.yAbstractType = new XmlText(content);
             } else {
-                this.state = new XmlElement(this.type.name);
+                this.yAbstractType = new XmlElement(this.type.name);
             }
         }
 
-        if (this.state instanceof XmlElement) {
+        if (this.yAbstractType instanceof XmlElement) {
             Object.keys(attrs).forEach(key => {
                 const value = attrs[key];
-                if (value !== this.state.getAttribute(key)) {
+                if (value !== this.yAbstractType.getAttribute(key)) {
                     if (value) {
-                        this.state.setAttribute(key, value as string)
+                        this.yAbstractType.setAttribute(key, value as string)
                     } else {
-                        this.state.removeAttribute(key);
+                        this.yAbstractType.removeAttribute(key);
                     }
                 }
             });
         }
         if (
             content !== null
-            && this.state instanceof XmlElement
+            && this.yAbstractType instanceof XmlElement
         ) {
             const list = Array.isArray(content) ? content : [content];
             const yContent = list.map(item => {
-                if (item instanceof Node) return item.data;
+                if (item instanceof Node) return item.state;
                 return typeof item === 'string' ? new XmlText(item) : item;
             })
-            this.state.insert(0, yContent);
+            this.yAbstractType.insert(0, yContent);
 
         }
     }
 
-    get data() {
-        return this.state;
+    get state() {
+        return this.yAbstractType;
     }
 
     get attributes(): T {
-        return this.data.getAttributes() as T;
+        return this.state.getAttributes() as T;
     }
 
     get depth() {
@@ -73,10 +73,10 @@ export class Node<T extends IAttrs = any> {
             if (state.parent.nodeName === rootName) return depth;
             return getDepth(state.parent, depth + 1);
         }
-        return getDepth(this.data);
+        return getDepth(this.state);
     }
 
     get nodeSize() {
-        return this.data.length;
+        return this.state.length;
     }
 }
