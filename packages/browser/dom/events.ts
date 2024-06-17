@@ -5,7 +5,9 @@
  */
 import { fabric } from 'fabric';
 import { debounce, throttle } from 'lodash-es';
+import { getElement } from '../dom'
 import type { Mindmap } from '@ymindmap/core'
+
 
 type DocumentEventMap = Map<string, {
     handler: (e: Event) => void,
@@ -125,11 +127,21 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
         if (define) document.addEventListener(eventKey, define.handler, define.options);
     });
 
+    const resetContainerBackground = debounce((el: HTMLDivElement) => {
+        el.style.background = '';
+    }, 1000)
     // 增加resizeObserver事件绑定
     const resizeObserver = new ResizeObserver(([containerSize]) => {
+        // 强制设置一次背景颜色，防止闪烁
         const { contentRect: { width, height } } = containerSize;
+
+        const container = getElement(canvas);
+        container.style.background = canvas.backgroundColor?.toString() || '';
+
         if (width !== canvas.getWidth()) canvas.setWidth(width);
         if (height !== canvas.getHeight()) canvas.setHeight(height);
+
+        resetContainerBackground(container);
     });
     resizeObserver.observe(container);
     Reflect.set(canvas, 'resizeObserver', resizeObserver);
