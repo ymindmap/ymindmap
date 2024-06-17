@@ -28,10 +28,11 @@ const Topic = fabric.util.createClass(fabric.Group, {
     initialize(options: TopicOptions = {}) {
         // 创建Itext
         const iText = new fabric.IText(options.title || '', {
+            type: 'title',
             fill: options.color,
             left: options.paddingLeft || 0,
             top: options.paddingTop || 0,
-            fontSize: options.fontSize || 12
+            fontSize: options.fontSize || 12,
         })
 
         // 创建背景
