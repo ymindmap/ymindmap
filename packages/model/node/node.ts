@@ -16,7 +16,7 @@ export class Node<T extends IAttrs = any> {
         type: NodeType,
         attrs: IAttrs = {},
         content: INodeContent = null,
-        initState?: XmlElement | null
+        initState?: XmlElement | XmlText | null
     ) {
         this.type = type;
 

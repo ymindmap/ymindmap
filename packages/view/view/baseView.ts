@@ -1,31 +1,39 @@
 /**
  * view
  */
-import { fabric } from 'fabric'
-import { Node } from '@ymindmap/model'
+import type { fabric } from 'fabric'
+import type { Node, Theme } from '@ymindmap/model'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
-export class BaseView<T extends fabric.Object = fabric.Object> {
+export interface Context {
     canvas: fabric.Canvas;
+    theme: Theme
+}
+
+export class BaseView<T extends fabric.Object = fabric.Object> {
+    context: Context;
     node: Node;
     fabricObject: T | null;
     parent: null | BaseView;
     children: BaseView[];
 
     constructor(
-        canvas: fabric.Canvas,
+        context: Context,
         node: Node,
         fabricObject?: T | null,
         parent?: BaseView | null
     ) {
-        this.canvas = canvas;
+        this.context = context;
         this.node = node;
         this.fabricObject = fabricObject || null;
         this.parent = parent || null;
         this.children = []
 
-        if (this.fabricObject) Reflect.set(this.fabricObject, VIEW_KEY, this);
+        if (this.fabricObject) {
+            Reflect.set(this.fabricObject, VIEW_KEY, this);
+            this.context.canvas.add(this.fabricObject);
+        }
 
         // 订阅更新移除自己的子节点
         this.node.state.observe((e) => {
@@ -105,7 +113,7 @@ export class BaseView<T extends fabric.Object = fabric.Object> {
         this.children.forEach(item => item.destroy());
         if (this.fabricObject) {
             Reflect.deleteProperty(this.fabricObject, VIEW_KEY);
-            this.canvas.remove(this.fabricObject);
+            this.context.canvas.remove(this.fabricObject);
         }
     }
 }

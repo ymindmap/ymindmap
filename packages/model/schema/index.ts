@@ -1,4 +1,4 @@
-import { XmlElement } from 'yjs'
+import { XmlElement, XmlText } from 'yjs'
 import {
     NodeType,
     Node,
@@ -48,8 +48,8 @@ export class Schema {
     }
 
     /** parseNode from xmlElement */
-    parseNode(xml: XmlElement): Node | null {
-        const nodeName = xml.nodeName;
+    parseNode(xml: XmlElement | XmlText): Node | null {
+        const nodeName = xml instanceof XmlElement ? xml.nodeName : 'text';
         const nodeType = this.nodes[nodeName];
         if (nodeType) return nodeType.parse(xml);
         return null;

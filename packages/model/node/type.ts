@@ -1,7 +1,7 @@
 import { Node, INodeContent } from './node';
 import { NodeSpec } from './spec';
 import { Schema } from '../schema'
-import { XmlElement } from 'yjs';
+import { XmlElement, XmlText } from 'yjs';
 import type { IAttrs } from './attr.d';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export class NodeType<T extends NodeSpec = NodeSpec> {
@@ -18,7 +18,11 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
         this.schema = schema;
     }
 
-    create(attrs: IAttrs = {}, content: INodeContent = null, initXmlElement: XmlElement | null = null): Node {
+    create(
+        attrs: IAttrs = {},
+        content: INodeContent = null,
+        initYFragment: XmlElement | XmlText | null = null
+    ): Node {
         const nodeAttrs: IAttrs = Object
             .keys(this.spec.attrs || {})
             .reduce<IAttrs>((_attrs, key) => {
@@ -35,10 +39,10 @@ export class NodeType<T extends NodeSpec = NodeSpec> {
                 }
                 return _attrs;
             }, { ...attrs });
-        return new Node(this, nodeAttrs, content, initXmlElement);
+        return new Node(this, nodeAttrs, content, initYFragment);
     }
 
-    parse(xml: XmlElement) {
+    parse(xml: XmlElement | XmlText) {
         return this.create(xml.getAttributes(), null, xml);
     }
 
