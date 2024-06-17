@@ -15,10 +15,12 @@ type TopicOptions = {
     title?: string,
     color?: string, // 文字颜色
     backgroundColor?: string, // 背景颜色
+    fontSize?: number,
     paddingTop?: number
     paddingRight?: number
     paddingBottom?: number
     paddingLeft?: number
+    borderRadius?: number
 
 }
 const Topic = fabric.util.createClass(fabric.Group, {
@@ -29,13 +31,16 @@ const Topic = fabric.util.createClass(fabric.Group, {
             fill: options.color,
             left: options.paddingLeft || 0,
             top: options.paddingTop || 0,
+            fontSize: options.fontSize || 12
         })
 
         // 创建背景
         const bg = new fabric.Rect({
             width: (iText.width || 0) + (options.paddingLeft || 0) + (options.paddingRight || 0),
             height: (iText.height || 0) + (options.paddingTop || 0) + (options.paddingBottom || 0),
-            fill: options.backgroundColor
+            fill: options.backgroundColor,
+            rx: options.borderRadius,
+            ry: options.borderRadius
         })
 
         this.callSuper('initialize', [
@@ -99,12 +104,12 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
         title: node.attributes?.title || '请输入内容',
         color: topicStyle.color,
         backgroundColor: topicStyle.backgroundColor,
-        rx: topicStyle.borderRadius,
-        ry: topicStyle.borderRadius,
+        borderRadius: topicStyle.borderRadius,
         paddingTop,
         paddingRight,
         paddingLeft,
         paddingBottom,
+        fontSize: topicStyle.fontSize || 14
     })
 
     return topic;
