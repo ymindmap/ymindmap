@@ -12,7 +12,7 @@ export type Options = {
     height?: number;
     theme?: string;
     themeList?: { [key: string]: Theme };
-} & Omit<StateConfig, 'doc' | 'activeClients'>
+} & Omit<StateConfig, 'doc' | 'activeClients' | 'undoManager'>
 
 export class Mindmap<T extends Record<EventType, unknown> = any> {
     storage: {
