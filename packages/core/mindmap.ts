@@ -111,6 +111,22 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
         return this.emitter.off
     }
 
+    get undoSize() {
+        return this.state.undoManager.undoStack.length;
+    }
+
+    get redoSize() {
+        return this.state.undoManager.redoStack.length;
+    }
+
+    undo() {
+        this.state.undoManager.undo()
+    }
+
+    redo() {
+        this.state.undoManager.redo()
+    }
+
     toDataUrl(options: fabric.IDataURLOptions) {
         return this.view.toDataUrl(options)
     }

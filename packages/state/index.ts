@@ -8,7 +8,8 @@ import {
     Doc,
     applyUpdateV2,
     encodeStateAsUpdateV2,
-    XmlElement
+    XmlElement,
+    UndoManager
 } from 'yjs';
 import { Schema } from '@ymindmap/model';
 
@@ -24,6 +25,7 @@ export type Command = (
 export interface StateConfig {
     schema: Schema;
     doc: Doc;
+    undoManager: UndoManager
     awareness?: Awareness, // 感知数据
     plugins?: unknown[];
 }
@@ -34,6 +36,8 @@ export class State {
     awareness: Awareness;
 
     schema: Schema;
+
+    undoManager: UndoManager;
 
     commands: {
         [key: string]: Command;
@@ -50,7 +54,8 @@ export class State {
             plugins: this.plugins,
             awareness: {
                 selectedObjects: []
-            }
+            },
+            undoManager: this.undoManager
         });
         newState.commands = this.commands;
 
@@ -67,6 +72,7 @@ export class State {
 
     constructor(config: StateConfig) {
         this.doc = config.doc;
+        this.undoManager = config.undoManager;
         this.schema = config.schema;
         this.plugins = config.plugins || [];
         this.awareness = config.awareness || {
@@ -78,16 +84,21 @@ export class State {
         this.commands[key] = () => command(this.doc);
     }
 
-    static create(data: Uint8Array, config: Omit<StateConfig, 'doc'>) {
+    static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
         const doc = new Doc();
+        const undoManager = new UndoManager(doc.getXmlFragment('default'));
         applyUpdateV2(doc, data);
+        doc.once('updateV2', () => setTimeout(() => undoManager.clear()));
+
         return new State({
             schema: config.schema,
             plugins: config.plugins || [],
             awareness: {
                 selectedObjects: []
             },
-            doc
+            doc,
+            undoManager
         });
     }
 }
+
