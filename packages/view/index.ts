@@ -26,11 +26,12 @@ export class View extends NodeView {
             backgroundColor: theme.background,
             ...options
         });
-        
+        const viewContext = { canvas, theme };
+
         super(
-            { canvas, theme },
+            viewContext,
             node,
-            node?.type.spec.toFabric && node.type.spec.toFabric(node, theme),
+            node?.type.spec.toFabric && node.type.spec.toFabric(node, viewContext),
         );
 
         // 订阅state变化

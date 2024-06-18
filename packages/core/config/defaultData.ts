@@ -8,16 +8,16 @@ export function getDefaultData() {
                     "_attributes": {
                         "id": "root",
                     },
-                    "topic": [
-                        {
-                            "_attributes": {
-                            },
-                        },
-                        {
-                            "_attributes": {
-                            },
-                        },
-                    ]
+                    // "topic": [
+                    //     {
+                    //         "_attributes": {
+                    //         },
+                    //     },
+                    //     {
+                    //         "_attributes": {
+                    //         },
+                    //     },
+                    // ]
                 },
             ]
         }

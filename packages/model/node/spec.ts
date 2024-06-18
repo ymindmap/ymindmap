@@ -3,6 +3,11 @@ import type { Theme } from '../theme'
 import type { IAttrSpec, IAttrs } from './attr.d';
 import type { fabric } from 'fabric'
 
+export type NodeToFabricContext = {
+    theme: Theme;
+    canvas: fabric.Canvas;
+}
+
 // eslint-disable-next-line 
 export interface NodeSpec<K extends IAttrs = any> {
     content?: string;
@@ -17,5 +22,5 @@ export interface NodeSpec<K extends IAttrs = any> {
 
     draggable?: boolean;
 
-    toFabric?: (node: Node<K>, theme: Theme) => fabric.Object;
+    toFabric?: (node: Node<K>, context: NodeToFabricContext) => fabric.Object;
 }

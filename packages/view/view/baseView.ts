@@ -2,24 +2,19 @@
  * view
  */
 import type { fabric } from 'fabric'
-import type { Node, Theme } from '@ymindmap/model'
+import type { Node, NodeToFabricContext } from '@ymindmap/model'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
-export interface Context {
-    canvas: fabric.Canvas;
-    theme: Theme
-}
-
 export class BaseView<T extends fabric.Object = fabric.Object> {
-    context: Context;
+    context: NodeToFabricContext;
     node: Node;
     fabricObject: T | null;
     parent: null | BaseView;
     children: BaseView[];
 
     constructor(
-        context: Context,
+        context: NodeToFabricContext,
         node: Node,
         fabricObject?: T | null,
         parent?: BaseView | null

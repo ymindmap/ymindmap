@@ -2,12 +2,11 @@
  * 创建一个topic节点
  * 目前视图和数据的绑定在这里，如果变得复杂，之后需要额外移动到单独的类下
  * @see http://fabricjs.com/fabric-intro-part-3#subclassing
- * @see https://github.com/fabricjs/fabric.js/issues/2574 // 绘制padding
  * @todo 支持latex https://jsfiddle.net/3aHQc/39/
  */
 
 import { fabric } from 'fabric';
-import { Node, Theme, TopicStyle } from '@ymindmap/model';
+import { Node, NodeToFabricContext, Theme, TopicStyle } from '@ymindmap/model';
 
 import type { ITopicNodeAttrs } from './attr';
 
@@ -30,15 +29,11 @@ const Topic = fabric.util.createClass(fabric.Group, {
         const iText = new fabric.IText(options.title || '', {
             type: 'title',
             fill: options.color,
-            left: options.paddingLeft || 0,
-            top: options.paddingTop || 0,
             fontSize: options.fontSize || 12,
         })
 
         // 创建背景
         const bg = new fabric.Rect({
-            width: (iText.width || 0) + (options.paddingLeft || 0) + (options.paddingRight || 0),
-            height: (iText.height || 0) + (options.paddingTop || 0) + (options.paddingBottom || 0),
             fill: options.backgroundColor,
             rx: options.borderRadius,
             ry: options.borderRadius
@@ -49,28 +44,39 @@ const Topic = fabric.util.createClass(fabric.Group, {
             iText,
         ], {
             ...options,
+            editable: false,
             hasControls: false,
         });
+
+        this.autoLayout();
+
+        // 联动宽度变更
+        iText.on('changed', () => {
+            this.autoLayout(true)
+        })
     },
 
-    // _render(ctx: CanvasRenderingContext2D) {
-    //     // 绘制本身的文字
-    //     // ctx.fillStyle = this.color;
-    //     ctx.fillStyle = '#000';
-    //     this.callSuper('_render', ctx);
+    /**
+     * @todo 修复尺寸过小问题
+     * @param ignorePosition 
+     */
+    autoLayout(ignorePosition = false) {
+        const { paddingLeft, paddingRight, paddingTop, paddingBottom } = this;
+        const [bg, iText] = this._objects as [fabric.Rect, fabric.IText];
 
-    //     // 绘制背景颜色 + padding
-    //     const { x, y } = this._getNonTransformedDimensions();
-    //     ctx.fillStyle = this.fill;
-    //     ctx.fillRect(
-    //         // x,
-    //         // y,
-    //         0,
-    //         0,
-    //         this.width + (this.paddingLeft || 0) + (this.paddingRight || 0),
-    //         this.height + (this.paddingTop || 0) + (this.paddingBottom || 0)
-    //     )
-    // }
+        bg.width = (iText.width || 0) + (paddingLeft || 0) + (paddingRight || 0);
+        bg.height = (iText.height || 0) + (paddingTop || 0) + (paddingBottom || 0);
+
+        this.width = bg.width;
+        this.height = bg.height;
+
+        if (!ignorePosition) {
+            bg.left = -(bg.width || 0) / 2;
+            bg.top = -(bg.height || 0) / 2;
+            iText.left = (paddingLeft || 0) - ((bg.width || 0) / 2);
+            iText.top = (paddingTop || 0) - ((bg.height || 0) / 2);
+        }
+    }
 })
 
 function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
@@ -85,10 +91,10 @@ function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
+export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToFabricContext) {
     const topicStyle = Object.assign(
         {},
-        getTopicTheme(node, theme),
+        getTopicTheme(node, context.theme),
         node.attributes,
     );
 
@@ -111,6 +117,38 @@ export function createTopic(node: Node<ITopicNodeAttrs>, theme: Theme) {
         paddingLeft,
         paddingBottom,
         fontSize: topicStyle.fontSize || 14
+    })
+
+    // 进入编辑模式
+    topic.on('mousedblclick', () => {
+        if (!topic.editable) return;
+
+        // 先解绑，然后将iText focus 之后进入编辑模式
+        const objects: fabric.Object[] = topic.getObjects();
+        const title = objects.find(item => item.type === 'title') as fabric.IText | undefined;
+        if (!title) return;
+        topic._restoreObjectsState();
+        context.canvas.remove(topic);
+        context.canvas.renderAll();
+        objects.forEach((object) => context.canvas.add(object))
+        context.canvas.setActiveObject(title);
+        title.enterEditing();
+        title.selectAll();
+        context.canvas.renderAll();
+
+        const regroup = () => {
+            // 退出编辑模式，重新渲染topic
+            objects.forEach(object => context.canvas.remove(object));
+            context.canvas.renderAll();
+            context.canvas.add(topic);
+            // 内部的元素需要重新布局
+            topic.autoLayout();
+            context.canvas.renderAll();
+            title.off('editing:exited', regroup);
+        }
+
+        // 退出编辑模式，重新渲染topic
+        title.on('editing:exited', regroup);
     })
 
     return topic;

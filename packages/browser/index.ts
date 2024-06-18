@@ -17,6 +17,9 @@ export class Mindmap extends CoreMindmap<{
     constructor(options: Options & { editable?: boolean }) {
         super(options);
         this.setEditable(options.editable);
+
+        // 绑定editable 自动同步注入
+        this.canvas.on('object:added', (e) => e.target && e.target.set('editable' as any, this.editable));
     }
 
     // initEditor() {
@@ -49,6 +52,24 @@ export class Mindmap extends CoreMindmap<{
 
     setEditable(value: boolean = false) {
         this.editable = value;
+
+        // 所有子节点都设置这个属性
+        const getAllObjects = function (
+            container: fabric.Group | fabric.Canvas,
+            list: fabric.Object[] = []
+        ) {
+            const objects = container.getObjects();
+            list.push(...objects);
+            objects.forEach(object => {
+                if (Reflect.has(object, 'getObjects')) getAllObjects(object as fabric.Group, list);
+            })
+            return list;
+        }
+        const allObjects = getAllObjects(this.canvas);
+        /**
+         * @todo 如果有编辑的需要强制退出编辑
+         */
+        allObjects.forEach(object => object.set('editable' as any, value));
     }
 
     destroy() {
