@@ -3,13 +3,23 @@
  * Doc, Transaction的状态管理
  * 参考了prosemirror的api接口实现
  */
-import { Transaction, Doc, applyUpdateV2, encodeStateAsUpdateV2, XmlElement } from 'yjs';
+import {
+    Transaction,
+    Doc,
+    applyUpdateV2,
+    encodeStateAsUpdateV2,
+    XmlElement
+} from 'yjs';
 import { Schema } from '@ymindmap/model';
 
 export type Awareness = {
     selectedObjects: XmlElement[],
     [key: string]: any
 }
+
+export type Command = (
+    doc: Doc,
+) => boolean
 
 export interface StateConfig {
     schema: Schema;
@@ -25,12 +35,16 @@ export class State {
 
     schema: Schema;
 
+    commands: {
+        [key: string]: Command;
+    } = {};
+
     /** @todo 实现plugin系统 */
     readonly plugins: unknown[] = [];
 
     apply(tr: Transaction): State {
         applyUpdateV2(this.doc, encodeStateAsUpdateV2(tr.doc));
-        return new State({
+        const newState = new State({
             doc: tr.doc,
             schema: this.schema,
             plugins: this.plugins,
@@ -38,6 +52,9 @@ export class State {
                 selectedObjects: []
             }
         });
+        newState.commands = this.commands;
+
+        return newState;
     }
 
     updateAwareness(key: keyof Awareness, value: any) {
@@ -55,6 +72,10 @@ export class State {
         this.awareness = config.awareness || {
             selectedObjects: []
         };
+    }
+
+    registerCommand(key: string, command: Command) {
+        this.commands[key] = () => command(this.doc);
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc'>) {

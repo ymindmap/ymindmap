@@ -91,6 +91,10 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
         return this.view.state;
     }
 
+    get commands() {
+        return this.state.commands;
+    }
+
     get canvas() {
         return this.view.canvas;
     }
