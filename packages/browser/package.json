@@ -21,8 +21,6 @@
     "@ymindmap/model": "workspace:*",
     "@ymindmap/state": "workspace:*",
     "@ymindmap/view": "workspace:*",
-    "lodash-es": "^4.17.21",
-    "quill": "^2.0.2",
-    "y-quill": "^1.0.0"
+    "lodash-es": "^4.17.21"
   }
 }

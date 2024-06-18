@@ -1,6 +1,5 @@
 import { Mindmap as CoreMindmap, Options } from '@ymindmap/core'
 import { getElement, destroy as domDestroy } from './dom/index'
-// import { Editor } from './editor'
 
 export * from '@ymindmap/core';
 
