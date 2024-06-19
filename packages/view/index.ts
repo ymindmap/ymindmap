@@ -1,6 +1,5 @@
 import { XmlElement } from 'yjs'
 import { fabric } from 'fabric'
-import { Yoga, loadYoga } from 'yoga-layout/load';
 import { NodeView } from './view/nodeView'
 import { VIEW_KEY } from './view/baseView'
 import type { Theme, Node } from '@ymindmap/model'
@@ -13,7 +12,6 @@ export type ViewOptions = {
 
 export class View extends NodeView {
     state: State
-    private yoga: Yoga | null = null;
     constructor(state: State, theme: Theme, options: ViewOptions = {}) {
         let rootState = state.doc.getXmlFragment('default').firstChild;
         if (!rootState) {
@@ -39,16 +37,6 @@ export class View extends NodeView {
 
         // 禁止group的时候拥有control
         fabric.Group.prototype.hasControls = false;
-
-        // 加载yoga进行排版
-        loadYoga()
-            .then((yoga) => {
-                this.yoga = yoga;
-                // 开始排版
-            })
-            .catch((e) => {
-                throw e;
-            })
 
         // 选区自动同步
         const onCanvasSelectionChange = () => {
