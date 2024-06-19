@@ -18,10 +18,6 @@ export type Awareness = {
     [key: string]: any
 }
 
-export type Command = (
-    doc: Doc,
-) => boolean
-
 export interface StateConfig {
     schema: Schema;
     doc: Doc;
@@ -39,10 +35,6 @@ export class State {
 
     undoManager: UndoManager;
 
-    commands: {
-        [key: string]: Command;
-    } = {};
-
     /** @todo 实现plugin系统 */
     readonly plugins: unknown[] = [];
 
@@ -57,7 +49,6 @@ export class State {
             },
             undoManager: this.undoManager
         });
-        newState.commands = this.commands;
 
         return newState;
     }
@@ -78,10 +69,6 @@ export class State {
         this.awareness = config.awareness || {
             selectedObjects: []
         };
-    }
-
-    registerCommand(key: string, command: Command) {
-        this.commands[key] = () => command(this.doc);
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
