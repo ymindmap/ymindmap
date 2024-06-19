@@ -17,7 +17,8 @@ export interface StateConfig {
     doc: Doc;
     undoManager: UndoManager
     plugins?: unknown[];
-    selected?: Node[]
+    selected?: Node[];
+    pluginState?: Record<string, any>
 }
 
 export class State {
@@ -28,6 +29,8 @@ export class State {
     undoManager: UndoManager;
 
     selected: Node[] = [];
+
+    pluginState: Record<string, any> = {};
 
     /** @todo 实现plugin系统 */
     readonly plugins: unknown[] = [];
@@ -40,13 +43,14 @@ export class State {
             plugins: this.plugins,
             undoManager: this.undoManager,
             selected: this.selected,
+            pluginState: this.pluginState,
         });
 
         return newState;
     }
 
-    tr() {
-        return new Transaction(this.doc, null, true);
+    get tr() {
+        return this.doc.transact
     }
 
     get $selection() {
@@ -62,6 +66,7 @@ export class State {
         this.schema = config.schema;
         this.plugins = config.plugins || [];
         this.selected = config.selected || [];
+        this.pluginState = config.pluginState || {};
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
