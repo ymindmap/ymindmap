@@ -8,32 +8,26 @@ import {
     Doc,
     applyUpdateV2,
     encodeStateAsUpdateV2,
-    XmlElement,
     UndoManager
 } from 'yjs';
-import { Schema } from '@ymindmap/model';
-
-export type Awareness = {
-    selectedObjects: XmlElement[],
-    [key: string]: any
-}
+import { Schema, Node } from '@ymindmap/model';
 
 export interface StateConfig {
     schema: Schema;
     doc: Doc;
     undoManager: UndoManager
-    awareness?: Awareness, // 感知数据
     plugins?: unknown[];
+    selected?: Node[]
 }
 
 export class State {
     doc: Doc;
-    /** 选中的id */
-    awareness: Awareness;
 
     schema: Schema;
 
     undoManager: UndoManager;
+
+    selected: Node[] = [];
 
     /** @todo 实现plugin系统 */
     readonly plugins: unknown[] = [];
@@ -44,21 +38,22 @@ export class State {
             doc: tr.doc,
             schema: this.schema,
             plugins: this.plugins,
-            awareness: {
-                selectedObjects: []
-            },
-            undoManager: this.undoManager
+            undoManager: this.undoManager,
+            selected: this.selected,
         });
 
         return newState;
     }
 
-    updateAwareness(key: keyof Awareness, value: any) {
-        this.awareness[key] = value;
-    }
-
     tr() {
         return new Transaction(this.doc, null, true);
+    }
+
+    get $selection() {
+        return {
+            nodes: this.selected,
+            empty: this.selected.length === 0
+        }
     }
 
     constructor(config: StateConfig) {
@@ -66,9 +61,7 @@ export class State {
         this.undoManager = config.undoManager;
         this.schema = config.schema;
         this.plugins = config.plugins || [];
-        this.awareness = config.awareness || {
-            selectedObjects: []
-        };
+        this.selected = config.selected || [];
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
@@ -80,9 +73,6 @@ export class State {
         return new State({
             schema: config.schema,
             plugins: config.plugins || [],
-            awareness: {
-                selectedObjects: []
-            },
             doc,
             undoManager
         });

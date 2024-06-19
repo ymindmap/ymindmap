@@ -3,7 +3,7 @@ import { fabric } from 'fabric'
 import { Yoga, loadYoga } from 'yoga-layout/load';
 import { NodeView } from './view/nodeView'
 import { VIEW_KEY } from './view/baseView'
-import type { Theme } from '@ymindmap/model'
+import type { Theme, Node } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 
 export type ViewOptions = {
@@ -40,7 +40,6 @@ export class View extends NodeView {
         // 禁止group的时候拥有control
         fabric.Group.prototype.hasControls = false;
 
-        this.bindAwareness();
         // 加载yoga进行排版
         loadYoga()
             .then((yoga) => {
@@ -50,6 +49,19 @@ export class View extends NodeView {
             .catch((e) => {
                 throw e;
             })
+
+        // 选区自动同步
+        const onCanvasSelectionChange = () => {
+            this.state.selected = this.canvas.getActiveObjects()
+                .map(item => {
+                    const view: NodeView | undefined = Reflect.get(item, VIEW_KEY);
+                    return view?.node;
+                })
+                .filter((item) => !!item) as Node[];
+        }
+        this.canvas.on('selection:cleared', onCanvasSelectionChange);
+        this.canvas.on('selection:created', onCanvasSelectionChange);
+        this.canvas.on('selection:updated', onCanvasSelectionChange);
     }
 
     get schema() {
@@ -62,23 +74,6 @@ export class View extends NodeView {
 
     get canvas() {
         return this.context.canvas
-    }
-
-    bindAwareness() {
-        /**
-         * 订阅当前选中节点
-         */
-        const onCanvasSelectionChange = () => {
-            const selectedObjects = this.canvas.getActiveObjects()
-                .map(item => {
-                    const view: NodeView | undefined = Reflect.get(item, VIEW_KEY);
-                    return view?.node?.state;
-                }).filter((item) => item)
-            this.state.updateAwareness('selectedObjects', selectedObjects);
-        }
-        this.canvas.on('selection:cleared', onCanvasSelectionChange);
-        this.canvas.on('selection:created', onCanvasSelectionChange);
-        this.canvas.on('selection:updated', onCanvasSelectionChange);
     }
 
     renderAll() {
