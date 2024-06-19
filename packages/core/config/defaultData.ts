@@ -7,7 +7,6 @@ export function getDefaultData() {
                 "topic": [
                     {
                         "_attributes": {
-                            "id": "root",
                         },
                         // "topic": [
                         //     {
