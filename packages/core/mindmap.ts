@@ -1,6 +1,7 @@
 import { State, StateConfig } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
 import mitt, { EventType } from 'mitt';
+import { CommandManager } from './command/index';
 
 import { yjs2string, string2Yjs } from './bridge'
 
@@ -23,6 +24,8 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
     themeName = 'default'
 
     view: View;
+
+    commandManager: CommandManager;
 
     private emitter = mitt<T & {
         change: string
@@ -58,6 +61,9 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
             }
         )
 
+        // 绑定commandMager
+        this.commandManager = new CommandManager(this.view);
+
         /**
          * chang事件绑定
          * @todo 如果有更多事件的话，迁移到统一绑定区域
@@ -92,7 +98,7 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
     }
 
     get commands() {
-        return this.state.commands;
+        return this.commandManager.commands;
     }
 
     get canvas() {

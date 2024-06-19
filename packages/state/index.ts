@@ -4,10 +4,10 @@
  * 参考了prosemirror的api接口实现
  */
 import {
-    Transaction,
+    // Transaction,
     Doc,
     applyUpdateV2,
-    encodeStateAsUpdateV2,
+    // encodeStateAsUpdateV2,
     UndoManager
 } from 'yjs';
 import { Schema, Node } from '@ymindmap/model';
@@ -35,31 +35,6 @@ export class State {
     /** @todo 实现plugin系统 */
     readonly plugins: unknown[] = [];
 
-    apply(tr: Transaction): State {
-        applyUpdateV2(this.doc, encodeStateAsUpdateV2(tr.doc));
-        const newState = new State({
-            doc: tr.doc,
-            schema: this.schema,
-            plugins: this.plugins,
-            undoManager: this.undoManager,
-            selected: this.selected,
-            pluginState: this.pluginState,
-        });
-
-        return newState;
-    }
-
-    get tr() {
-        return this.doc.transact
-    }
-
-    get $selection() {
-        return {
-            nodes: this.selected,
-            empty: this.selected.length === 0
-        }
-    }
-
     constructor(config: StateConfig) {
         this.doc = config.doc;
         this.undoManager = config.undoManager;
@@ -67,6 +42,35 @@ export class State {
         this.plugins = config.plugins || [];
         this.selected = config.selected || [];
         this.pluginState = config.pluginState || {};
+    }
+
+    get transact() {
+        return this.doc.transact
+    }
+
+    // apply(tr: Transaction): State {
+    //     applyUpdateV2(this.doc, encodeStateAsUpdateV2(tr.doc));
+    //     const newState = new State({
+    //         doc: tr.doc,
+    //         schema: this.schema,
+    //         plugins: this.plugins,
+    //         undoManager: this.undoManager,
+    //         selected: this.selected,
+    //         pluginState: this.pluginState,
+    //     });
+
+    //     return newState;
+    // }
+
+    // tr(origin?: any) {
+    //     return new Transaction(this.doc, origin, true);
+    // }
+
+    get $selection() {
+        return {
+            nodes: this.selected,
+            empty: this.selected.length === 0
+        }
     }
 
     static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
