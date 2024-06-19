@@ -21,7 +21,7 @@ export class View extends NodeView {
         const node = state.schema.parseNode(rootState);
         if (!node || node.type !== state.schema.topNodeType) throw new Error('Can not init view with error topNodeType')
         const canvas = new fabric.Canvas(null, {
-            backgroundColor: theme.background,
+            backgroundColor: node.attributes.background || theme.background,
             ...options
         });
         const viewContext = { canvas, theme };

@@ -24,9 +24,6 @@ export const mindmap = NodeType.createNode({
         structure: {
             default: 'right',
         },
-        background: {
-            default: '#ffffff'
-        }
     },
 })
 
