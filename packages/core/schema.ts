@@ -1,12 +1,13 @@
-import { topic, mindmap, text } from '@ymindmap/view'
+import { topic, mindmap, text, doc } from '@ymindmap/view'
 import { Schema } from '@ymindmap/model'
 
 export const schema = new Schema({
     nodes: {
+        mindmap,
         topic,
         text
     },
-    topNodeType: mindmap
+    topNodeType: doc
 });
 
 export default schema;

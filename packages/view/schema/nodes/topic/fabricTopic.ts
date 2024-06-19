@@ -81,10 +81,11 @@ const Topic = fabric.util.createClass(fabric.Group, {
 
 function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
     let topicTheme = theme.childTopic;
-    if (node.depth === 0) {
+    const mindmapDepth = 0; // 这个必须是0
+    if (node.depth === mindmapDepth + 1) {
         topicTheme = theme.centerTopic;
     }
-    if (node.depth === 1) {
+    if (node.depth === mindmapDepth + 2) {
         topicTheme = theme.subTopic
     }
     return topicTheme;
