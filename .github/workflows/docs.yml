@@ -41,13 +41,10 @@ jobs:
         run: pnpm build
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./apps/docs/dist
-          destination: ./
-      - name: Upload artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./apps/docs/dist
 
   # Deployment job
   deploy:
