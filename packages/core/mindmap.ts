@@ -101,6 +101,11 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
         return this.commandManager.commands;
     }
 
+    get $anchor() {
+        const { empty, nodes } = this.state.$selection;
+        return empty ? null : nodes[0];
+    }
+
     get canvas() {
         return this.view.canvas;
     }
