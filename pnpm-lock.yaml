@@ -75,6 +75,12 @@ importers:
       '@ymindmap/model':
         specifier: workspace:*
         version: link:../../packages/model
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.0.7
+      yoga-layout:
+        specifier: ^3.0.4
+        version: 3.0.4
     devDependencies:
       '@types/fabric':
         specifier: ^5.3.7
@@ -2593,4 +2599,3 @@ packages:
 
   /yoga-layout@3.0.4:
     resolution: {integrity: sha512-mNmdkofwKGSXUYvo4sDTNI9BXTLAXw/LsBsftEmelPtS/PeePzs4yWe2Q0Y+p5NqadPSAMhAGuIiXs1QiZ+lBg==}
-    dev: true

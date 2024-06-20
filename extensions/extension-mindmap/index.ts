@@ -7,6 +7,10 @@ export const MindmapExtension: IExtensionConfig = {
             topic,
             mindmap
         }
+    },
+
+    onCreate() {
+        console.log(this)
     }
 }
 

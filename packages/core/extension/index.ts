@@ -14,9 +14,9 @@ export interface IExtensionConfig {
 
     addStorage?: () => Record<string, any>
 
-    onCreate?: () => void;
+    onCreate?: (this: Board) => void;
 
-    onUpdate?: () => void;
+    onUpdate?: (this: Board) => void;
 }
 
 export type IExtensionOptions = IExtensionConfig & {
@@ -67,7 +67,7 @@ export class ExtensionManager {
     }
 
     onUpdate() {
-        this.onUpdateCallbackList.forEach((callback) => callback());
+        this.onUpdateCallbackList.forEach((callback) => callback.call(this.board));
     }
 
     get extensions() {
@@ -81,7 +81,7 @@ export class ExtensionManager {
                 this.onUpdateCallbackList.push(extensionConfig.onUpdate);
             }
 
-            if (extensionConfig.onCreate) extensionConfig.onCreate();
+            if (extensionConfig.onCreate) extensionConfig.onCreate.call(this.board);
         })
     }
 }
