@@ -14,6 +14,8 @@ export const mindmap = NodeType.createNode<NodeSpec<
         childMarginWidth: string;
         theme: string;
         structure: string;
+        left?: string
+        top?: string
     }>
 >({
     name: 'mindmap',
@@ -40,7 +42,13 @@ export const mindmap = NodeType.createNode<NodeSpec<
             default: 'right',
         },
     },
-    toFabric: createTopic
+    toFabric: (node, context) => {
+        const mindmapRootTopic = createTopic(node, context);
+        const isAutoToCenter = !Reflect.has(node.attributes, 'left') && !Reflect.has(node.attributes, 'top');
+        if (isAutoToCenter) context.canvas.centerObject(mindmapRootTopic)
+
+        return mindmapRootTopic;
+    }
 })
 
 export default mindmap;

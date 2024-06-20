@@ -21,24 +21,6 @@ export function getDefaultData() {
                             // ]
                         },
                     ]
-                },
-                {
-                    "topic": [
-                        {
-                            "_attributes": {
-                            },
-                            // "topic": [
-                            //     {
-                            //         "_attributes": {
-                            //         },
-                            //     },
-                            //     {
-                            //         "_attributes": {
-                            //         },
-                            //     },
-                            // ]
-                        },
-                    ]
                 }
             ]
         }
