@@ -2,7 +2,7 @@
  * 画板
  * 一切的入口
  */
-import { State, StateConfig } from '@ymindmap/state'
+import { State } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
 import mitt, { EventType } from 'mitt';
 import { CommandManager } from './command/index';

@@ -6,7 +6,7 @@
 import { fabric } from 'fabric';
 import { debounce, throttle } from 'lodash-es';
 import { getElement } from '../dom'
-import type { Mindmap } from '@ymindmap/core'
+import type { Board } from '@ymindmap/core'
 
 
 type DocumentEventMap = Map<string, {
@@ -28,7 +28,7 @@ function damping(source: number, sourceMax: number, rate: number = 100) {
     return Math.floor(Math.round(x < 0 ? -y : y) / rate);
 }
 
-export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number, mindmap?: Mindmap }) {
+export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, maxZoom: number, board?: Board }) {
     // 校验
     const zoomWithDamping = throttle((targetScale: number) => {
         if (Math.floor(targetScale * 100) === Math.floor(canvas.getZoom() * 100)) return;
@@ -90,7 +90,7 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
                     valideAndReZoom();
                 }
             }
-            if (options.mindmap) options.mindmap.emit('keydown', e);
+            if (options.board) options.board.emit('keydown', e);
         }
     })
 
