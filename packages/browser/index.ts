@@ -1,4 +1,4 @@
-import { Mindmap as CoreMindmap, Options } from '@ymindmap/core'
+import { Board, Options } from '@ymindmap/core'
 import { getElement, destroy as domDestroy } from './dom/index'
 
 export * from '@ymindmap/core';
@@ -8,7 +8,7 @@ export * from '@ymindmap/core';
  * 支持事件上的缩放，增加事件回调
  * 同时如果获取了canvas的dom，就需要初始化一个quill editor
  */
-export class Mindmap extends CoreMindmap<{
+export class Mindmap extends Board<{
     "keydown": KeyboardEvent
 }> {
     // private editor: Editor | null = null;

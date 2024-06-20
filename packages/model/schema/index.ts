@@ -20,14 +20,19 @@ export class Schema {
         this.spec = {
             ...spec,
             topNodeType: spec.topNodeType || NodeType.createNode({
-                name: 'root'
+                name: 'doc',
+                attrs: {
+                    background: {
+                        default: '#ffffff'
+                    }
+                }
             })
         };
 
         this.allNodes.forEach((node) => this.registerNode(node));
     }
 
-    private registerNode(node: NodeType) {
+    public registerNode(node: NodeType) {
         if (!this.spec.nodes[node.name]) this.spec.nodes[node.name] = node;
         node.setSchema(this);
     }
@@ -39,7 +44,7 @@ export class Schema {
     get nodes(): { [key: string]: NodeType } {
         return this.spec.nodes;
     }
-    
+
     private get allNodes() {
         return Object.keys(this.spec.nodes).reduce<NodeType[]>((list, key) => {
             list.push(this.spec.nodes[key]);
@@ -57,7 +62,7 @@ export class Schema {
 
     /** createNode */
     createNode(type: string | NodeType, attrs: IAttrs, content: INodeContent) {
-        const nodeType = typeof type ==='string'? this.spec.nodes[type] : type;
+        const nodeType = typeof type === 'string' ? this.spec.nodes[type] : type;
         return nodeType.create(attrs, content)
     }
 }

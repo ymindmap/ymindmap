@@ -1,11 +1,16 @@
+/**
+ * 画板
+ * 一切的入口
+ */
 import { State, StateConfig } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
 import mitt, { EventType } from 'mitt';
 import { CommandManager } from './command/index';
+import { ExtensionManager, IExtensionConfig } from './extension';
 
 import { yjs2string, string2Yjs } from './bridge'
 
-import type { Theme } from '@ymindmap/model'
+import { Schema, type Theme } from '@ymindmap/model'
 
 export type Options = {
     data: string | Uint8Array;
@@ -13,9 +18,11 @@ export type Options = {
     height?: number;
     theme?: string;
     themeList?: { [key: string]: Theme };
+    options?: Record<string, any>;
+    extensions?: Record<string, IExtensionConfig>
 } & Omit<StateConfig, 'doc' | 'activeClients' | 'undoManager'>
 
-export class Mindmap<T extends Record<EventType, unknown> = any> {
+export class Board<T extends Record<EventType, unknown> = any> {
     storage: {
         themeList: { [key: string]: Theme }
         [key: string]: unknown;
@@ -26,6 +33,8 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
     view: View;
 
     commandManager: CommandManager;
+
+    extensionManager: ExtensionManager;
 
     private emitter = mitt<T & {
         change: string
@@ -48,11 +57,24 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
         // 开始生成基础数据
         const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
 
+        // 注册schema
+        const schema = options.schema || new Schema({
+            nodes: {}
+        })
+        Object.values(options.extensions || {}).forEach((extensionConfig) => {
+            if (extensionConfig.addNodes) {
+                const nodeTypes = extensionConfig.addNodes();
+                Object.values(nodeTypes).forEach((nodeType) => {
+                    schema.registerNode(nodeType);
+                })
+            }
+        })
+
         // 创建绑定view层
         this.view = View.create(
             State.create(yjsUpdate, {
                 plugins: [],
-                schema: options.schema,
+                schema
             }),
             themeConfig,
             {
@@ -63,6 +85,10 @@ export class Mindmap<T extends Record<EventType, unknown> = any> {
 
         // 绑定commandMager
         this.commandManager = new CommandManager(this.view);
+
+        // 绑定插件系统
+        this.extensionManager = new ExtensionManager(this);
+        this.extensionManager.registerExtension(options.extensions || {}, options);
 
         /**
          * chang事件绑定

@@ -1,9 +1,8 @@
-import { Mindmap, getDefaultData, schema } from '@ymindmap/browser';
+import { Mindmap, getDefaultData } from '@ymindmap/browser';
 import "./style.css";
 
 const mindmap = new Mindmap({
   data: getDefaultData(),
-  schema,
   editable: true,
 });
 

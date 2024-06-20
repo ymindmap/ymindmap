@@ -1,4 +1,3 @@
-export * from "./schema"
-export * from './mindmap'
+export * from './board'
 export * from './bridge'
 export * from './config'
