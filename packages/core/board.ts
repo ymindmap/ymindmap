@@ -92,9 +92,11 @@ export class Board<T extends Record<EventType, unknown> = any> {
 
         /**
          * chang事件绑定
-         * @todo 如果有更多事件的话，迁移到统一绑定区域
          */
-        this.state.doc.on('update', () => this.emitter.emit('change', this.toString() as any))
+        this.state.doc.on('update', () => {
+            this.emitter.emit('change', this.toString() as any)
+            this.extensionManager.onUpdate()
+        })
     }
 
     get theme(): Theme {

@@ -15,6 +15,8 @@ export interface IExtensionConfig {
     addStorage?: () => Record<string, any>
 
     onCreate?: () => void;
+
+    onUpdate?: () => void;
 }
 
 export type IExtensionOptions = IExtensionConfig & {
@@ -56,8 +58,16 @@ export class Extension {
 export class ExtensionManager {
     board: Board;
     _extension: Extension[] = [];
+
+    // 缓存的callback列表
+    onUpdateCallbackList: (() => void)[] = []
+
     constructor(board: Board) {
         this.board = board;
+    }
+
+    onUpdate() {
+        this.onUpdateCallbackList.forEach((callback) => callback());
     }
 
     get extensions() {
@@ -67,6 +77,11 @@ export class ExtensionManager {
     registerExtension(extensions: Record<string, IExtensionConfig>, defaultOptions: Record<string, any>) {
         Object.entries(extensions).forEach(([name, extensionConfig]) => {
             this._extension.push(Extension.create({ ...extensionConfig, name, board: this.board }, defaultOptions))
+            if (extensionConfig.onUpdate) {
+                this.onUpdateCallbackList.push(extensionConfig.onUpdate);
+            }
+
+            if (extensionConfig.onCreate) extensionConfig.onCreate();
         })
     }
 }
