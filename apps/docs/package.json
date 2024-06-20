@@ -18,6 +18,8 @@
     "vite": "^5.1.4"
   },
   "dependencies": {
-    "@ymindmap/browser": "workspace:*"
+    "@ymindmap/browser": "workspace:*",
+    "@ymindmap/extension-mindmap": "workspace:^",
+    "@ymindmap/extension-text": "workspace:^"
   }
 }

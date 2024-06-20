@@ -1,9 +1,15 @@
 import { Mindmap, getDefaultData } from '@ymindmap/browser';
+import { TextMindmapExtension } from '@ymindmap/extension-text'
+import { MindmapExtension } from '@ymindmap/extension-mindmap'
 import "./style.css";
 
 const mindmap = new Mindmap({
   data: getDefaultData(),
   editable: true,
+  extensions: {
+    Text: TextMindmapExtension,
+    Mindmap: MindmapExtension
+  }
 });
 
 mindmap.on('change', (value) => {

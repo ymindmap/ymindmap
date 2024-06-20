@@ -20,7 +20,9 @@ export type Options = {
     themeList?: { [key: string]: Theme };
     options?: Record<string, any>;
     extensions?: Record<string, IExtensionConfig>
-} & Omit<StateConfig, 'doc' | 'activeClients' | 'undoManager'>
+} & {
+    schema?: Schema;
+}
 
 export class Board<T extends Record<EventType, unknown> = any> {
     storage: {

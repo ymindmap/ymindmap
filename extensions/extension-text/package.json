@@ -1,5 +1,5 @@
 {
-  "name": "@ymindmap/core",
+  "name": "@ymindmap/extension-text",
   "version": "0.0.0",
   "exports": {
     ".": "./index.ts"
@@ -13,13 +13,12 @@
     "@ymindmap/eslint-config": "workspace:*",
     "@ymindmap/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "@ymindmap/core": "workspace:*",
+    "@ymindmap/state": "workspace:*",
+    "@ymindmap/view": "workspace:*"
   },
   "dependencies": {
-    "@ymindmap/model": "workspace:*",
-    "@ymindmap/state": "workspace:*",
-    "@ymindmap/view": "workspace:*",
-    "mitt": "^3.0.1",
-    "xml-js": "^1.6.11"
+    "@ymindmap/model": "workspace:*"
   }
 }

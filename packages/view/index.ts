@@ -100,6 +100,5 @@ export class View extends NodeView {
     }
 }
 
-export * from './schema'
 export * from './theme'
 export * from './view'

@@ -30,6 +30,12 @@ importers:
       '@ymindmap/browser':
         specifier: workspace:*
         version: link:../../packages/browser
+      '@ymindmap/extension-mindmap':
+        specifier: workspace:^
+        version: link:../../extensions/extension-mindmap
+      '@ymindmap/extension-text':
+        specifier: workspace:^
+        version: link:../../extensions/extension-text
     devDependencies:
       '@ymindmap/eslint-config':
         specifier: workspace:*
@@ -63,6 +69,68 @@ importers:
         version: 9.1.0(eslint@8.57.0)
 
   configs/config-typescript: {}
+
+  extensions/extension-mindmap:
+    dependencies:
+      '@ymindmap/model':
+        specifier: workspace:*
+        version: link:../../packages/model
+    devDependencies:
+      '@types/fabric':
+        specifier: ^5.3.7
+        version: 5.3.7
+      '@ymindmap/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ymindmap/eslint-config':
+        specifier: workspace:*
+        version: link:../../configs/config-eslint
+      '@ymindmap/state':
+        specifier: workspace:*
+        version: link:../../packages/state
+      '@ymindmap/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/config-typescript
+      '@ymindmap/view':
+        specifier: workspace:*
+        version: link:../../packages/view
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  extensions/extension-text:
+    dependencies:
+      '@ymindmap/model':
+        specifier: workspace:*
+        version: link:../../packages/model
+    devDependencies:
+      '@types/fabric':
+        specifier: ^5.3.7
+        version: 5.3.7
+      '@ymindmap/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@ymindmap/eslint-config':
+        specifier: workspace:*
+        version: link:../../configs/config-eslint
+      '@ymindmap/state':
+        specifier: workspace:*
+        version: link:../../packages/state
+      '@ymindmap/typescript-config':
+        specifier: workspace:*
+        version: link:../../configs/config-typescript
+      '@ymindmap/view':
+        specifier: workspace:*
+        version: link:../../packages/view
+      eslint:
+        specifier: ^8.57.0
+        version: 8.57.0
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
 
   packages/browser:
     dependencies:
@@ -118,43 +186,6 @@ importers:
       xml-js:
         specifier: ^1.6.11
         version: 1.6.11
-      yoga-layout:
-        specifier: ^3.0.4
-        version: 3.0.4
-    devDependencies:
-      '@types/fabric':
-        specifier: ^5.3.7
-        version: 5.3.7
-      '@ymindmap/eslint-config':
-        specifier: workspace:*
-        version: link:../../configs/config-eslint
-      '@ymindmap/typescript-config':
-        specifier: workspace:*
-        version: link:../../configs/config-typescript
-      eslint:
-        specifier: ^8.57.0
-        version: 8.57.0
-      typescript:
-        specifier: ^5.3.3
-        version: 5.3.3
-
-  packages/extension:
-    dependencies:
-      '@ymindmap/model':
-        specifier: workspace:*
-        version: link:../model
-      '@ymindmap/state':
-        specifier: workspace:^
-        version: link:../state
-      '@ymindmap/view':
-        specifier: workspace:^
-        version: link:../view
-      fabric:
-        specifier: ^5.3.0
-        version: 5.3.0
-      nanoid:
-        specifier: ^5.0.7
-        version: 5.0.7
     devDependencies:
       '@types/fabric':
         specifier: ^5.3.7
@@ -2562,3 +2593,4 @@ packages:
 
   /yoga-layout@3.0.4:
     resolution: {integrity: sha512-mNmdkofwKGSXUYvo4sDTNI9BXTLAXw/LsBsftEmelPtS/PeePzs4yWe2Q0Y+p5NqadPSAMhAGuIiXs1QiZ+lBg==}
+    dev: true
