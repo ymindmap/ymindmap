@@ -1,3 +1,3 @@
-export { VIEW_KEY } from './baseView'
+export { VIEW_KEY } from './view'
 export * from './nodeView'
 export * from './textView'

@@ -1,7 +1,7 @@
 import { XmlElement } from 'yjs'
 import { fabric } from 'fabric'
 import { NodeView } from './view/nodeView'
-import { VIEW_KEY } from './view/baseView'
+import { VIEW_KEY } from './view/view'
 import type { Theme, Node } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
 

@@ -1,14 +1,14 @@
 import { XmlElement, XmlText } from 'yjs'
-import { BaseView, } from './baseView'
+import { View, } from './view'
 import { TextView } from './textView'
 import type { Node, NodeToFabricContext } from '@ymindmap/model'
 
-export class NodeView extends BaseView<fabric.Object> {
+export class NodeView extends View<fabric.Object> {
     constructor(
         context: NodeToFabricContext,
         node: Node,
         fabricObject?: fabric.Object | null,
-        parent?: BaseView | null
+        parent?: View | null
     ) {
         super(context, node, fabricObject, parent);
 

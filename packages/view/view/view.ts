@@ -2,22 +2,22 @@
  * view
  */
 import type { fabric } from 'fabric'
-import type { Node, NodeToFabricContext } from '@ymindmap/model'
+import { Node, NodeToFabricContext } from '@ymindmap/model'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
-export class BaseView<T extends fabric.Object = fabric.Object> {
+export class View<T extends fabric.Object = fabric.Object> {
     context: NodeToFabricContext;
     node: Node;
     fabricObject: T | null;
-    parent: null | BaseView;
-    children: BaseView[];
+    parent: null | View;
+    children: View[];
 
     constructor(
         context: NodeToFabricContext,
         node: Node,
         fabricObject?: T | null,
-        parent?: BaseView | null
+        parent?: View | null
     ) {
         this.context = context;
         this.node = node;
@@ -35,6 +35,8 @@ export class BaseView<T extends fabric.Object = fabric.Object> {
             // 监听到更新啦
             console.log(e);
         })
+
+        View.NodeViewMap.set(this.node, this);
     }
 
     /**
@@ -111,4 +113,10 @@ export class BaseView<T extends fabric.Object = fabric.Object> {
             this.context.canvas.remove(this.fabricObject);
         }
     }
+
+    nodeAt(node: Node): View | undefined {
+        return View.NodeViewMap.get(node);
+    }
+
+    static NodeViewMap = new WeakMap<Node, View>;
 }
