@@ -138,10 +138,19 @@ export function bindEvent(canvas: fabric.Canvas, options: { minZoom: number, max
         const container = getElement(canvas);
         container.style.background = canvas.backgroundColor?.toString() || '';
 
-        if (width !== canvas.getWidth()) canvas.setWidth(width);
-        if (height !== canvas.getHeight()) canvas.setHeight(height);
+        const deltaX = width - canvas.getWidth();
+        const deltaY = height - canvas.getHeight();
+
+        if (deltaX) canvas.setWidth(width);
+        if (deltaY) canvas.setHeight(height);
+
+        canvas.relativePan({
+            x: deltaX / 2,
+            y: deltaY / 2
+        })
 
         resetContainerBackground(container);
+        canvas.renderAll();
     });
     resizeObserver.observe(container);
     Reflect.set(canvas, 'resizeObserver', resizeObserver);
