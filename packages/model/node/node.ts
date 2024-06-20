@@ -55,6 +55,8 @@ export class Node<T extends IAttrs = any> {
             this.yAbstractType.insert(0, yContent);
 
         }
+
+        Node.NodeStateMap.set(this.state, this);
     }
 
     get state() {
@@ -79,4 +81,16 @@ export class Node<T extends IAttrs = any> {
     get nodeSize() {
         return this.state.length;
     }
+
+    get children(): Array<Node<any>> {
+        if (this.state instanceof XmlText) return [];
+        const children: Array<Node<any>> = [];
+        this.state.forEach(child => {
+            const node = Node.NodeStateMap.get(child);
+            if (node) children.push(node)
+        })
+        return children;
+    }
+
+    static NodeStateMap = new WeakMap<XmlElement | XmlText, Node<any>>()
 }

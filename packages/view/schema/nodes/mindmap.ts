@@ -14,8 +14,8 @@ export const mindmap = NodeType.createNode<NodeSpec<
         childMarginWidth: string;
         theme: string;
         structure: string;
-    }
->>({
+    }>
+>({
     name: 'mindmap',
     attrs: {
         id: {
