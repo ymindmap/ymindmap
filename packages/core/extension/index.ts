@@ -4,9 +4,9 @@ import type {
     RawCommands
 } from '../command/type.d'
 
-export interface IExtensionConfig {
+export interface IExtensionConfig<IOptions = any, IStorage = any> {
     // 注册命令
-    addCommands?: () => RawCommands
+    addCommands?: (extension: Extension<IOptions, IStorage>) => RawCommands
 
     addNodes?: () => Record<string, NodeType>
 
@@ -14,9 +14,9 @@ export interface IExtensionConfig {
 
     addStorage?: () => Record<string, any>
 
-    onCreate?: (this: Extension, board: Board) => void;
+    onCreate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 
-    onUpdate?: (this: Extension, board: Board) => void;
+    onUpdate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 }
 
 export type IExtensionOptions = IExtensionConfig & {
@@ -24,11 +24,11 @@ export type IExtensionOptions = IExtensionConfig & {
     board: Board
 }
 
-export class Extension {
+export class Extension<IOptions = Record<string, any>, IStorage = Record<string, any>> {
     name: string
     board: Board
-    options: Record<string, any> = {}
-    storage: Record<string, any> = {}
+    options: IOptions = {} as any
+    storage: IStorage = {} as any
 
     constructor(options: IExtensionOptions, boardOptions: Record<string, any>) {
         this.board = options.board
@@ -42,11 +42,11 @@ export class Extension {
         }
 
         if (options.addStorage) {
-            this.storage = options.addStorage();
+            this.storage = options.addStorage() as any;
         }
 
-        if (options.addCommands) {
-            this.board.commandManager && this.board.commandManager.registerCommands(options.addCommands())
+        if (options.addCommands && this.board.commandManager) {
+            this.board.commandManager.registerCommands(options.addCommands(this))
         }
     }
 

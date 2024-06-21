@@ -1,8 +1,14 @@
+import { VIEW_KEY, NodeView } from '@ymindmap/view'
 import { topic, mindmap } from './schema'
+import { LayoutController } from './layout'
 import type { IExtensionConfig } from '@ymindmap/core'
-import { loadYoga } from 'yoga-layout/load'
 
-export const MindmapExtension: IExtensionConfig = {
+type IOptions = NonNullable<unknown>
+type IStorage = {
+    nodeLayoutControllerMap: WeakMap<NodeView, LayoutController>
+}
+
+export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
     addNodes() {
         return {
             topic,
@@ -12,12 +18,24 @@ export const MindmapExtension: IExtensionConfig = {
 
     addStorage() {
         return {
-            yogeLayout: null
+            yoga: null,
+            nodeLayoutControllerMap: new WeakMap()
         }
     },
 
-    onCreate() {
-        console.log(this)
+    async onCreate(board) {
+
+        // 目前mindmap必须在第一层可以直接靠getObjects获取，之后可能会改成迭代遍历
+        const mindmapViews: NodeView[] = board.canvas
+            .getObjects('mindmap')
+            .map(item => Reflect.get(item, VIEW_KEY))
+            .filter(item => !!item);
+        mindmapViews.forEach(mindmap => {
+            this.storage.nodeLayoutControllerMap.set(mindmap, new LayoutController({
+                mindmap,
+                board
+            }))
+        })
     }
 }
 

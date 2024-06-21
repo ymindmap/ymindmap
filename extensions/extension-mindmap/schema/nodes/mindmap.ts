@@ -44,9 +44,9 @@ export const mindmap = NodeType.createNode<NodeSpec<
     },
     toFabric: (node, context) => {
         const mindmapRootTopic = createTopic(node, context);
+        mindmapRootTopic.set('type', 'mindmap'); // 修改名称
         const isAutoToCenter = !Reflect.has(node.attributes, 'left') && !Reflect.has(node.attributes, 'top');
         if (isAutoToCenter) context.canvas.centerObject(mindmapRootTopic)
-
         return mindmapRootTopic;
     }
 })

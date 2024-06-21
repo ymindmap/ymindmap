@@ -1,4 +1,5 @@
 import { XmlElement, XmlText } from 'yjs'
+import { fabric } from 'fabric'
 import { View, } from './view'
 import { TextView } from './textView'
 import type { Node, NodeToFabricContext } from '@ymindmap/model'
@@ -49,5 +50,16 @@ export class NodeView extends View<fabric.Object> {
             fabricObject as any, // TextView 是 fabric.Text 所以先改为any
             this
         ))
+    }
+
+    getMatrix(view: NodeView = this) {
+        // 获取位置
+        const { fabricObject } = view;
+        if (fabricObject) {
+            const transformMatrix = fabricObject.calcTransformMatrix();
+            return fabric.util.qrDecompose(transformMatrix);
+        }
+
+        return null
     }
 }
