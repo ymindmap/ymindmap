@@ -14,9 +14,9 @@ export interface IExtensionConfig {
 
     addStorage?: () => Record<string, any>
 
-    onCreate?: (board: Board) => void;
+    onCreate?: (this: Extension, board: Board) => void;
 
-    onUpdate?: (board: Board) => void;
+    onUpdate?: (this: Extension, board: Board) => void;
 }
 
 export type IExtensionOptions = IExtensionConfig & {
@@ -60,14 +60,24 @@ export class ExtensionManager {
     _extension: Extension[] = [];
 
     // 缓存的callback列表
-    onUpdateCallbackList: ((board: Board) => void)[] = []
+    onUpdateCallbackList: ({
+        name: string,
+        callback: (this: Extension, board: Board) => void
+    })[] = []
 
     constructor(board: Board) {
         this.board = board;
     }
 
     onUpdate() {
-        this.onUpdateCallbackList.forEach((callback) => callback(this.board));
+        const { extensions } = this;
+        this.onUpdateCallbackList.forEach(({
+            name,
+            callback
+        }) => {
+            const extensionInstance = extensions[name];
+            if (extensionInstance) callback.call(extensionInstance, this.board)
+        });
     }
 
     get extensions() {
@@ -76,12 +86,16 @@ export class ExtensionManager {
 
     registerExtension(extensions: Record<string, IExtensionConfig>, defaultOptions: Record<string, any>) {
         Object.entries(extensions).forEach(([name, extensionConfig]) => {
-            this._extension.push(Extension.create({ ...extensionConfig, name, board: this.board }, defaultOptions))
+            const extensionInstance = Extension.create({ ...extensionConfig, name, board: this.board }, defaultOptions);
+            this._extension.push(extensionInstance)
             if (extensionConfig.onUpdate) {
-                this.onUpdateCallbackList.push(extensionConfig.onUpdate);
+                this.onUpdateCallbackList.push({
+                    name,
+                    callback: extensionConfig.onUpdate
+                });
             }
 
-            if (extensionConfig.onCreate) extensionConfig.onCreate(this.board);
+            if (extensionConfig.onCreate) extensionConfig.onCreate.call(extensionInstance, this.board);
         })
     }
 }
