@@ -24,6 +24,7 @@ export class View extends NodeView {
             backgroundColor: node.attributes.background || theme.background,
             ...options
         });
+
         const viewContext = { canvas, theme };
 
         super(

@@ -33,7 +33,13 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
         mindmapViews.forEach(mindmap => {
             this.storage.nodeLayoutControllerMap.set(mindmap, new LayoutController({
                 mindmap,
-                board
+                board,
+                margin: {
+                    height: 20,
+                    width: 20,
+                    childWidth: 20,
+                    childHeight: 20
+                }
             }))
         })
     }

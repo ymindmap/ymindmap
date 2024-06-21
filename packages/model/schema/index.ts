@@ -23,7 +23,6 @@ export class Schema {
                 name: 'doc',
                 attrs: {
                     background: {
-                        default: '#ffffff'
                     }
                 }
             })
