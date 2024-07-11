@@ -20,7 +20,6 @@
     "@ymindmap/core": "workspace:*",
     "@ymindmap/model": "workspace:*",
     "@ymindmap/state": "workspace:*",
-    "@ymindmap/view": "workspace:*",
-    "lodash-es": "^4.17.21"
+    "@ymindmap/view": "workspace:*"
   }
 }

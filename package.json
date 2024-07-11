@@ -15,6 +15,7 @@
   "packageManager": "pnpm@8.15.6",
   "name": "with-vite",
   "dependencies": {
+    "leafer-ui": "^1.0.0",
     "yjs": "^13.6.16"
   }
 }

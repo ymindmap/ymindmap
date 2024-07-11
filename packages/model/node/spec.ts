@@ -1,11 +1,11 @@
 import { Node } from './node';
+import { Leafer, UI } from 'leafer-ui';
 import type { Theme } from '../theme'
 import type { IAttrSpec, IAttrs } from './attr.d';
-import type { fabric } from 'fabric'
 
-export type NodeToFabricContext = {
+export type NodeToCanvasContext = {
     theme: Theme;
-    canvas: fabric.Canvas;
+    render: Leafer;
 }
 
 // eslint-disable-next-line 
@@ -22,5 +22,5 @@ export interface NodeSpec<K extends IAttrs = any> {
 
     draggable?: boolean;
 
-    toFabric?: (node: Node<K>, context: NodeToFabricContext) => fabric.Object;
+    toCanvas?: (node: Node<K>, context: NodeToCanvasContext) => UI;
 }

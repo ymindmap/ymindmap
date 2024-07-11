@@ -2,6 +2,7 @@
  * 标准左右布局
  */
 import { NodeView } from '@ymindmap/view'
+import { nonLayeredTidyTree } from './lib/nonLayeredTidyTree'
 import type { ILayoutController } from '../type.d';
 
 function getIndexIsLeftAxis(index: number) {
@@ -45,7 +46,9 @@ export function layout(this: ILayoutController, node: NodeView) {
             right: []
         })
 
-        console.log(left, right);
+        // 排序两个树
+        nonLayeredTidyTree(root, true, left);
+        nonLayeredTidyTree(root, true, right);
 
         return;
     }

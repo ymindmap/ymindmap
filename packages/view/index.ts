@@ -1,5 +1,5 @@
 import { XmlElement } from 'yjs'
-import { fabric } from 'fabric'
+import { Leafer } from 'leafer-ui'
 import { NodeView } from './view/nodeView'
 import { VIEW_KEY } from './view/view'
 import type { Theme, Node } from '@ymindmap/model'
@@ -20,24 +20,23 @@ export class View extends NodeView {
         }
         const node = state.schema.parseNode(rootState);
         if (!node || node.type !== state.schema.topNodeType) throw new Error('Can not init view with error topNodeType')
-        const canvas = new fabric.Canvas(null, {
-            backgroundColor: node.attributes.background || theme.background,
-            ...options
+
+        const leafer = new Leafer({
+            fill: node.attributes.background || theme.background,
+            ...options,
         });
+        const canvas = leafer.canvas;
 
         const viewContext = { canvas, theme };
 
         super(
             viewContext,
             node,
-            node?.type.spec.toFabric && node.type.spec.toFabric(node, viewContext),
+            node?.type.spec.toCanvas && node.type.spec.toCanvas(node, viewContext),
         );
 
         // 订阅state变化
         this.state = state;
-
-        // 禁止group的时候拥有control
-        fabric.Group.prototype.hasControls = false;
 
         // 选区自动同步
         const onCanvasSelectionChange = () => {

@@ -6,7 +6,7 @@
  */
 
 import { fabric } from 'fabric';
-import { Node, NodeToFabricContext, Theme, TopicStyle } from '@ymindmap/model';
+import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
 
 import type { ITopicNodeAttrs } from './attr';
 
@@ -91,7 +91,7 @@ function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToFabricContext) {
+export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasContext) {
     const topicStyle = Object.assign(
         {},
         getTopicTheme(node, context.theme),

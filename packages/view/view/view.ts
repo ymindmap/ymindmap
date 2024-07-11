@@ -1,33 +1,33 @@
 /**
  * view
  */
-import type { fabric } from 'fabric'
-import { Node, NodeToFabricContext } from '@ymindmap/model'
+import type { UI } from 'leafer-ui'
+import { Node, NodeToCanvasContext } from '@ymindmap/model'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
-export class View<T extends fabric.Object = fabric.Object> {
-    context: NodeToFabricContext;
+export class View<T extends UI = UI> {
+    context: NodeToCanvasContext;
     node: Node;
-    fabricObject: T | null;
+    canvasUI: T | null;
     parent: null | View;
     children: View[];
 
     constructor(
-        context: NodeToFabricContext,
+        context: NodeToCanvasContext,
         node: Node,
         fabricObject?: T | null,
         parent?: View | null
     ) {
         this.context = context;
         this.node = node;
-        this.fabricObject = fabricObject || null;
+        this.canvasUI = fabricObject || null;
         this.parent = parent || null;
         this.children = []
 
-        if (this.fabricObject) {
-            Reflect.set(this.fabricObject, VIEW_KEY, this);
-            this.context.canvas.add(this.fabricObject);
+        if (this.canvasUI) {
+            Reflect.set(this.canvasUI, VIEW_KEY, this);
+            this.context.render.add(this.canvasUI);
         }
 
         // 订阅更新移除自己的子节点
@@ -75,7 +75,7 @@ export class View<T extends fabric.Object = fabric.Object> {
 
     // 获取对应 pos 的位置
     pointFromPos(pos: number, preferBefore: boolean): {
-        object: fabric.Object | null,
+        object: UI | null,
         offset: number
     } {
         let index = 0;
@@ -98,7 +98,7 @@ export class View<T extends fabric.Object = fabric.Object> {
             offset = offset + size;
         }
 
-        return { object: this.fabricObject, offset: pos };
+        return { object: this.canvasUI, offset: pos };
     }
 
     // 更新
@@ -108,9 +108,9 @@ export class View<T extends fabric.Object = fabric.Object> {
 
     destroy() {
         this.children.forEach(item => item.destroy());
-        if (this.fabricObject) {
-            Reflect.deleteProperty(this.fabricObject, VIEW_KEY);
-            this.context.canvas.remove(this.fabricObject);
+        if (this.canvasUI) {
+            Reflect.deleteProperty(this.canvasUI, VIEW_KEY);
+            this.context.render.remove(this.canvasUI);
         }
     }
 

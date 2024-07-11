@@ -5,7 +5,7 @@ import type { IExtensionConfig } from '@ymindmap/core'
 
 export const text = NodeType.createNode({
     name: 'text',
-    toFabric(node) {
+    toCanvas(node) {
         const text = node.state instanceof XmlText ? node.state.toString() : '';
         return new fabric.Text(text);
     }

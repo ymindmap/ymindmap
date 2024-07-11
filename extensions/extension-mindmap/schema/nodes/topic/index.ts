@@ -18,7 +18,7 @@ export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
      * 一个topic节点
      * @param node 
      */
-    toFabric: createTopic
+    toCanvas: createTopic
 })
 
 export default topic;
