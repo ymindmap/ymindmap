@@ -1,7 +1,7 @@
 import { XmlElement, XmlText } from 'yjs'
 import { View } from './view'
 import { TextView } from './textView'
-import type { UI } from 'leafer-ui'
+import type { UI, Text } from 'leafer-ui'
 import type { Node, NodeToCanvasContext } from '@ymindmap/model'
 
 export class NodeView extends View<UI> {
@@ -21,7 +21,7 @@ export class NodeView extends View<UI> {
 
     update() {
         if (this.canvasUI && this.node.state instanceof XmlElement) {
-            // 更新fabric对象
+            // 更新 ui 对象 更新对应的attributes
             this.canvasUI.set(this.node.attributes);
             return true;
         }
@@ -42,7 +42,7 @@ export class NodeView extends View<UI> {
         this.children.push(new ChildViewConstructor(
             this.context,
             node,
-            ui as any, // TextView 是 fabric.Text 所以先改为any
+            ui as Text, // TextView 是 Text 所以先改为any
             this
         ))
     }

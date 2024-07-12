@@ -16,12 +16,12 @@ export class View<T extends UI = UI> {
     constructor(
         context: NodeToCanvasContext,
         node: Node,
-        fabricObject?: T | null,
+        ui?: T | null,
         parent?: View | null
     ) {
         this.context = context;
         this.node = node;
-        this.canvasUI = fabricObject || null;
+        this.canvasUI = ui || null;
         this.parent = parent || null;
         this.children = []
 

@@ -1,6 +1,6 @@
 # 一个基于Yjs的mindmap项目
 
-一个个人的 yjs/fabric 项目
+一个 yjs/leaferjs 项目
 核心项目定义参考了[prosemirror](https://prosemirror.net/)
 
 如果你觉得很像，那就对了
@@ -37,7 +37,7 @@
 
 可以基于node来自动初始化一个yjs的xmlElement
 
-也可以基于Yjs.XmlElement来创建一个node来创建对应的 fabric 对象
+也可以基于Yjs.XmlElement来创建一个node来创建对应的 leaferjs 的 ui 对象
 
 #### packages/state
 
@@ -47,7 +47,7 @@
 
 视图定义
 
-定义了基础的Topic模型 + 绑定 yjs 和 fabric
+定义了基础的Topic模型 + 绑定 yjs 和 ui 对象
 
 ### startkits
 

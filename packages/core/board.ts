@@ -168,8 +168,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
         this.state.undoManager.redo()
     }
 
-    toDataUrl(options: fabric.IDataURLOptions) {
-        return this.view.toDataUrl(options)
+    toDataUrl(type: "jpg" | "png" | "webp" = 'png', quality?: number | undefined) {
+        return this.view.toDataUrl(type, quality)
     }
 
     /**
@@ -177,8 +177,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
      * @param options 
      * @returns 
      */
-    toSvg(options: fabric.IToSVGOptions) {
-        return this.view.toSvg(options)
+    toSvg() {
+        return this.view.toSvg()
     }
 
     getData() {

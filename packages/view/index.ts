@@ -1,13 +1,15 @@
 import { XmlElement } from 'yjs'
-import { Leafer } from 'leafer-ui'
+import { Leafer, Debug } from 'leafer-ui'
 import { NodeView } from './view/nodeView'
-import { VIEW_KEY } from './view/view'
-import type { Theme, Node } from '@ymindmap/model'
+// import { VIEW_KEY } from './view/view'
+import type { Theme, NodeToCanvasContext } from '@ymindmap/model'
 import type { State } from '@ymindmap/state'
+import type { LeaferCanvas } from 'leafer-ui'
 
 export type ViewOptions = {
     width?: number,
-    height?: number
+    height?: number,
+    debug?: boolean
 }
 
 export class View extends NodeView {
@@ -25,9 +27,13 @@ export class View extends NodeView {
             fill: node.attributes.background || theme.background,
             ...options,
         });
-        const canvas = leafer.canvas;
 
-        const viewContext = { canvas, theme };
+        if (options.debug) {
+            Debug.enable = true;
+            Debug.showRepaint = true
+        }
+
+        const viewContext: NodeToCanvasContext = { render: leafer, theme };
 
         super(
             viewContext,
@@ -38,18 +44,18 @@ export class View extends NodeView {
         // 订阅state变化
         this.state = state;
 
-        // 选区自动同步
-        const onCanvasSelectionChange = () => {
-            this.state.selected = this.canvas.getActiveObjects()
-                .map(item => {
-                    const view: NodeView | undefined = Reflect.get(item, VIEW_KEY);
-                    return view?.node;
-                })
-                .filter((item) => !!item) as Node[];
-        }
-        this.canvas.on('selection:cleared', onCanvasSelectionChange);
-        this.canvas.on('selection:created', onCanvasSelectionChange);
-        this.canvas.on('selection:updated', onCanvasSelectionChange);
+        // // 选区自动同步
+        // const onCanvasSelectionChange = () => {
+        //     this.state.selected = this.canvas.getActiveObjects()
+        //         .map(item => {
+        //             const view: NodeView | undefined = Reflect.get(item, VIEW_KEY);
+        //             return view?.node;
+        //         })
+        //         .filter((item) => !!item) as Node[];
+        // }
+        // this.canvas.on('selection:cleared', onCanvasSelectionChange);
+        // this.canvas.on('selection:created', onCanvasSelectionChange);
+        // this.canvas.on('selection:updated', onCanvasSelectionChange);
     }
 
     get schema() {
@@ -60,39 +66,32 @@ export class View extends NodeView {
         return this.context.theme
     }
 
-    get canvas() {
-        return this.context.canvas
-    }
-
-    renderAll() {
-        this.canvas.requestRenderAll();
+    get canvas(): LeaferCanvas {
+        return this.context.render.canvas as LeaferCanvas;
     }
 
     setTheme(theme: Theme) {
         if (theme !== this.theme) {
             this.context.theme = theme;
             // 重新绘制 需要所有节点重新绘制
-            this.canvas.renderAll();
+            // this.canvas.renderAll();
         }
     }
 
-    toDataUrl(options: fabric.IDataURLOptions) {
-        return this.canvas.toDataURL(options)
+    toDataUrl(type: "jpg" | "png" | "webp" = 'png', quality?: number) {
+        return this.canvas.toDataURL(type, quality);
     }
 
     /**
      * 转为svg的方法
-     * @todo 现在是
-     * @param options 
-     * @returns 
      */
-    toSvg(options: fabric.IToSVGOptions) {
-        return this.canvas.toSVG(options)
+    toSvg() {
+        return this.canvas.export('svg')
     }
 
     destroy() {
         super.destroy();
-        this.canvas.dispose();
+        this.context.render.destroy();
     }
 
     static create(state: State, theme: Theme, options?: ViewOptions) {

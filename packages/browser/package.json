@@ -9,7 +9,6 @@
     "lint": "eslint \"**/*.ts\""
   },
   "devDependencies": {
-    "@types/fabric": "^5.3.7",
     "@types/lodash-es": "^4.17.12",
     "@ymindmap/eslint-config": "workspace:*",
     "@ymindmap/typescript-config": "workspace:*",

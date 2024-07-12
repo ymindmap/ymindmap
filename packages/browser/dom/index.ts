@@ -1,23 +1,25 @@
 /**
  * 生成domElement
  */
-import { fabric } from 'fabric';
-import { bindEvent, unbindEvent } from './events'
-import type { Board } from '@ymindmap/core'
+import type { LeaferCanvas } from 'leafer-ui'
 
-const KEY = '__ymindmap_events_binded__'
+export const CANVAS_CONTAINER_MAP = new Map<LeaferCanvas, HTMLDivElement>();
 
-export function getElement(canvas: fabric.Canvas, board?: Board): HTMLDivElement {
+export function getElement(canvas: LeaferCanvas): HTMLDivElement {
     // 自动生成绑定的dom元素
-    // eslint-disable-next-line 
-    const element = (canvas as unknown as any).wrapperEl as HTMLDivElement;
-    if (!Reflect.has(element, KEY)) {
-        bindEvent(canvas, { minZoom: 0.1, maxZoom: 3, board });
-        Reflect.set(element, KEY, true);
-    }
-    return element;
+    if (canvas.view.parentElement) return canvas.view.parentElement as HTMLDivElement;
+
+    const container = document.createElement('div');
+    CANVAS_CONTAINER_MAP.set(canvas, container);
+
+    container.appendChild(canvas.view);
+    return container;
 }
 
-export function destroy(canvas: fabric.Canvas) {
-    unbindEvent(canvas);
+export function destroy(canvas: LeaferCanvas) {
+    if (canvas.view.parentElement) {
+        canvas.view.parentElement.parentElement?.removeChild(canvas.view.parentElement);
+        CANVAS_CONTAINER_MAP.delete(canvas);
+        canvas.destroy();
+    }
 }

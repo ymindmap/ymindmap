@@ -3,7 +3,7 @@
  */
 import { NodeType, NodeSpec } from '@ymindmap/model';
 import { nanoid } from 'nanoid'
-import { createTopic } from './topic/fabricTopic'
+import { createTopic } from './topic/render'
 import { ITopicNodeAttrs } from './topic/attr.d'
 
 export const mindmap = NodeType.createNode<NodeSpec<
@@ -46,7 +46,7 @@ export const mindmap = NodeType.createNode<NodeSpec<
         const mindmapRootTopic = createTopic(node, context);
         mindmapRootTopic.set('type', 'mindmap'); // 修改名称
         const isAutoToCenter = !Reflect.has(node.attributes, 'left') && !Reflect.has(node.attributes, 'top');
-        if (isAutoToCenter) context.canvas.centerObject(mindmapRootTopic)
+        // if (isAutoToCenter) context.render.centerObject(mindmapRootTopic)
         return mindmapRootTopic;
     }
 })
