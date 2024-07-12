@@ -34,13 +34,14 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
 
     const topic = new Box({
         fill: topicStyle.backgroundColor,
-        padding,
         // tag: 'topic',
         fontSize: topicStyle.fontSize || 14,
         cornerRadius: topicStyle.borderRadius,
+        draggable: true,
         children: [
             {
                 tag: 'Text',
+                padding,
                 // tag: 'title',
                 text: node.attributes?.title || '请输入内容',
                 fill: topicStyle.color,
