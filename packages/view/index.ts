@@ -1,5 +1,5 @@
 import { XmlElement } from 'yjs'
-import { Leafer, Debug } from 'leafer-ui'
+import { Leafer, Debug, useCanvas } from 'leafer-ui'
 import { NodeView } from './view/nodeView'
 // import { VIEW_KEY } from './view/view'
 import type { Theme, NodeToCanvasContext } from '@ymindmap/model'
@@ -9,7 +9,8 @@ import type { LeaferCanvas } from 'leafer-ui'
 export type ViewOptions = {
     width?: number,
     height?: number,
-    debug?: boolean
+    debug?: boolean,
+    container?: any
 }
 
 export class View extends NodeView {
@@ -24,8 +25,12 @@ export class View extends NodeView {
         if (!node || node.type !== state.schema.topNodeType) throw new Error('Can not init view with error topNodeType')
 
         const leafer = new Leafer({
+            type: 'design',
+            view: options.container,
             fill: node.attributes.background || theme.background,
             ...options,
+            width: options.width || 800,
+            height: options.height || 600
         });
 
         if (options.debug) {

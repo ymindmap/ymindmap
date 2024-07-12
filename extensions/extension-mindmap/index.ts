@@ -26,22 +26,22 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
     async onCreate(board) {
 
         // 目前mindmap必须在第一层可以直接靠getObjects获取，之后可能会改成迭代遍历
-        const mindmapViews: NodeView[] = board.canvas
-            .getObjects('mindmap')
-            .map(item => Reflect.get(item, VIEW_KEY))
-            .filter(item => !!item);
-        mindmapViews.forEach(mindmap => {
-            this.storage.nodeLayoutControllerMap.set(mindmap, new LayoutController({
-                mindmap,
-                board,
-                margin: {
-                    height: 20,
-                    width: 20,
-                    childWidth: 20,
-                    childHeight: 20
-                }
-            }))
-        })
+        // const mindmapViews: NodeView[] = board.canvas
+        //     .getObjects('mindmap')
+        //     .map(item => Reflect.get(item, VIEW_KEY))
+        //     .filter(item => !!item);
+        // mindmapViews.forEach(mindmap => {
+        //     this.storage.nodeLayoutControllerMap.set(mindmap, new LayoutController({
+        //         mindmap,
+        //         board,
+        //         margin: {
+        //             height: 20,
+        //             width: 20,
+        //             childWidth: 20,
+        //             childHeight: 20
+        //         }
+        //     }))
+        // })
     }
 }
 

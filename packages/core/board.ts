@@ -20,8 +20,10 @@ export type Options = {
     themeList?: { [key: string]: Theme };
     options?: Record<string, any>;
     extensions?: Record<string, IExtensionConfig>
+    container?: any
 } & {
     schema?: Schema;
+    debug?: boolean;
 }
 
 export class Board<T extends Record<EventType, unknown> = any> {
@@ -82,6 +84,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
             {
                 width: options.width,
                 height: options.height,
+                container: options.container
             }
         )
 

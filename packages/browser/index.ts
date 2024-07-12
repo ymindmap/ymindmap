@@ -1,5 +1,4 @@
 import { Board, Options } from '@ymindmap/core'
-import { getElement, destroy as domDestroy } from './dom/index'
 
 export * from '@ymindmap/core';
 
@@ -13,10 +12,13 @@ export class Mindmap extends Board<{
 }> {
     // private editor: Editor | null = null;
     private editable: boolean = false;
+    private container: HTMLDivElement | null = null;
 
     constructor(options: Options & { editable?: boolean }) {
-        super(options);
+        const container = document.createElement('div');
+        super({ ...options, container });
         this.setEditable(options.editable);
+        this.container = container;
     }
 
     // initEditor() {
@@ -35,12 +37,7 @@ export class Mindmap extends Board<{
     // }
 
     get dom(): HTMLDivElement {
-        const element = getElement(this.canvas);
-
-        // 有人获取了element说明可以进行编辑器的初始化了
-        // this.initEditor();
-
-        return element;
+        return this.container as HTMLDivElement;
     }
 
     get isEditable() {
@@ -52,7 +49,11 @@ export class Mindmap extends Board<{
     }
 
     destroy() {
-        domDestroy(this.canvas);
         super.destroy();
+        if (!this.container) return;
+        if (this.container.parentElement) {
+            this.container.parentElement.removeChild(this.container.parentElement);
+            this.container = null;
+        }
     }
 }
