@@ -1,6 +1,7 @@
 /**
  * 画板
  * 一切的入口
+ * @todo themeList判断是否要作为插件
  */
 import { State } from '@ymindmap/state'
 import { theme as defaultTheme, View } from '@ymindmap/view'
@@ -27,7 +28,7 @@ export type Options = {
 }
 
 export class Board<T extends Record<EventType, unknown> = any> {
-    storage: {
+    _storage: {
         themeList: { [key: string]: Theme }
         [key: string]: unknown;
     } = { themeList: {} }
@@ -49,8 +50,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
         this.themeName = theme || 'default';
 
         // 注册所有的theme
-        this.storage = {
-            ...this.storage,
+        this._storage = {
+            ...this._storage,
             themeList: {
                 ...themeList,
                 ['default']: defaultTheme,
@@ -161,6 +162,18 @@ export class Board<T extends Record<EventType, unknown> = any> {
 
     get redoSize() {
         return this.state.undoManager.redoStack.length;
+    }
+
+    get storage() {
+        if (this.extensionManager) return {
+            ...this._storage,
+            ...Object.fromEntries(
+                Object.entries(this.extensionManager.extensions).map(([key, value]) => {
+                    return [key, value.storage]
+                })
+            )
+        }
+        return this._storage
     }
 
     undo() {
