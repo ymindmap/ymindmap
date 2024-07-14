@@ -43,6 +43,7 @@ export class Extension<IOptions = Record<string, any>, IStorage = Record<string,
 
         if (options.addStorage) {
             this.storage = options.addStorage() as any;
+            this.board.storage[this.name] = this.storage;
         }
 
         if (options.addCommands && this.board.commandManager) {

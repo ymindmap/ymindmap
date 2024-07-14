@@ -4,6 +4,12 @@ import { TextView } from './textView'
 import type { UI, Text } from 'leafer-ui'
 import type { Node, NodeToCanvasContext } from '@ymindmap/model'
 
+type Matrix = {
+    x: number,
+    y: number,
+    width: number,
+    height: number
+}
 export class NodeView extends View<UI> {
     constructor(
         context: NodeToCanvasContext,
@@ -20,9 +26,9 @@ export class NodeView extends View<UI> {
     }
 
     update() {
-        if (this.canvasUI && this.node.state instanceof XmlElement) {
+        if (this.ui && this.node.state instanceof XmlElement) {
             // 更新 ui 对象 更新对应的attributes
-            this.canvasUI.set(this.node.attributes);
+            this.ui.set(this.node.attributes);
             return true;
         }
         return false;
@@ -47,15 +53,12 @@ export class NodeView extends View<UI> {
         ))
     }
 
-    getMatrix(view: NodeView = this) {
+    getMatrix(inner?: boolean): Matrix {
         // 获取位置
-        const { canvasUI } = view;
-        if (canvasUI) {
-            return {
-                width: canvasUI.width as number,
-                height: canvasUI.height as number,
-                ...canvasUI.getWorldPoint({ x: 0, y: 0 })
-            }
+        const { ui } = this;
+        if (ui) {
+            if (inner) return ui.boxBounds;
+            return ui.worldBoxBounds;
         }
 
         return {

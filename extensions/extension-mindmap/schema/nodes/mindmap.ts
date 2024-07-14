@@ -45,7 +45,7 @@ export const mindmap = NodeType.createNode<NodeSpec<
     toCanvas: (node, context) => {
         const mindmapRootTopic = createTopic(node, context);
         // console.log(mindmapRootTopic);
-        // mindmapRootTopic.set('type', 'mindmap'); // 修改名称
+        mindmapRootTopic.setAttr('className', 'mindmap'); // 修改名称
         // const isAutoToCenter = !Reflect.has(node.attributes, 'left') && !Reflect.has(node.attributes, 'top');
         // if (isAutoToCenter) context.render.centerObject(mindmapRootTopic)
         return mindmapRootTopic;

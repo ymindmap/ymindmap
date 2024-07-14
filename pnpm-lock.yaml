@@ -75,6 +75,9 @@ importers:
 
   extensions/extension-mindmap:
     dependencies:
+      '@leafer-in/html':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@ymindmap/model':
         specifier: workspace:*
         version: link:../../packages/model
@@ -512,6 +515,21 @@ packages:
 
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
+
+  /@leafer-in/html@1.0.0:
+    resolution: {integrity: sha512-gPkgpyKTzhDaF/zi5zoaqgJvomjHaWdZ4EVZ32MMhZSey3y9QzghbqIuC9xM6rn5lLdZ852l4mpDkLxKKsMSaA==}
+    dependencies:
+      '@leafer-in/interface': 1.0.0
+      '@leafer-ui/draw': 1.0.0
+      '@leafer-ui/interface': 1.0.0
+    dev: false
+
+  /@leafer-in/interface@1.0.0:
+    resolution: {integrity: sha512-G00wT/PKIJKsNQY1dmAa+wNpxvDZPCRK7jLOMZTB37I7NbWAddFA5jsIQqOPhMt7dNG1Fny9grBJa0BOdlbv+Q==}
+    dependencies:
+      '@leafer-ui/interface': 1.0.0
+      '@leafer/interface': 1.0.0
+    dev: false
 
   /@leafer-ui/app@1.0.0:
     resolution: {integrity: sha512-qHOx+RsRoNb1zUJYakR/eAFz7RMFWyiljdT+ipAWk+KaJw8onCeKXiw1JXvqqQh1iZke/MOku8dTOsLpm/KlQQ==}

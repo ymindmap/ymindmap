@@ -1,5 +1,5 @@
 import { XmlElement } from 'yjs'
-import { Leafer, Debug, useCanvas } from 'leafer-ui'
+import { Leafer, Debug } from 'leafer-ui'
 import { NodeView } from './view/nodeView'
 // import { VIEW_KEY } from './view/view'
 import type { Theme, NodeToCanvasContext } from '@ymindmap/model'
@@ -48,6 +48,7 @@ export class View extends NodeView {
 
         // 订阅state变化
         this.state = state;
+        this.ui = leafer; // 设置view对应的ui层
 
         // // 选区自动同步
         // const onCanvasSelectionChange = () => {

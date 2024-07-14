@@ -2,7 +2,6 @@
  * 布局功能
  * 感谢提供思路
  * @see https://leungwensen.github.io/blog/2017/mindmap-drawing-algorithms.html
- * 
  * @todo 支持动态注入其他的布局方案
  */
 import { layout as standard } from './structure/standard'

@@ -18,6 +18,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@leafer-in/html": "^1.0.0",
     "@ymindmap/model": "workspace:*",
     "nanoid": "^5.0.7"
   }

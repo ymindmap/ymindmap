@@ -50,6 +50,8 @@ export function layout(this: ILayoutController, node: NodeView) {
         nonLayeredTidyTree(root, true, left);
         nonLayeredTidyTree(root, true, right);
 
+        // 左侧树
+
         return;
     }
 

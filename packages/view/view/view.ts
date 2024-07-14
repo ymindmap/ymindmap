@@ -9,7 +9,7 @@ export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 export class View<T extends UI = UI> {
     context: NodeToCanvasContext;
     node: Node;
-    canvasUI: T | null;
+    ui: T | null;
     parent: null | View;
     children: View[];
 
@@ -21,13 +21,13 @@ export class View<T extends UI = UI> {
     ) {
         this.context = context;
         this.node = node;
-        this.canvasUI = ui || null;
+        this.ui = ui || null;
         this.parent = parent || null;
         this.children = []
 
-        if (this.canvasUI) {
-            Reflect.set(this.canvasUI, VIEW_KEY, this);
-            this.context.render.add(this.canvasUI);
+        if (this.ui) {
+            Reflect.set(this.ui, VIEW_KEY, this);
+            this.context.render.add(this.ui);
         }
 
         // 订阅更新移除自己的子节点
@@ -98,7 +98,7 @@ export class View<T extends UI = UI> {
             offset = offset + size;
         }
 
-        return { object: this.canvasUI, offset: pos };
+        return { object: this.ui, offset: pos };
     }
 
     // 更新
@@ -108,9 +108,9 @@ export class View<T extends UI = UI> {
 
     destroy() {
         this.children.forEach(item => item.destroy());
-        if (this.canvasUI) {
-            Reflect.deleteProperty(this.canvasUI, VIEW_KEY);
-            this.context.render.remove(this.canvasUI);
+        if (this.ui) {
+            Reflect.deleteProperty(this.ui, VIEW_KEY);
+            this.context.render.remove(this.ui);
         }
     }
 
