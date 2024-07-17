@@ -14,7 +14,7 @@ export const moveRootMindmapToCenter: () => Command = () => (state, view) => {
     const rootMindmap = view.ui.findOne('.mindmap');
     if (!rootMindmap) return false;
 
-    view.ui.zoom(rootMindmap, 0, true);
+    view.ui.zoom(rootMindmap.getBounds(), 0, true);
 
     return true
 }
