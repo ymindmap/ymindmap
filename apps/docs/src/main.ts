@@ -9,7 +9,8 @@ const mindmap = new Mindmap({
   extensions: {
     Text: TextMindmapExtension,
     Mindmap: MindmapExtension
-  }
+  },
+  debug: true
 });
 
 mindmap.on('change', (value) => {

@@ -31,6 +31,7 @@ function getNodeIsLeftAxis(viewNodeView: View, rootView: View): boolean {
 
 export function layout(this: ILayoutController, node: View) {
     const root = this.mindmap;
+
     if (root === node) {
         const { left, right } = (node.children as View[]).reduce<{
             left: View[],
@@ -54,6 +55,5 @@ export function layout(this: ILayoutController, node: View) {
         // 左侧树反转
         right2left(root, left);
 
-        return;
     }
 }

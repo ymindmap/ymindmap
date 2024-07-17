@@ -4,7 +4,6 @@
  * @see https://github.com/leungwensen/mindmap-layouts/blob/master/lib/algorithms/non-layered-tidy-tree.js#L39
  */
 import { NodeView, View } from '@ymindmap/view';
-import { Line } from 'leafer-ui'
 import type { Node } from '@ymindmap/model'
 import type { ITopicNodeAttrs } from '../../../schema/nodes/topic/attr.d'
 import type { ILayoutController } from '../../type'
@@ -12,7 +11,7 @@ import type { ILayoutController } from '../../type'
 /**
  * 一个自动布局
  */
-type LayerReturn = null | {
+type LayerReturn = {
     view: NodeView,
     children: NodeView[],
     currentOffset: number,
@@ -25,17 +24,14 @@ type LayerOptions = {
 }
 
 function layer(this: ILayoutController, view: NodeView, options: LayerOptions): LayerReturn {
-    if (!view.ui || !this.mindmap.ui) return null;
-    let offset = options.offset || 0;
-    const depth = this.mindmap.depth - view.depth;
-    let margin = 0;
-    // 判断margin
-    if (depth === 1) {
-        margin = this._margin[options.isHorizontal ? 'width' : 'height'];
-    } else {
-        margin = this._margin[options.isHorizontal ? 'childWidth' : 'childHeight'];
+    const empty: LayerReturn = {
+        children: [],
+        view,
+        currentOffset: options.offset || 0
     }
-    offset += margin
+    if (!view.ui) return empty;
+    let offset = options.offset || 0;
+    offset += getMargin.call(this, view, options.isHorizontal);
 
     if (options.isHorizontal) {
         view.ui.x = offset;
@@ -54,7 +50,55 @@ function layer(this: ILayoutController, view: NodeView, options: LayerOptions): 
         }
     }
 
-    return null
+    return empty
+}
+
+function getMargin(this: ILayoutController, node: NodeView, isHorizontal: boolean) {
+    const mindmapDepth = this.mindmap.depth;
+    const depth = mindmapDepth - (node.depth || 0);
+    const margin = depth === 1 ? this._margin[isHorizontal ? 'height' : 'width'] : this._margin[isHorizontal ? 'childHeight' : 'childWidth'];
+    return margin;
+}
+
+/**
+ * 获取其尺寸，和子节点有关系
+ * @param this 
+ * @param view 
+ * @param isHorizontal 
+ */
+function getNodeSize(this: ILayoutController, childNodes: NodeView[], isHorizontal = false): number {
+    return childNodes.reduce((total, node, index) => {
+        if (!node.ui) return total;
+        if (index > 0) total += getMargin.call(this, node, !isHorizontal);
+
+        const nodeSize = node.ui[isHorizontal ? 'height' : 'width'] || 0;
+        total += node.children.length
+            ? Math.max(getNodeSize.call(this, node.children as NodeView[], isHorizontal), nodeSize)
+            : nodeSize
+
+        return total;
+    }, 0)
+}
+
+function alignSameLevel(this: ILayoutController, nodeView: NodeView, layerTaskResults: LayerReturn[], isHorizontal: boolean) {
+    if (!nodeView.ui) return;
+    const totalSize = getNodeSize.call(
+        this,
+        layerTaskResults.map(item => item.view),
+        isHorizontal
+    );
+    let currentOffset = totalSize;
+    // let currentOffset = -totalSize / 2 + (isHorizontal
+    //     ? (nodeView.ui.y || 0) - (nodeView.ui.height || 0) / 2
+    //     : (nodeView.ui.x || 0) + (nodeView.ui.width || 0) / 2);
+
+    layerTaskResults.forEach((result, index) => {
+        if (result.view.ui) {
+            result.view.ui[isHorizontal ? 'y' : 'x'] = currentOffset;
+            currentOffset += (result.view.ui[isHorizontal ? 'height' : 'width'] || 0);
+            if (index > 0) currentOffset += getMargin.call(this, result.view, !isHorizontal);
+        }
+    })
 }
 
 export function nonLayeredTidyTree(
@@ -70,20 +114,22 @@ export function nonLayeredTidyTree(
     if (node.attributes.collapsed === 'true') return; // 当前被收起
     const childViews = children || nodeView.children;
 
-    const layerTaskResults = childViews.map(childView => {
-        if (!nodeView.ui) return null;
-        if (childView instanceof NodeView) return layer.call(
-            this,
-            childView,
-            {
-                isHorizontal,
-                offset: offset || isHorizontal
-                    ? ((nodeView.ui.x || 0) + (nodeView.ui.width || 0))
-                    : nodeView.ui.y ?? 0
-            }
-        );
-        return null;
-    })
+    const layerTaskResults = childViews.reduce<LayerReturn[]>((results, childView) => {
+        if (!nodeView.ui) return results;
+        if (childView instanceof NodeView) {
+            results.push(layer.call(
+                this,
+                childView,
+                {
+                    isHorizontal,
+                    offset: offset || isHorizontal
+                        ? ((nodeView.ui.x || 0) + (nodeView.ui.width || 0))
+                        : nodeView.ui.y ?? 0
+                }
+            ))
+        };
+        return results;
+    }, [])
 
     // 自动对齐机制
     if (this._autoAlign) {
@@ -93,8 +139,8 @@ export function nonLayeredTidyTree(
         })
     }
 
-    // 同层级之间距离
-
+    // 同层级之间排版
+    alignSameLevel.call(this, nodeView, layerTaskResults, isHorizontal);
 
     // 继续排版子层级
     layerTaskResults.forEach((layerTaskResult) => {
