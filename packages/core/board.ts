@@ -4,7 +4,7 @@
  * @todo themeList判断是否要作为插件
  */
 import { State } from '@ymindmap/state'
-import { theme as defaultTheme, View } from '@ymindmap/view'
+import { theme as defaultTheme, BoardView } from '@ymindmap/view'
 import mitt, { EventType } from 'mitt';
 import { CommandManager } from './command/index';
 import { ExtensionManager, IExtensionConfig } from './extension';
@@ -35,7 +35,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
 
     themeName = 'default'
 
-    view: View;
+    view: BoardView;
 
     commandManager: CommandManager;
 
@@ -76,7 +76,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
         })
 
         // 创建绑定view层
-        this.view = View.create(
+        this.view = BoardView.create(
             State.create(yjsUpdate, {
                 plugins: [],
                 schema

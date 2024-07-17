@@ -14,7 +14,7 @@ export type ViewOptions = {
     container?: any
 }
 
-export class View extends NodeView {
+export class BoardView extends NodeView {
     state: State
     ui: Leafer
 
@@ -104,7 +104,7 @@ export class View extends NodeView {
     }
 
     static create(state: State, theme: Theme, options?: ViewOptions) {
-        return new View(state, theme, options);
+        return new BoardView(state, theme, options);
     }
 }
 

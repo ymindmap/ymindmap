@@ -1,3 +1,5 @@
+import type { NodeView } from '@ymindmap/view'
+import type { Board } from '@ymindmap/core'
 export interface ILayoutController {
     board: Board
     mindmap: NodeView

@@ -3,6 +3,7 @@
  */
 import { View } from '@ymindmap/view'
 import { nonLayeredTidyTree } from './lib/nonLayeredTidyTree'
+import { right2left } from './lib/rightToLeft';
 import type { ILayoutController } from '../type.d';
 
 function getIndexIsLeftAxis(index: number) {
@@ -47,17 +48,12 @@ export function layout(this: ILayoutController, node: View) {
         })
 
         // 排序两个树
-        nonLayeredTidyTree(root, true, left);
-        nonLayeredTidyTree(root, true, right);
+        nonLayeredTidyTree.call(this, root, true, left);
+        nonLayeredTidyTree.call(this, root, true, right);
 
-        // 左侧树
+        // 左侧树反转
+        right2left(root, left);
 
         return;
     }
-
-    // // 区分左右
-    // if (root === node) {
-    // } else {
-    //     // find左右
-    // }
 }
