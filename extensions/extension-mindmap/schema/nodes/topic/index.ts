@@ -11,6 +11,9 @@ export const topic = NodeType.createNode<NodeSpec<ITopicNodeAttrs>>({
         },
         title: {
             default: ''
+        },
+        collapsed: {
+            default: 'false'
         }
     },
 

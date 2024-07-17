@@ -4,6 +4,9 @@
  * @see https://github.com/leungwensen/mindmap-layouts/blob/master/lib/algorithms/non-layered-tidy-tree.js#L39
  */
 import { NodeView, View } from '@ymindmap/view';
+import { Line } from 'leafer-ui'
+import type { Node } from '@ymindmap/model'
+import type { ITopicNodeAttrs } from '../../../schema/nodes/topic/attr.d'
 import type { ILayoutController } from '../../type'
 
 /**
@@ -61,8 +64,12 @@ export function nonLayeredTidyTree(
     children: View[],
     offset: number = 0
 ) {
-    const childViews = children || nodeView.children;
     if (!nodeView.ui) return;
+
+    const node = nodeView.node as Node<ITopicNodeAttrs>;
+    if (node.attributes.collapsed === 'true') return; // 当前被收起
+    const childViews = children || nodeView.children;
+
     const layerTaskResults = childViews.map(childView => {
         if (!nodeView.ui) return null;
         if (childView instanceof NodeView) return layer.call(
