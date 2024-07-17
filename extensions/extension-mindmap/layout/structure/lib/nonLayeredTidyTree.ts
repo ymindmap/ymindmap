@@ -59,7 +59,7 @@ export function nonLayeredTidyTree(
     nodeView: NodeView,
     isHorizontal = true,
     children: View[],
-    offset?: number = 0
+    offset: number = 0
 ) {
     const childViews = children || nodeView.children;
     if (!nodeView.ui) return;
@@ -87,6 +87,7 @@ export function nonLayeredTidyTree(
     }
 
     // 同层级之间距离
+
 
     // 继续排版子层级
     layerTaskResults.forEach((layerTaskResult) => {
