@@ -59,7 +59,7 @@ export function nonLayeredTidyTree(
     nodeView: NodeView,
     isHorizontal = true,
     children: View[],
-    offset: number
+    offset?: number = 0
 ) {
     const childViews = children || nodeView.children;
     if (!nodeView.ui) return;
