@@ -13,21 +13,21 @@ function getIndexIsLeftAxis(index: number) {
 /**
  * 获取一个节点是左侧还是右侧
  */
-function getNodeIsLeftAxis(viewNodeView: View, rootView: View): boolean {
-    function getLatestParentToRoot(currentView: View) {
-        if (currentView === rootView) return null;
-        if (currentView.parent === rootView) return currentView;
-        if (!currentView.parent) return null;
-        return getLatestParentToRoot(currentView.parent as View);
-    }
-    const latestParentNodeView = getLatestParentToRoot(viewNodeView);
-    if (latestParentNodeView) {
-        const index = rootView.children.indexOf(latestParentNodeView);
-        if (index === -1) return false;
-        return getIndexIsLeftAxis(index);
-    }
-    return false;
-}
+// function getNodeIsLeftAxis(viewNodeView: View, rootView: View): boolean {
+//     function getLatestParentToRoot(currentView: View) {
+//         if (currentView === rootView) return null;
+//         if (currentView.parent === rootView) return currentView;
+//         if (!currentView.parent) return null;
+//         return getLatestParentToRoot(currentView.parent as View);
+//     }
+//     const latestParentNodeView = getLatestParentToRoot(viewNodeView);
+//     if (latestParentNodeView) {
+//         const index = rootView.children.indexOf(latestParentNodeView);
+//         if (index === -1) return false;
+//         return getIndexIsLeftAxis(index);
+//     }
+//     return false;
+// }
 
 export function layout(this: ILayoutController, node: View) {
     const root = this.mindmap;

@@ -9,7 +9,7 @@ import type { Command } from '@ymindmap/core';
  * @param view 
  * @returns 
  */
-export const moveRootMindmapToCenter: () => Command = () => (state, view) => {
+export const moveRootMindmapToCenter: () => Command = () => (_state, view) => {
     if (!view.ui) throw new Error('leafer is not inited');
     const rootMindmap = view.ui.findOne('.mindmap');
     if (!rootMindmap) return false;

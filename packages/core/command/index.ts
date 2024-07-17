@@ -1,15 +1,15 @@
 /**
  * 命令注册机制
  */
-import type { View } from '@ymindmap/view';
+import type { BoardView } from '@ymindmap/view';
 import type {
     RawCommands
 } from './type.d'
 
 export class CommandManager {
-    view: View;
+    view: BoardView;
     rawCommands: RawCommands = {}
-    constructor(view: View, rawCommands: RawCommands = {}) {
+    constructor(view: BoardView, rawCommands: RawCommands = {}) {
         this.view = view;
         this.rawCommands = rawCommands
     }
