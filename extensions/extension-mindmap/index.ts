@@ -4,6 +4,9 @@ import {
 } from '@ymindmap/view'
 import { topic, mindmap } from './schema'
 import { LayoutController } from './layout'
+import {
+    moveRootMindmapToCenter
+} from './commands'
 import type { IExtensionConfig } from '@ymindmap/core'
 
 type IOptions = NonNullable<unknown>
@@ -25,8 +28,17 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
         }
     },
 
+    addCommands() {
+        return {
+            moveRootMindmapToCenter
+        }
+    },
+
     async onCreate(board) {
         if (!board.view.ui) return;
+
+        if (board.commands.moveRootMindmapToCenter) board.commands.moveRootMindmapToCenter();
+
         // 目前mindmap必须在第一层可以直接靠getObjects获取，之后可能会改成迭代遍历
         const mindmapViews: NodeView[] = board.view.ui
             .find('.mindmap')

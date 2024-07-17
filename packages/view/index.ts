@@ -1,5 +1,6 @@
 import { XmlElement } from 'yjs'
 import { Leafer, Debug } from 'leafer-ui'
+import '@leafer-in/view';
 import { NodeView } from './view/nodeView'
 // import { VIEW_KEY } from './view/view'
 import type { Theme, NodeToCanvasContext } from '@ymindmap/model'
@@ -15,6 +16,8 @@ export type ViewOptions = {
 
 export class View extends NodeView {
     state: State
+    ui: Leafer
+
     constructor(state: State, theme: Theme, options: ViewOptions = {}) {
         let rootState = state.doc.getXmlFragment('default').firstChild;
         if (!rootState) {

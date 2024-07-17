@@ -1,7 +1,7 @@
 /**
  * 标准左右布局
  */
-import { NodeView } from '@ymindmap/view'
+import { View } from '@ymindmap/view'
 import { nonLayeredTidyTree } from './lib/nonLayeredTidyTree'
 import type { ILayoutController } from '../type.d';
 
@@ -12,12 +12,12 @@ function getIndexIsLeftAxis(index: number) {
 /**
  * 获取一个节点是左侧还是右侧
  */
-function getNodeIsLeftAxis(viewNodeView: NodeView, rootView: NodeView): boolean {
-    function getLatestParentToRoot(currentView: NodeView) {
+function getNodeIsLeftAxis(viewNodeView: View, rootView: View): boolean {
+    function getLatestParentToRoot(currentView: View) {
         if (currentView === rootView) return null;
         if (currentView.parent === rootView) return currentView;
         if (!currentView.parent) return null;
-        return getLatestParentToRoot(currentView.parent as NodeView);
+        return getLatestParentToRoot(currentView.parent as View);
     }
     const latestParentNodeView = getLatestParentToRoot(viewNodeView);
     if (latestParentNodeView) {
@@ -28,12 +28,12 @@ function getNodeIsLeftAxis(viewNodeView: NodeView, rootView: NodeView): boolean 
     return false;
 }
 
-export function layout(this: ILayoutController, node: NodeView) {
+export function layout(this: ILayoutController, node: View) {
     const root = this.mindmap;
     if (root === node) {
-        const { left, right } = (node.children as NodeView[]).reduce<{
-            left: NodeView[],
-            right: NodeView[]
+        const { left, right } = (node.children as View[]).reduce<{
+            left: View[],
+            right: View[]
         }>((result, nodeView, index) => {
             if (getIndexIsLeftAxis(index)) {
                 result.left.push(nodeView)

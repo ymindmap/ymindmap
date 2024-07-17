@@ -239,6 +239,9 @@ importers:
 
   packages/view:
     dependencies:
+      '@leafer-in/view':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@ymindmap/model':
         specifier: workspace:*
         version: link:../model
@@ -529,6 +532,14 @@ packages:
     dependencies:
       '@leafer-ui/interface': 1.0.0
       '@leafer/interface': 1.0.0
+    dev: false
+
+  /@leafer-in/view@1.0.0:
+    resolution: {integrity: sha512-b38Wd0q5N5zqQIfAcCQVKymq1rcJShwcPDK25SDHTD3KOwXVb8q9I8xknYdcvNLsLRotvE6Y9GjvuR2SIqcYIQ==}
+    dependencies:
+      '@leafer-in/interface': 1.0.0
+      '@leafer-ui/draw': 1.0.0
+      '@leafer-ui/interface': 1.0.0
     dev: false
 
   /@leafer-ui/app@1.0.0:
