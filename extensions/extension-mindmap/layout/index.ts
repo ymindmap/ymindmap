@@ -19,6 +19,12 @@ export class LayoutController implements ILayoutController {
     _structure: string
     _margin: IMargin
 
+    /**
+     * 是否自动对齐
+     * @todo 支持动态修改
+     */
+    _autoAlign: boolean = false
+
     // 布局算法
     structures: Record<string, any> = {}
 
@@ -33,6 +39,7 @@ export class LayoutController implements ILayoutController {
         this._margin = options.margin;
 
         this.mindmap = options.mindmap;
+        this._autoAlign = options.autoAlign || false;
 
         this.structures = {
             standard,
@@ -46,6 +53,17 @@ export class LayoutController implements ILayoutController {
 
     get layoutMethod(): (this: ILayoutController, nodeVie: NodeView) => void {
         return this.structures[this._structure] || this.structures['standard']
+    }
+
+    get autoAlign() {
+        return this._autoAlign
+    }
+
+    set autoAlign(flag) {
+        if (flag !== this._autoAlign) {
+            this._autoAlign = flag;
+            this.doLayout();
+        }
     }
 
     setStructure(structure: string) {

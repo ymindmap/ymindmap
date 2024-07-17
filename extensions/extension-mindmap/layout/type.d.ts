@@ -5,6 +5,7 @@ export interface ILayoutController {
     mindmap: NodeView
     _structure: string
     _margin: IMargin
+    _autoAlign: boolean
 
     // 布局算法
     structures: Record<string, any>
@@ -23,7 +24,8 @@ export type IMargin = {
 export interface ILayoutControllerOptions {
     board: Board
     structure?: string
-    mindmap: NodeView,
+    mindmap: NodeView
     structures?: Record<string, any>
     margin: IMargin
+    autoAlign?: boolean
 }
