@@ -137,6 +137,9 @@ importers:
 
   packages/browser:
     dependencies:
+      '@leafer-in/state':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@ymindmap/core':
         specifier: workspace:*
         version: link:../core
@@ -532,6 +535,14 @@ packages:
     dependencies:
       '@leafer-ui/interface': 1.0.0
       '@leafer/interface': 1.0.0
+    dev: false
+
+  /@leafer-in/state@1.0.0:
+    resolution: {integrity: sha512-ZbRjmrW6hPLXNiqGFGpvmznE2zqY8IVfgutC9KYIA1lEK8BnTWQHs4jApon/1+ZNFRaU4ruMGdcZBcIKIH0oKA==}
+    dependencies:
+      '@leafer-in/interface': 1.0.0
+      '@leafer-ui/core': 1.0.0
+      '@leafer-ui/interface': 1.0.0
     dev: false
 
   /@leafer-in/view@1.0.0:

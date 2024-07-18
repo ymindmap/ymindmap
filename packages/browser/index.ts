@@ -1,4 +1,5 @@
 import { Board, Options } from '@ymindmap/core'
+import '@leafer-in/state'
 
 export * from '@ymindmap/core';
 
