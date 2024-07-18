@@ -12,7 +12,7 @@ export * from '@ymindmap/core';
 export class Mindmap extends Board<{
     "keydown": KeyboardEvent
 }> {
-    // private editor: Editor | null = null;
+    private editor: Editor | null = null;
     private editable: boolean = false;
     private container: HTMLDivElement | null = null;
 
@@ -28,17 +28,21 @@ export class Mindmap extends Board<{
         parentElement.appendChild(container);
 
         super({ ...options, container: container });
-        this.setEditable(options.editable);
         this.container = container;
 
         this.initEditor();
+        this.setEditable(options.editable);
     }
 
     initEditor() {
+        if (this.editor) return;
         /**
          * @see https://www.leaferjs.com/ui/plugin/in/editor/
          * 这里采用手动注入editor，减少无用的能力
          */
+        this.editor = new Editor({});
+        this.editor.hittable = false;
+        this.view.app.sky.add(this.editor);
     }
 
     get dom(): HTMLDivElement {
@@ -46,15 +50,16 @@ export class Mindmap extends Board<{
     }
 
     get isEditable() {
-        return this.editable;
+        return this.editor ? this.editor.hittable : false;
     }
 
     setEditable(value: boolean = false) {
-        this.editable = value;
+        if (this.editor) this.editor.hittable = value
     }
 
     destroy() {
         super.destroy();
+        if (this.editor) this.editor.destroy();
         if (!this.container) return;
         if (this.container.parentElement) {
             this.container.parentElement.removeChild(this.container.parentElement);
