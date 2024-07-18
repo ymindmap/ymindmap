@@ -1,4 +1,5 @@
 import { Board, Options } from '@ymindmap/core'
+import { Editor } from '@leafer-in/editor' // 导入图形编辑器插件
 import '@leafer-in/state'
 
 export * from '@ymindmap/core';
@@ -15,27 +16,30 @@ export class Mindmap extends Board<{
     private editable: boolean = false;
     private container: HTMLDivElement | null = null;
 
-    constructor(options: Options & { editable?: boolean }) {
+    constructor(options: Options & { editable?: boolean, el: HTMLElement | string }) {
         const container = document.createElement('div');
-        super({ ...options, container });
+        /**
+         * container 的尺寸在这里设定默认100%
+         */
+        container.style.width = options.width ? Math.abs(options.width) + 'px' : '100%';
+        container.style.height = options.height ? Math.abs(options.height) + 'px' : '100%';
+        const parentElement = options.el instanceof HTMLElement ? options.el : document.querySelector(options.el);
+        if (!parentElement) throw new Error('options.el is not a HTMLElement or valid querySelector');
+        parentElement.appendChild(container);
+
+        super({ ...options, container: container });
         this.setEditable(options.editable);
         this.container = container;
+
+        this.initEditor();
     }
 
-    // initEditor() {
-    //     if (this.editor) return;
-    //     const editor = new Editor(this.canvas);
-    //     this.editor = editor;
-    //     // 绑定canvas的object的双击事件
-    //     this.canvas.on('mouse:dblclick', (e) => {
-    //         const target = e.target;
-    //         if (target) {
-    //             if (this.isEditable) {
-    //                 editor.bind(target);
-    //             }
-    //         }
-    //     })
-    // }
+    initEditor() {
+        /**
+         * @see https://www.leaferjs.com/ui/plugin/in/editor/
+         * 这里采用手动注入editor，减少无用的能力
+         */
+    }
 
     get dom(): HTMLDivElement {
         return this.container as HTMLDivElement;

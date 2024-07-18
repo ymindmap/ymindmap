@@ -4,6 +4,7 @@ import { MindmapExtension } from '@ymindmap/extension-mindmap'
 import "./style.css";
 
 const mindmap = new Mindmap({
+  el: '#app',
   data: getDefaultData(),
   editable: true,
   extensions: {

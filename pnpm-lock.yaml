@@ -137,6 +137,9 @@ importers:
 
   packages/browser:
     dependencies:
+      '@leafer-in/editor':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@leafer-in/state':
         specifier: ^1.0.0
         version: 1.0.0
@@ -522,6 +525,15 @@ packages:
   /@humanwhocodes/object-schema@2.0.2:
     resolution: {integrity: sha512-6EwiSjwWYP7pTckG6I5eyFANjPhmPjUX9JRLUSfNPC7FX7zK9gyZAfUEaECL6ALTpGX5AjnBq3C9XmVWPitNpw==}
 
+  /@leafer-in/editor@1.0.0:
+    resolution: {integrity: sha512-U2nuZCm1n7ghuHuYSKsXs7q6b0zJhlrR0NHWWWyTJRvqarBs9gIOjxq7btMuO2rrUPzJrUiIK1Q+AGJee+V24w==}
+    dependencies:
+      '@leafer-in/interface': 1.0.0
+      '@leafer-in/resize': 1.0.0
+      '@leafer-ui/core': 1.0.0
+      '@leafer-ui/interface': 1.0.0
+    dev: false
+
   /@leafer-in/html@1.0.0:
     resolution: {integrity: sha512-gPkgpyKTzhDaF/zi5zoaqgJvomjHaWdZ4EVZ32MMhZSey3y9QzghbqIuC9xM6rn5lLdZ852l4mpDkLxKKsMSaA==}
     dependencies:
@@ -535,6 +547,13 @@ packages:
     dependencies:
       '@leafer-ui/interface': 1.0.0
       '@leafer/interface': 1.0.0
+    dev: false
+
+  /@leafer-in/resize@1.0.0:
+    resolution: {integrity: sha512-4YIVcgD34bqhE42rL8POpBaeImEIy4Twz0QC+o4XAEFJJ5hvYw8Lq2uBl9vcPx9eY20vGlOL3SO07BQg3F1fKA==}
+    dependencies:
+      '@leafer-ui/draw': 1.0.0
+      '@leafer-ui/interface': 1.0.0
     dev: false
 
   /@leafer-in/state@1.0.0:

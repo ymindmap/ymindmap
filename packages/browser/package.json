@@ -16,6 +16,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
+    "@leafer-in/editor": "^1.0.0",
     "@leafer-in/state": "^1.0.0",
     "@ymindmap/core": "workspace:*",
     "@ymindmap/model": "workspace:*",

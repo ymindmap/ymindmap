@@ -1,5 +1,5 @@
 import { XmlElement } from 'yjs'
-import { Leafer, Debug } from 'leafer-ui'
+import { Leafer, App } from 'leafer-ui'
 import '@leafer-in/view';
 import { NodeView } from './view/nodeView'
 // import { VIEW_KEY } from './view/view'
@@ -17,6 +17,7 @@ export type ViewOptions = {
 export class BoardView extends NodeView {
     state: State
     ui: Leafer
+    app: App
 
     constructor(state: State, theme: Theme, options: ViewOptions = {}) {
         let rootState = state.doc.getXmlFragment('default').firstChild;
@@ -27,21 +28,17 @@ export class BoardView extends NodeView {
         const node = state.schema.parseNode(rootState);
         if (!node || node.type !== state.schema.topNodeType) throw new Error('Can not init view with error topNodeType')
 
-        const leafer = new Leafer({
-            type: 'design',
+        const app = new App({
             view: options.container,
             fill: node.attributes.background || theme.background,
+        })
+        app.tree = app.addLeafer({
+            type: 'design',
             ...options,
-            width: options.width || 800,
-            height: options.height || 600
         });
+        app.sky = app.addLeafer({ type: 'draw', usePartRender: false });
 
-        if (options.debug) {
-            Debug.enable = true;
-            Debug.showRepaint = true
-        }
-
-        const viewContext: NodeToCanvasContext = { render: leafer, theme };
+        const viewContext: NodeToCanvasContext = { render: app.tree as Leafer, theme };
 
         super(
             viewContext,
@@ -49,9 +46,11 @@ export class BoardView extends NodeView {
             node?.type.spec.toCanvas && node.type.spec.toCanvas(node, viewContext),
         );
 
+        this.app = app;
+
         // 订阅state变化
         this.state = state;
-        this.ui = leafer; // 设置view对应的ui层
+        this.ui = this.app.tree as Leafer;
 
         // // 选区自动同步
         // const onCanvasSelectionChange = () => {
