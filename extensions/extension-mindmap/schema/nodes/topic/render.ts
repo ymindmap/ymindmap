@@ -4,7 +4,7 @@
  * @todo 支持latex https://jsfiddle.net/3aHQc/39/
  */
 
-import { Box } from 'leafer-ui';
+import { Box, defineKey } from 'leafer-ui';
 import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
 
 import type { ITopicNodeAttrs } from './attr';
@@ -39,16 +39,30 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
         cornerRadius: topicStyle.borderRadius,
         draggable: true,
         id: node.attributes?.id,
+        editable: true,
         children: [
             {
                 className: 'topic-title',
                 tag: 'Text',
                 padding,
+                editable: false,
                 // tag: 'title',
                 text: node.attributes?.title || '请输入内容',
                 fill: topicStyle.color,
             }
         ]
+    })
+
+    // 设置无法缩放等功能
+    defineKey(topic, 'editConfig', {
+        get() {
+            return {
+                moveable: false,
+                resizeable: false,
+                rotateable: false,
+                skewable: false
+            }
+        }
     })
 
     return topic;

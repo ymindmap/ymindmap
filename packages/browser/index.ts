@@ -1,5 +1,6 @@
 import { Board, Options } from '@ymindmap/core'
-import { Editor } from '@leafer-in/editor' // 导入图形编辑器插件
+import { NodeView, VIEW_KEY } from '@ymindmap/view'
+import { Editor } from './editor'
 import '@leafer-in/state'
 
 export * from '@ymindmap/core';
@@ -13,7 +14,6 @@ export class Mindmap extends Board<{
     "keydown": KeyboardEvent
 }> {
     private editor: Editor | null = null;
-    private editable: boolean = false;
     private container: HTMLDivElement | null = null;
 
     constructor(options: Options & { editable?: boolean, el: HTMLElement | string }) {
@@ -39,8 +39,11 @@ export class Mindmap extends Board<{
         /**
          * @see https://www.leaferjs.com/ui/plugin/in/editor/
          * 这里采用手动注入editor，减少无用的能力
+         * 一些resizeable之类的能力如果要做白板需要变成动态启用
          */
-        this.editor = new Editor({});
+        this.editor = new Editor({
+
+        });
         this.editor.hittable = false;
         this.view.app.sky.add(this.editor);
     }
@@ -51,6 +54,12 @@ export class Mindmap extends Board<{
 
     get isEditable() {
         return this.editor ? this.editor.hittable : false;
+    }
+
+    get selected(): NodeView[] {
+        return (this.editor ? this.editor.leafList.list : [])
+            .filter(leaf => Reflect.has(leaf, VIEW_KEY))
+            .map(leaf => Reflect.get(leaf, VIEW_KEY) as NodeView)
     }
 
     setEditable(value: boolean = false) {
