@@ -13,6 +13,7 @@
     "@ymindmap/eslint-config": "workspace:*",
     "@ymindmap/typescript-config": "workspace:*",
     "eslint": "^8.57.0",
+    "markdown-it-textual-uml": "^0.17.1",
     "typescript": "^5.3.3",
     "vitepress": "^1.3.1"
   },

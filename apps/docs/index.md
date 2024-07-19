@@ -4,22 +4,22 @@ layout: home
 
 hero:
   name: "YMindmap"
-  text: "A mindmap with yjs and Leafer.js"
-  tagline: My great project tagline
+  text: "一个用Yjs作为数据源的一个思维导图"
+  tagline: 通过 Yjs 作为数据驱动 + Leaferjs 作为渲染层的
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: 快速上手 -> 
+      link: /guide/
     - theme: alt
-      text: API Examples
+      text: 示例
       link: /api-examples
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: 基于Yjs驱动
+    details: 天然的CRDT数据同步方案，支持离线/多人编辑
+  - title: 基于Leaferjs渲染层
+    details: 国产，简单，快速，搞得定
+  - title: Prosemirror Like的底层架构
+    details: View Node Model 分离，拓展性更好
 ---
 

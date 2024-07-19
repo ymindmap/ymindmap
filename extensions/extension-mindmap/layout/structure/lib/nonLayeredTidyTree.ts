@@ -32,13 +32,14 @@ function layer(this: ILayoutController, view: NodeView, options: LayerOptions): 
     if (!view.ui) return empty;
     let offset = options.offset || 0;
     offset += getMargin.call(this, view, options.isHorizontal);
+    const boxBounds = view.ui.boxBounds;
 
     if (options.isHorizontal) {
         view.ui.x = offset;
-        offset += view.ui.width || 0;
+        offset += boxBounds.width || 0;
     } else {
         view.ui.y = offset;
-        offset += view.ui.height || 0;
+        offset += boxBounds.height || 0;
     }
 
     const children: NodeView[] = view.children.filter(item => item instanceof NodeView) as unknown as NodeView[];
@@ -71,7 +72,7 @@ function getNodeSize(this: ILayoutController, childNodes: NodeView[], isHorizont
         if (!node.ui) return total;
         if (index > 0) total += getMargin.call(this, node, !isHorizontal);
 
-        const nodeSize = node.ui[isHorizontal ? 'height' : 'width'] || 0;
+        const nodeSize = node.ui.boxBounds[isHorizontal ? 'height' : 'width'] || 0;
         total += node.children.length
             ? Math.max(getNodeSize.call(this, node.children as NodeView[], isHorizontal), nodeSize)
             : nodeSize
@@ -82,20 +83,25 @@ function getNodeSize(this: ILayoutController, childNodes: NodeView[], isHorizont
 
 function alignSameLevel(this: ILayoutController, nodeView: NodeView, layerTaskResults: LayerReturn[], isHorizontal: boolean) {
     if (!nodeView.ui) return;
-    const totalSize = getNodeSize.call(
-        this,
-        layerTaskResults.map(item => item.view),
-        isHorizontal
+    const totalSize = Math.max(
+        getNodeSize.call(
+            this,
+            layerTaskResults.map(item => item.view),
+            isHorizontal
+        ),
+        nodeView.ui
+            ? (nodeView.ui.boxBounds[isHorizontal ? 'height' : 'width'] || 0)
+            : 0
     );
-    let currentOffset = totalSize;
-    // let currentOffset = -totalSize / 2 + (isHorizontal
-    //     ? (nodeView.ui.y || 0) - (nodeView.ui.height || 0) / 2
-    //     : (nodeView.ui.x || 0) + (nodeView.ui.width || 0) / 2);
+    let currentOffset = totalSize - nodeView.ui.boxBounds[isHorizontal ? 'height' : 'width'] / 2;
 
     layerTaskResults.forEach((result, index) => {
         if (result.view.ui) {
-            result.view.ui[isHorizontal ? 'y' : 'x'] = currentOffset;
-            currentOffset += (result.view.ui[isHorizontal ? 'height' : 'width'] || 0);
+            console.log(currentOffset, result.view.ui.boxBounds[isHorizontal ?
+                'height' : 'width'])
+            result.view.ui[isHorizontal ? 'y' : 'x'] = currentOffset - result.view.ui.boxBounds[isHorizontal ?
+                'height' : 'width'];
+            currentOffset += (result.view.ui.boxBounds[isHorizontal ? 'height' : 'width'] || 0);
             if (index > 0) currentOffset += getMargin.call(this, result.view, !isHorizontal);
         }
     })
@@ -123,7 +129,7 @@ export function nonLayeredTidyTree(
                 {
                     isHorizontal,
                     offset: offset || isHorizontal
-                        ? ((nodeView.ui.x || 0) + (nodeView.ui.width || 0))
+                        ? ((nodeView.ui.x || 0) + (nodeView.ui.boxBounds.width || 0))
                         : nodeView.ui.y ?? 0
                 }
             ))
@@ -140,7 +146,9 @@ export function nonLayeredTidyTree(
     }
 
     // 同层级之间排版
-    alignSameLevel.call(this, nodeView, layerTaskResults, isHorizontal);
+    if (layerTaskResults.length) {
+        alignSameLevel.call(this, nodeView, layerTaskResults, isHorizontal);
+    }
 
     // 继续排版子层级
     layerTaskResults.forEach((layerTaskResult) => {

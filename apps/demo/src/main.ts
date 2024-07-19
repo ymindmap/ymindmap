@@ -18,6 +18,4 @@ mindmap.on('change', (value) => {
   localStorage.setItem('data', value)
 })
 
-document.querySelector<HTMLDivElement>("#app")?.appendChild(mindmap.dom as HTMLElement)
-
 Reflect.set(window, 'mindmap', mindmap);
