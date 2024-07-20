@@ -92,6 +92,9 @@ importers:
       sass:
         specifier: ^1.77.8
         version: 1.77.8
+      tsdoc-markdown:
+        specifier: ^0.6.0
+        version: 0.6.0(typescript@5.3.3)
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -3788,6 +3791,15 @@ packages:
   /ts-dedent@2.2.0:
     resolution: {integrity: sha512-q5W7tVM71e2xjHZTlgfTDoPF/SmqKG5hddq9SzR49CH2hayqRKJtQ4mtRlSxKaJlR/+9rEM+mnBHf7I2/BQcpQ==}
     engines: {node: '>=6.10'}
+    dev: true
+
+  /tsdoc-markdown@0.6.0(typescript@5.3.3):
+    resolution: {integrity: sha512-5Xbdm+g+96fwEv8LCLs5c4iGkcrieKutvjiA7Edh3jVXmnOjT+h6l8FjJZPw/FTXsWWN9f5ZMdRIQkiHJ9UPMw==}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5
+    dependencies:
+      typescript: 5.3.3
     dev: true
 
   /turbo-darwin-64@2.0.3:

@@ -20,8 +20,8 @@ export default defineConfig({
     nav: [
       { text: '首页', link: '/' },
       { text: '快速上手', link: '/guide/' },
-      // { text: '示例', link: '/guide/' },
-      { text: '实现原理', link: '/guide/implementation/' }
+      { text: '实现原理', link: '/guide/implementation/' },
+      { text: 'API 参考手册', link: '/ref/packages.html' },
     ],
 
     sidebar: [
@@ -39,6 +39,13 @@ export default defineConfig({
         text: '实现原理',
         items: [
           { text: '设计思路', link: '/guide/implementation/' },
+        ]
+      },
+      {
+        text: 'API 参考手册',
+        items: [
+          { text: '核心库', link: '/ref/packages.html' },
+          { text: '插件', link: '/ref/extensions.html' },
         ]
       }
     ],
