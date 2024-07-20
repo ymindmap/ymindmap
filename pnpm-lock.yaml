@@ -15,6 +15,9 @@ importers:
         specifier: ^13.6.16
         version: 13.6.16
     devDependencies:
+      '@leafer-ui/interface':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@ymindmap/eslint-config':
         specifier: workspace:*
         version: link:configs/config-eslint
@@ -1169,7 +1172,6 @@ packages:
     resolution: {integrity: sha512-eC+hA4eyTXsalKfVWmcyiGPeuIJJ3T02zllsQuJ1ZRKPEWj1voNTfBFjepAsokPXMHChYTKt2LJt37WZxPvIRQ==}
     dependencies:
       '@leafer/interface': 1.0.0
-    dev: false
 
   /@leafer-ui/paint@1.0.0:
     resolution: {integrity: sha512-suOdDTdLDuhPSOQgCSUl3QHXXB+Y2RrgQOOBy7/wuOrDFijoNDmF1/GkHlrWMHXpOrDhnIUf9xfasD9tPP0h8Q==}
@@ -1337,7 +1339,6 @@ packages:
 
   /@leafer/interface@1.0.0:
     resolution: {integrity: sha512-IUAv+XOdi8m3t0Rz/V8Z0q4oDllEND542ZEejs831id34Yubs2tXdOraqWONinyKUobmaZGtFvuz4MqHEMpfTw==}
-    dev: false
 
   /@leafer/layout@1.0.0:
     resolution: {integrity: sha512-hZZoSR3iKZm77f+WRKFVLW0iuKWpU+CF7lQJObbH5QVr8t23QCJWW9Q4kMBq/GDNFX+Df8z1Ff+uPjL6QC0zRQ==}

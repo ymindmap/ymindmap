@@ -7,6 +7,7 @@
  */
 import { NodeView, View } from '@ymindmap/view';
 import type { Node } from '@ymindmap/model'
+import { createLine } from './edgeLine';
 import type { ITopicNodeAttrs } from '../../../schema/nodes/topic/attr.d'
 import type { ILayoutController } from '../../type'
 
@@ -59,7 +60,7 @@ function layer(this: ILayoutController, view: NodeView, options: LayerOptions): 
 function getMargin(this: ILayoutController, node: NodeView, isHorizontal: boolean) {
     const mindmapDepth = this.mindmap.depth;
     const depth = mindmapDepth - (node.depth || 0);
-    const margin = depth === 1 ? this._margin[isHorizontal ? 'height' : 'width'] : this._margin[isHorizontal ? 'childHeight' : 'childWidth'];
+    const margin = depth === 1 ? this._margin[isHorizontal ? 'width' : 'height'] : this._margin[isHorizontal ? 'childWidth' : 'childHeight'];
     return margin;
 }
 
@@ -160,6 +161,9 @@ export function nonLayeredTidyTree(
                 layerTaskResult.children,
                 layerTaskResult.currentOffset
             );
+
+            // 开始连线
+            createLine.call(this, nodeView, layerTaskResult.view, isHorizontal);
         }
     })
 }

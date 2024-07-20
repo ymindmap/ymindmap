@@ -40,6 +40,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
         draggable: true,
         id: node.attributes?.id,
         editable: true,
+        cursor: 'pointer',
         children: [
             {
                 className: 'topic-title',
@@ -57,7 +58,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
     defineKey(topic, 'editConfig', {
         get() {
             return {
-                moveable: false,
+                moveable: true,
                 resizeable: false,
                 rotateable: false,
                 skewable: false

@@ -50,8 +50,8 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
                 board,
                 margin: {
                     height: 20,
-                    width: 20,
-                    childWidth: 20,
+                    width: 60,
+                    childWidth: 60,
                     childHeight: 20
                 }
             }))

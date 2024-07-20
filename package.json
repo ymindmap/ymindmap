@@ -7,6 +7,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
+    "@leafer-ui/interface": "^1.0.0",
     "@ymindmap/eslint-config": "workspace:*",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",

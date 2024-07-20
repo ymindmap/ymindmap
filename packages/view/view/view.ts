@@ -1,8 +1,9 @@
 /**
  * view
  */
-import type { UI, getBoundsData } from 'leafer-ui'
 import { Node, NodeToCanvasContext } from '@ymindmap/model'
+import type { UI, getBoundsData } from 'leafer-ui'
+import type { IBoundsData } from '@leafer-ui/interface'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
@@ -76,7 +77,7 @@ export class View<T extends UI = UI> {
     /**
      * 当前真实的位置
      */
-    get bounds(): ReturnType<typeof getBoundsData> {
+    get bounds(): IBoundsData {
         if (this.ui) {
             const { x, y, height, width } = this.ui.__localBoxBounds;
             return { x: this.ui.x || x, y: this.ui.y || y, height, width };
