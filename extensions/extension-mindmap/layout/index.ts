@@ -4,7 +4,7 @@
  * @see https://leungwensen.github.io/blog/2017/mindmap-drawing-algorithms.html
  * @todo 支持动态注入其他的布局方案
  */
-import { layout as standard } from './structure/standard'
+import { structures } from './structure';
 
 import type { Board } from '@ymindmap/core'
 import type { NodeView } from '@ymindmap/view'
@@ -13,6 +13,9 @@ import type {
     IMargin,
     ILayoutControllerOptions
 } from './type.d'
+
+const DEFAULT_STRUCTURE = 'right'
+
 export class LayoutController implements ILayoutController {
     board: Board
     mindmap: NodeView
@@ -35,14 +38,14 @@ export class LayoutController implements ILayoutController {
 
     constructor(options: ILayoutControllerOptions) {
         this.board = options.board
-        this._structure = options.structure || 'standard'
+        this._structure = options.structure || DEFAULT_STRUCTURE
         this._margin = options.margin;
 
         this.mindmap = options.mindmap;
         this._autoAlign = options.autoAlign || false;
 
         this.structures = {
-            standard,
+            ...structures,
             ...options.structures
         }
 
@@ -52,7 +55,7 @@ export class LayoutController implements ILayoutController {
     }
 
     get layoutMethod(): (this: ILayoutController, nodeVie: NodeView) => void {
-        return this.structures[this._structure] || this.structures['standard']
+        return this.structures[this._structure] || this.structures[DEFAULT_STRUCTURE]
     }
 
     get autoAlign() {
