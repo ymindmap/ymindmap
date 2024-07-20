@@ -1,28 +1,27 @@
-import { NodeView, View } from "@ymindmap/view";
-import type { UI } from 'leafer-ui'
+import { NodeView } from "@ymindmap/view";
 
-function getCenterX(ui: UI) {
-    return ui.x || 0 + (ui.width || 0) / 2
+function getCenterX(nodeView: NodeView) {
+    const { bounds } = nodeView
+    return bounds.x + bounds.width / 2
 }
 
 /**
  * 右侧的树基于某个节点自动旋转
  */
-export function right2left(reference: NodeView, child?: View[]) {
+export function right2left(reference: NodeView, child?: NodeView[]) {
     if (!reference.ui) return;
-    const childNodes = child || reference.children;
-    const referenceCenterX = getCenterX(reference.ui)
+    const childNodes: NodeView[] = child || reference.children.filter(item => item instanceof NodeView) as NodeView[];
+    if (!childNodes.length) return;
+    const referenceCenterX = getCenterX(reference)
     childNodes.forEach(child => {
-        if (child instanceof NodeView) right2left(child);
+        if (child instanceof NodeView) right2left(reference, child.children as NodeView[]);
         if (child.ui) {
-            const offset = getCenterX(child.ui) - referenceCenterX;
+            const offset = getCenterX(child) - referenceCenterX;
             if (offset > 0) {
-                child.ui.x =
-                    (child.ui.x || 0)
+                child.ui.x = child.bounds.x
                     - offset * 2
-                    - (child.ui.width || 0) / 2
+                    - child.bounds.width / 2
             }
         }
-        if (child instanceof NodeView) right2left(child);
     })
 }

@@ -11,16 +11,16 @@ export function getDefaultData() {
                                 "title": "1"
                             },
                             "topic": [
-                                // {
-                                //     "_attributes": {
-                                //         "title": "1.1"
-                                //     },
-                                // },
-                                // {
-                                //     "_attributes": {
-                                //         "title": "1.2"
-                                //     },
-                                // },
+                                {
+                                    "_attributes": {
+                                        "title": "1.1"
+                                    },
+                                },
+                                {
+                                    "_attributes": {
+                                        "title": "1.2"
+                                    },
+                                },
                             ]
                         },
                         {
@@ -28,16 +28,16 @@ export function getDefaultData() {
                                 "title": "2"
                             },
                             "topic": [
-                                // {
-                                //     "_attributes": {
-                                //         "title": "2.1"
-                                //     },
-                                // },
-                                // {
-                                //     "_attributes": {
-                                //         "title": "2.2"
-                                //     },
-                                // },
+                                {
+                                    "_attributes": {
+                                        "title": "2.1"
+                                    },
+                                },
+                                {
+                                    "_attributes": {
+                                        "title": "2.2"
+                                    },
+                                },
                             ]
                         },
                         {
@@ -45,16 +45,16 @@ export function getDefaultData() {
                                 "title": "3"
                             },
                             "topic": [
-                                // {
-                                //     "_attributes": {
-                                //         "title": "3.1"
-                                //     },
-                                // },
-                                // {
-                                //     "_attributes": {
-                                //         "title": "3.2"
-                                //     },
-                                // },
+                                {
+                                    "_attributes": {
+                                        "title": "3.1"
+                                    },
+                                },
+                                {
+                                    "_attributes": {
+                                        "title": "3.2"
+                                    },
+                                },
                             ]
                         },
                     ]
