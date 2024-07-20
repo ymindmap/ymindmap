@@ -102,6 +102,7 @@ function alignSameLevel(this: ILayoutController, nodeView: NodeView, layerTaskRe
             result.view.bounds[isHorizontal ? 'width' : 'height']
         );
         result.view.ui[isHorizontal ? 'x' : 'y'] = currentMatrixValue
+            + (selfSize - result.view.bounds[isHorizontal ? 'width' : 'height']) / 2 // 修正的高度差
 
         currentMatrixValue += selfSize + getMargin.call(this, result.view, isHorizontal);
     })
