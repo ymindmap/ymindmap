@@ -43,11 +43,21 @@ mindmap.on('change', (value) => {
 
 ## 核心流程
 
-```mermaid
-flowchart TD
-    加载[加载拓展] --> B(Go shopping)
-    B --> C{Let me think}
-    C -->|One| D[Laptop]
-    C -->|Two| E[iPhone]
-    C -->|Three| F[fa:fa-car Car]
+```plantuml
+@startuml
+用户 -> YMindmap: 数据 + Extension列表
+YMindmap -> Extension系统: addCommands，addNode，创建Schema + 命令
+Extension系统 -> schema: 生成schema
+Extension系统 -> Extension系统: onCreate
+Extension系统 -> YMindmap: 初始化完毕
+YMindmap -> core: 初始化leaferjs app
+core -> core: 根据data生成yjs
+core -> view: 创建view层
+view -> state: 根据yjs包装state
+state -> view: 遍历state，根据schame的node创建leafer的ui
+view -> schema: 根据xml的tag获取 NodeType
+schema -> view: NodeType => LeaferUI.UI
+view -> view: 绘制到 LeaferUI 的 app上
+view -> 用户: 可视化输出
+@enduml
 ```
