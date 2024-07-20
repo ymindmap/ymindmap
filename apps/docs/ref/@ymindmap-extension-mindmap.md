@@ -1,61 +1,116 @@
-## :toolbox: Functions
+# :toolbox: Functions
 
+- [createTopic](#gear-createtopic)
+- [toCanvas](#gear-tocanvas)
 - [string2Yjs](#gear-string2yjs)
 - [yjs2string](#gear-yjs2string)
 - [getDefaultData](#gear-getdefaultdata)
+- [nonLayeredTidyTree](#gear-nonlayeredtidytree)
+- [right2left](#gear-right2left)
+- [layout](#gear-layout)
+- [moveRootMindmapToCenter](#gear-moverootmindmaptocenter)
 
-### :gear: string2Yjs
+## :gear: createTopic
+
+| Function | Type |
+| ---------- | ---------- |
+| `createTopic` | `(node: Node<ITopicNodeAttrs>, context: NodeToCanvasContext) => Box` |
+
+## :gear: toCanvas
+
+| Function | Type |
+| ---------- | ---------- |
+| `toCanvas` | `(node: Node<ITopicNodeAttrs and { marginHeight: string; marginWidth: string; childMarginHeight: string; childMarginWidth: string; theme: string; structure: string; left?: string or undefined; top?: string or undefined; }>, context: NodeToCanvasContext) => Box` |
+
+## :gear: string2Yjs
 
 | Function | Type |
 | ---------- | ---------- |
 | `string2Yjs` | `(xmlString: string) => Uint8Array` |
 
-### :gear: yjs2string
+## :gear: yjs2string
 
 | Function | Type |
 | ---------- | ---------- |
 | `yjs2string` | `(doc: Doc) => string` |
 
-### :gear: getDefaultData
+## :gear: getDefaultData
 
 | Function | Type |
 | ---------- | ---------- |
 | `getDefaultData` | `() => string` |
 
+## :gear: nonLayeredTidyTree
 
-## :wrench: Constants
+| Function | Type |
+| ---------- | ---------- |
+| `nonLayeredTidyTree` | `(this: ILayoutController, nodeView: NodeView, isHorizontal: boolean or undefined, children: View<UI>[], offset?: number) => void` |
+
+## :gear: right2left
+
+右侧的树基于某个节点自动旋转
+
+| Function | Type |
+| ---------- | ---------- |
+| `right2left` | `(reference: NodeView, child?: View<UI>[] or undefined) => void` |
+
+## :gear: layout
+
+获取一个节点是左侧还是右侧
+
+| Function | Type |
+| ---------- | ---------- |
+| `layout` | `(this: ILayoutController, node: View<UI>) => void` |
+
+## :gear: moveRootMindmapToCenter
+
+移动到中心
+
+| Function | Type |
+| ---------- | ---------- |
+| `moveRootMindmapToCenter` | `() => Command` |
+
+
+# :wrench: Constants
 
 - [VIEW_KEY](#gear-view_key)
 - [theme](#gear-theme)
+- [topic](#gear-topic)
 
-### :gear: VIEW_KEY
+## :gear: VIEW_KEY
 
 | Constant | Type |
 | ---------- | ---------- |
 | `VIEW_KEY` | `"__Y_MINDMAP_VIEW__"` |
 
-### :gear: theme
+## :gear: theme
 
 | Constant | Type |
 | ---------- | ---------- |
 | `theme` | `Theme` |
 
+## :gear: topic
 
-## :factory: Schema
+| Constant | Type |
+| ---------- | ---------- |
+| `topic` | `NodeType<NodeSpec<ITopicNodeAttrs>>` |
 
-### Methods
+
+# :factory: Schema
+
+## Methods
 
 - [registerNode](#gear-registernode)
 - [parseNode](#gear-parsenode)
 - [createNode](#gear-createnode)
 
-#### :gear: registerNode
+### :gear: registerNode
 
 | Method | Type |
 | ---------- | ---------- |
 | `registerNode` | `(node: NodeType<NodeSpec<any>>) => void` |
 
-#### :gear: parseNode
+### :gear: parseNode
 
 parseNode from xmlElement
 
@@ -63,7 +118,7 @@ parseNode from xmlElement
 | ---------- | ---------- |
 | `parseNode` | `(xml: YXmlElement<{ [key: string]: string; }> or YXmlText) => Node<any> or null` |
 
-#### :gear: createNode
+### :gear: createNode
 
 createNode
 
@@ -72,142 +127,142 @@ createNode
 | `createNode` | `(type: string or NodeType<NodeSpec<any>>, attrs: IAttrs, content: INodeContent) => Node<any>` |
 
 
-## :factory: NodeType
+# :factory: NodeType
 
-### Methods
+## Methods
 
 - [setSchema](#gear-setschema)
 - [create](#gear-create)
 - [parse](#gear-parse)
 - [createNode](#gear-createnode)
 
-#### :gear: setSchema
+### :gear: setSchema
 
 | Method | Type |
 | ---------- | ---------- |
 | `setSchema` | `(schema: Schema) => void` |
 
-#### :gear: create
+### :gear: create
 
 | Method | Type |
 | ---------- | ---------- |
 | `create` | `(attrs?: IAttrs, content?: INodeContent, initYFragment?: YXmlElement<{ [key: string]: string; }> or YXmlText or null) => Node<any>` |
 
-#### :gear: parse
+### :gear: parse
 
 | Method | Type |
 | ---------- | ---------- |
 | `parse` | `(xml: YXmlElement<{ [key: string]: string; }> or YXmlText) => Node<any>` |
 
-#### :gear: createNode
+### :gear: createNode
 
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `<T extends NodeSpec<any>>(options: { name: string; } and T) => NodeType<T>` |
 
 
-## :factory: Node
+# :factory: Node
 
 一个基础的node
 作为定义转为yjs的代理
 
-## :factory: State
+# :factory: View
 
-### Methods
-
-- [create](#gear-create)
-
-#### :gear: create
-
-| Method | Type |
-| ---------- | ---------- |
-| `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
-
-
-## :factory: View
-
-### Methods
+## Methods
 
 - [pointFromPos](#gear-pointfrompos)
 - [update](#gear-update)
 - [destroy](#gear-destroy)
 - [nodeAt](#gear-nodeat)
 
-#### :gear: pointFromPos
+### :gear: pointFromPos
 
 | Method | Type |
 | ---------- | ---------- |
 | `pointFromPos` | `(pos: number, preferBefore: boolean) => { object: UI or null; offset: number; }` |
 
-#### :gear: update
+### :gear: update
 
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
 
-#### :gear: destroy
+### :gear: destroy
 
 | Method | Type |
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
-#### :gear: nodeAt
+### :gear: nodeAt
 
 | Method | Type |
 | ---------- | ---------- |
 | `nodeAt` | `(node: Node<any>) => View<UI> or undefined` |
 
 
-## :factory: TextView
+# :factory: TextView
 
-### Methods
+## Methods
 
 - [pointFromPos](#gear-pointfrompos)
 - [update](#gear-update)
 
-#### :gear: pointFromPos
+### :gear: pointFromPos
 
 | Method | Type |
 | ---------- | ---------- |
 | `pointFromPos` | `(pos: number) => { object: Text or null; offset: number; }` |
 
-#### :gear: update
+### :gear: update
 
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
 
 
-## :factory: NodeView
+# :factory: NodeView
 
-### Methods
+## Methods
 
 - [update](#gear-update)
 - [createChildView](#gear-createchildview)
 - [getMatrix](#gear-getmatrix)
 
-#### :gear: update
+### :gear: update
 
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
 
-#### :gear: createChildView
+### :gear: createChildView
 
 | Method | Type |
 | ---------- | ---------- |
 | `createChildView` | `(yFragment: YXmlElement<{ [key: string]: string; }> or YXmlText) => void` |
 
-#### :gear: getMatrix
+### :gear: getMatrix
 
 | Method | Type |
 | ---------- | ---------- |
 | `getMatrix` | `(inner?: boolean or undefined) => Matrix` |
 
 
-## :factory: BoardView
+# :factory: State
 
-### Methods
+## Methods
+
+- [create](#gear-create)
+
+### :gear: create
+
+| Method | Type |
+| ---------- | ---------- |
+| `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+
+
+# :factory: BoardView
+
+## Methods
 
 - [setTheme](#gear-settheme)
 - [toDataUrl](#gear-todataurl)
@@ -215,19 +270,19 @@ createNode
 - [destroy](#gear-destroy)
 - [create](#gear-create)
 
-#### :gear: setTheme
+### :gear: setTheme
 
 | Method | Type |
 | ---------- | ---------- |
 | `setTheme` | `(theme: Theme) => void` |
 
-#### :gear: toDataUrl
+### :gear: toDataUrl
 
 | Method | Type |
 | ---------- | ---------- |
 | `toDataUrl` | `(type?: "jpg" or "png" or "webp", quality?: number or undefined) => string or Promise<string>` |
 
-#### :gear: toSvg
+### :gear: toSvg
 
 转为svg的方法
 
@@ -235,68 +290,68 @@ createNode
 | ---------- | ---------- |
 | `toSvg` | `() => string or Promise<any>` |
 
-#### :gear: destroy
+### :gear: destroy
 
 | Method | Type |
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
-#### :gear: create
+### :gear: create
 
 | Method | Type |
 | ---------- | ---------- |
 | `create` | `(state: State, theme: Theme, options?: ViewOptions or undefined) => BoardView` |
 
 
-## :factory: CommandManager
+# :factory: CommandManager
 
-### Methods
+## Methods
 
 - [registerCommands](#gear-registercommands)
 
-#### :gear: registerCommands
+### :gear: registerCommands
 
 | Method | Type |
 | ---------- | ---------- |
 | `registerCommands` | `(rawCommands: RawCommands) => void` |
 
 
-## :factory: Extension
+# :factory: Extension
 
-### Methods
+## Methods
 
 - [create](#gear-create)
 
-#### :gear: create
+### :gear: create
 
 | Method | Type |
 | ---------- | ---------- |
 | `create` | `(options: IExtensionOptions, boardOptions: Record<string, any>) => Extension<Record<string, any>, Record<string, any>>` |
 
 
-## :factory: ExtensionManager
+# :factory: ExtensionManager
 
-### Methods
+## Methods
 
 - [onUpdate](#gear-onupdate)
 - [registerExtension](#gear-registerextension)
 
-#### :gear: onUpdate
+### :gear: onUpdate
 
 | Method | Type |
 | ---------- | ---------- |
 | `onUpdate` | `() => void` |
 
-#### :gear: registerExtension
+### :gear: registerExtension
 
 | Method | Type |
 | ---------- | ---------- |
 | `registerExtension` | `(extensions: Record<string, IExtensionConfig<any, any>>, defaultOptions: Record<string, any>) => void` |
 
 
-## :factory: Board
+# :factory: Board
 
-### Methods
+## Methods
 
 - [undo](#gear-undo)
 - [redo](#gear-redo)
@@ -306,25 +361,25 @@ createNode
 - [toString](#gear-tostring)
 - [destroy](#gear-destroy)
 
-#### :gear: undo
+### :gear: undo
 
 | Method | Type |
 | ---------- | ---------- |
 | `undo` | `() => void` |
 
-#### :gear: redo
+### :gear: redo
 
 | Method | Type |
 | ---------- | ---------- |
 | `redo` | `() => void` |
 
-#### :gear: toDataUrl
+### :gear: toDataUrl
 
 | Method | Type |
 | ---------- | ---------- |
 | `toDataUrl` | `(type?: "jpg" or "png" or "webp", quality?: number or undefined) => string or Promise<string>` |
 
-#### :gear: toSvg
+### :gear: toSvg
 
 转为svg的方法
 
@@ -332,19 +387,19 @@ createNode
 | ---------- | ---------- |
 | `toSvg` | `() => string or Promise<any>` |
 
-#### :gear: getData
+### :gear: getData
 
 | Method | Type |
 | ---------- | ---------- |
 | `getData` | `() => string` |
 
-#### :gear: toString
+### :gear: toString
 
 | Method | Type |
 | ---------- | ---------- |
 | `toString` | `() => string` |
 
-#### :gear: destroy
+### :gear: destroy
 
 销毁的办法
 
@@ -353,47 +408,41 @@ createNode
 | `destroy` | `() => void` |
 
 
-## :factory: Mindmap
+# :factory: LayoutController
 
-网页版的mindmap
-支持事件上的缩放，增加事件回调
-同时如果获取了canvas的dom，就需要初始化一个quill editor
+## Methods
 
-### Methods
+- [setStructure](#gear-setstructure)
+- [setMargin](#gear-setmargin)
+- [doLayout](#gear-dolayout)
 
-- [initEditor](#gear-initeditor)
-- [setEditable](#gear-seteditable)
-- [destroy](#gear-destroy)
-
-#### :gear: initEditor
+### :gear: setStructure
 
 | Method | Type |
 | ---------- | ---------- |
-| `initEditor` | `() => void` |
+| `setStructure` | `(structure: string) => void` |
 
-#### :gear: setEditable
-
-| Method | Type |
-| ---------- | ---------- |
-| `setEditable` | `(value?: boolean) => void` |
-
-#### :gear: destroy
-
-销毁的办法
+### :gear: setMargin
 
 | Method | Type |
 | ---------- | ---------- |
-| `destroy` | `() => void` |
+| `setMargin` | `(margin: IMargin) => void` |
+
+### :gear: doLayout
+
+| Method | Type |
+| ---------- | ---------- |
+| `doLayout` | `(nodeView?: NodeView) => void` |
 
 
-## :tropical_drink: Interfaces
+# :tropical_drink: Interfaces
 
 - [NodeSpec](#gear-nodespec)
 - [ISchemaSpec](#gear-ischemaspec)
 - [StateConfig](#gear-stateconfig)
 - [IExtensionConfig](#gear-iextensionconfig)
 
-### :gear: NodeSpec
+## :gear: NodeSpec
 
 
 
@@ -407,7 +456,7 @@ createNode
 | `toCanvas` | `((node: Node<K>, context: NodeToCanvasContext) => UI) or undefined` |  |
 
 
-### :gear: ISchemaSpec
+## :gear: ISchemaSpec
 
 
 
@@ -417,7 +466,7 @@ createNode
 | `topNodeType` | `NodeType<NodeSpec<any>>` |  |
 
 
-### :gear: StateConfig
+## :gear: StateConfig
 
 
 
@@ -431,7 +480,7 @@ createNode
 | `pluginState` | `Record<string, any> or undefined` |  |
 
 
-### :gear: IExtensionConfig
+## :gear: IExtensionConfig
 
 
 
@@ -445,7 +494,7 @@ createNode
 | `onUpdate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
 
 
-## :cocktail: Types
+# :cocktail: Types
 
 - [NodeToCanvasContext](#gear-nodetocanvascontext)
 - [INodeContent](#gear-inodecontent)
@@ -453,7 +502,7 @@ createNode
 - [IExtensionOptions](#gear-iextensionoptions)
 - [Options](#gear-options)
 
-### :gear: NodeToCanvasContext
+## :gear: NodeToCanvasContext
 
 | Type | Type |
 | ---------- | ---------- |
@@ -462,13 +511,13 @@ createNode
     render: Leafer;
 }` |
 
-### :gear: INodeContent
+## :gear: INodeContent
 
 | Type | Type |
 | ---------- | ---------- |
 | `INodeContent` | `Array<XmlElement or XmlText or Node> or XmlElement or XmlText or string or null` |
 
-### :gear: ViewOptions
+## :gear: ViewOptions
 
 | Type | Type |
 | ---------- | ---------- |
@@ -479,7 +528,7 @@ createNode
     container?: any
 }` |
 
-### :gear: IExtensionOptions
+## :gear: IExtensionOptions
 
 | Type | Type |
 | ---------- | ---------- |
@@ -488,7 +537,7 @@ createNode
     board: Board
 }` |
 
-### :gear: Options
+## :gear: Options
 
 | Type | Type |
 | ---------- | ---------- |

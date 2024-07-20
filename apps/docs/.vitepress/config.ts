@@ -21,7 +21,7 @@ export default defineConfig({
       { text: '首页', link: '/' },
       { text: '快速上手', link: '/guide/' },
       { text: '实现原理', link: '/guide/implementation/' },
-      { text: 'API 参考手册', link: '/ref/packages.html' },
+      { text: 'API 参考手册', link: '/ref/@ymindmap-view.html' },
     ],
 
     sidebar: [
@@ -44,8 +44,12 @@ export default defineConfig({
       {
         text: 'API 参考手册',
         items: [
-          { text: '核心库', link: '/ref/packages.html' },
-          { text: '插件', link: '/ref/extensions.html' },
+          { text: '@ymindmap/view', link: '/ref/@ymindmap-view.html' },
+          { text: '@ymindmap/model', link: '/ref/@ymindmap-model.html' },
+          { text: '@ymindmap/state', link: '/ref/@ymindmap-state.html' },
+          { text: '@ymindmap/core', link: '/ref/@ymindmap-core.html' },
+          { text: '@ymindmap/browser', link: '/ref/@ymindmap-browser.html' },
+          { text: '@ymindmap/extension-mindmap', link: '/ref/@ymindmap-extension-mindmap.html' },
         ]
       }
     ],

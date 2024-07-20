@@ -2,29 +2,45 @@ import { generateDocumentation } from 'tsdoc-markdown';
 import path from 'path';
 const rootPath = path.join(import.meta.url.replace('file://', ''), '..', '..', '..', '..', '..');
 
+const docs = [
+    {
+        source: 'packages/view/index.ts',
+        dist: "@ymindmap-view"
+    },
+    {
+        source: 'packages/model/index.ts',
+        dist: "@ymindmap-model"
+    },
+    {
+        source: 'packages/state/index.ts',
+        dist: "@ymindmap-state"
+    },
+    {
+        source: 'packages/core/index.ts',
+        dist: "@ymindmap-core"
+    },
+    {
+        source: 'packages/browser/index.ts',
+        dist: "@ymindmap-browser"
+    },
+    {
+        source: 'extensions/extension-mindmap/index.ts',
+        dist: "@ymindmap-extension-mindmap"
+    }
+]
+docs.forEach(({ source, dist }) => {
 // 核心仓库
 generateDocumentation({
     inputFiles: [
-        path.join(rootPath, 'packages/browser/index.ts'),
-        path.join(rootPath, 'packages/schema/index.ts'),
-        path.join(rootPath, 'packages/core/index.ts'),
-        path.join(rootPath, 'packages/state/index.ts'),
-        path.join(rootPath, 'packages/view/index.ts'),
+        path.join(rootPath, source),
     ],
-    outputFile: path.join(rootPath, 'apps', 'docs', 'ref', 'packages.md'),
+    outputFile: path.join(rootPath, 'apps', 'docs', 'ref', `${dist}.md`),
+    markdownOptions: {
+        headingLevel: '#'
+    },
     buildOptions: {
         types: true,
         explore: true
       }
 });
-
-generateDocumentation({
-    inputFiles: [
-        path.join(rootPath, 'extensions/extension-mindmap/index.ts'),
-    ],
-    outputFile: path.join(rootPath, 'apps', 'docs', 'ref', 'extensions.md'),
-    buildOptions: {
-        types: true,
-        explore: true
-      }
-});
+})
