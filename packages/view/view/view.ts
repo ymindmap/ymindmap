@@ -2,7 +2,7 @@
  * view
  */
 import { Node, NodeToCanvasContext } from '@ymindmap/model'
-import type { UI, getBoundsData } from 'leafer-ui'
+import type { UI } from 'leafer-ui'
 import type { IBoundsData } from '@leafer-ui/interface'
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
