@@ -1,7 +1,7 @@
 /**
  * 标准左右布局
  */
-import { View } from '@ymindmap/view'
+import { NodeView, View } from '@ymindmap/view'
 import { nonLayeredTidyTree } from './lib/nonLayeredTidyTree'
 import { right2left } from './lib/rightToLeft';
 import type { ILayoutController } from '../type.d';
@@ -53,7 +53,6 @@ export function layout(this: ILayoutController, node: View) {
         nonLayeredTidyTree.call(this, root, true, right);
 
         // 左侧树反转
-        right2left(root, left);
-
+        right2left(root, left as NodeView[]);
     }
 }
