@@ -21,7 +21,6 @@ export function right2left(reference: NodeView, child?: View[]) {
                     (child.ui.x || 0)
                     - offset * 2
                     - (child.ui.width || 0) / 2
-                    - (reference.ui?.width || 0) / 2;
             }
         }
         if (child instanceof NodeView) right2left(child);
