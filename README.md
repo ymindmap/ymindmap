@@ -9,58 +9,16 @@
 
 希望未来可以有更多人参与
 
-## 路径
+## 文档
 
-### apps/docs
-
-项目的测试/doc目录，目前待开发
-
-### extensions
-
-拓展系统，目前待开发
-
-### packages
-
-各类基础包
-
-#### packages/core
-
-核心库，整合了state/view/model相关的数据
-
-#### packages/browser
-
-核心库，浏览器支持，支持导出dom 放大缩小 大小重制，编辑器等操作
-
-#### packages/model
-
-模型定义，参考了prosemirror，主要用来绑定schema和Yjs.XmlElement
-
-可以基于node来自动初始化一个yjs的xmlElement
-
-也可以基于Yjs.XmlElement来创建一个node来创建对应的 leaferjs 的 ui 对象
-
-#### packages/state
-
-状态定义，对Yjs.state的简单封装，额外增加了当前选中态
-
-#### packages/view
-
-视图定义
-
-定义了基础的Topic模型 + 绑定 yjs 和 ui 对象
-
-### startkits
-
-待施工，给vue2/vue3/react未来使用的默认绑定组件
-
-大概我不会开发的大概
+[文档地址](https://mizuka-wu.github.io/ymindmap/)
 
 ## ROADMAP
 
 - [x] 基于prosemirror完成基础的类型定义
 - [x] 定义出第一个简单的 Topic
-- [ ] 渲染出第一个Topic
-- [ ] 一个Command系统
+- [x] 渲染出第一个Topic
+- [x] 一个Command系统
 - [ ] command支持创建Topic
 - [ ] Topic支持创建子Topic（）
 - [ ] Topic支持输入文字
