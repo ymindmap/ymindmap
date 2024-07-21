@@ -30,11 +30,11 @@ features:
 
 <script setup>
 import { onMounted } from 'vue'
-import { Mindmap, getDefaultData } from '@ymindmap/browser';
-import { TextMindmapExtension } from '@ymindmap/extension-text'
-import { MindmapExtension } from '@ymindmap/extension-mindmap'
 
-onMounted(() => {
+onMounted(async () => {
+  const { Mindmap, getDefaultData } = await import('@ymindmap/browser');
+  const { TextMindmapExtension } = await import('@ymindmap/extension-text');
+  const { MindmapExtension } = await import('@ymindmap/extension-mindmap');
   new Mindmap({
     el: '.demo',
     data: getDefaultData(),
