@@ -24,3 +24,25 @@ features:
     details: View Node Model 分离，拓展性更好
 ---
 
+<div class="demo-container" style="width: 100%;display: flex;justify-content: center;align-items: center;height: 300px;margin-top: 64px;">
+  <div class="demo" style="width: 100%;height: 100%;overflow: hidden;border-radius:8px;"></div>
+</div>
+
+<script setup>
+import { onMounted } from 'vue'
+import { Mindmap, getDefaultData } from '@ymindmap/browser';
+import { TextMindmapExtension } from '@ymindmap/extension-text'
+import { MindmapExtension } from '@ymindmap/extension-mindmap'
+
+onMounted(() => {
+  new Mindmap({
+    el: '.demo',
+    data: getDefaultData(),
+    editable: true,
+    extensions: {
+      Text: TextMindmapExtension,
+      Mindmap: MindmapExtension
+    },
+  })
+})
+</script>
