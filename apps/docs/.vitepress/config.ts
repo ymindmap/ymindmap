@@ -56,11 +56,14 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+    ],
+    search: {
+      provider: 'local'
+    }
   },
   markdown: {
     config(markdownIt) {
       markdownIt.use(MarkdownItTextualUml)
     }
-  }
+  },
 })

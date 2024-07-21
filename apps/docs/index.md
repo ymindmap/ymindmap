@@ -13,6 +13,7 @@ hero:
     - theme: alt
       text: 示例
       link: /api-examples
+  image: https://www.plantuml.com/plantuml/png/SoWkIImgoStCIybDBE2oAIwfp4cruuBoNJ8JquiISnMgkHGKzDABKbFpG4mWS4fCpauloY_DIt7EpyalKiZ9JCye0Ii0IjTorNBPw4DDqbRmXPgjhQrWOmDMOsU7oj7LHU8uf0ALGxG00000
 
 features:
   - title: 基于Yjs驱动
