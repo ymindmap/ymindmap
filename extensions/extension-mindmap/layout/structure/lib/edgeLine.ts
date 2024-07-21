@@ -74,17 +74,8 @@ export function connectNodeView(this: EdgeLine) {
         }
         case 'bezier': {
             // 计算控制点
-            const controlPointA: IPointData = { x: 0, y: 0 };
-            const controlPointB: IPointData = { x: 0, y: 0 };
-
-            if (this.isHorizontal) {
-                const y = (fromPoint.y + toPoint.y) / 2
-                controlPointA.x = fromPoint.x;
-                controlPointA.y = y;
-                controlPointB.x = toPoint.x;
-                controlPointB.y = y;
-            }
-
+            const controlPointA: IPointData = { x: toPoint.x, y: fromPoint.y };
+            const controlPointB: IPointData = { x: fromPoint.x, y: toPoint.y };
             this.pen.bezierCurveTo(controlPointA.x, controlPointA.y, controlPointB.x, controlPointB.y, toPoint.x, toPoint.y);
             break;
         }
@@ -180,6 +171,6 @@ export function createLine(this: ILayoutController, from: NodeView, to: NodeView
         isHorizontal,
         from,
         to,
-        mode: 'curve'
+        mode: 'bezier'
     }));
 }
