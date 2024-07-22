@@ -44,7 +44,21 @@
 
 [Api](/ref/@ymindmap-model.html)
 
+## 核心处理流程
+
+```plantuml
+@startuml
+Yjs -> XmlElement : 从根节点开始循环/遍历
+XmlElement -> XmlElement : 遍历
+XmlElement -> XmlElement.nodeName : 获取类型
+XmlElement.nodeName -> Schema.node : 获取到对应的`node`的工厂函数
+Schema.node -> NodeType
+NodeType -> Node : 生成真实的Leafer.js 的 UI 对象
+@enduml
+```
+
 ## 目前待开发
 
-[ ] `setAttr/setAttrs` 方法，将`attr`的变更同步回`yjs`上
-[ ] `update` 方法，如果有任何属性发生了改变，通知对应的`view`进行更新
+- [ ] `setAttr/setAttrs` 方法，将`attr`的变更同步回`yjs`上
+
+- [ ] `update` 方法，如果有任何属性发生了改变，通知对应的`view`进行更新

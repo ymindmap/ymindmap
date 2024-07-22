@@ -8,4 +8,10 @@
 
 可以参考[@ymindmap/core](/ref/@ymindmap-core.html#iextensionconfig)的相关配置定义
 
-### 注册Node节点
+* 注册Node节点
+* 注册命令
+* 注册storage
+
+## Todo
+
+- [] 插件支持注册`Keymap`

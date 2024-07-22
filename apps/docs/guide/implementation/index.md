@@ -70,3 +70,23 @@ view -> view: 绘制到 LeaferUI 的 app上
 view -> 用户: 可视化输出
 @enduml
 ```
+
+## 整体架构
+>
+> 以在浏览器端为例，实际上`Node.js`的话，只是不用引入`Browser`罢了
+
+```plantuml
+@startwbs
+* Browser
+** Core
+*** Extension
+*** Command
+*** Storages
+*** View
+**** State
+***** Schema
+****** NodeType
+**** Leafer.js
+
+@endwbs
+```
