@@ -28,6 +28,8 @@ export default defineConfig({
       {
         text: '快速上手',
         items: [
+          { text: '简介', link: '/guide/' },
+          { text: '安装', link: '/guide/install.html' },
         ]
       },
       {
@@ -36,9 +38,21 @@ export default defineConfig({
         ]
       },
       {
-        text: '实现原理',
+        text: '数据管理原理',
         items: [
           { text: '设计思路', link: '/guide/implementation/' },
+          { text: 'model', link: '/guide/implementation/packages/model.html' },
+          { text: 'state', link: '/guide/implementation/packages/state.html' },
+          { text: 'view', link: '/guide/implementation/packages/view.html' },
+          { text: 'core', link: '/guide/implementation/packages/core.html' },
+          { text: 'browser', link: '/guide/implementation/packages/browser.html' },
+          { text: '插件系统', link: '/guide/implementation/extensions/' },
+        ]
+      },
+      {
+        text: '思维导图原理',
+        items: [
+          { text: 'Mindmap', link: '/guide/implementation/extensions/mindmap.html' },
         ]
       },
       {

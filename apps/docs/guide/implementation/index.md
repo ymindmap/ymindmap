@@ -1,5 +1,33 @@
 # 设计思路
 
+整体和 `Prosemirror` 类似，尽可能的抽象成一个 `MVC` 架构出来
+
+```plantuml
+@startuml
+
+[*] --> State
+State : 对Yjs的基本封装
+
+State --> Model
+
+Model : 模型定义
+Model : Yjs.XML 对应 的Node节点
+
+Model --> View
+View : 模型和Leaferjs的胶水层
+View : 通过Model.toUI绘制到canvas上
+
+View --> Leaferjs
+Leaferjs : 一个基于canvas的显示框架
+
+Leaferjs --> View
+View --> Model
+Model --> State
+State --> [*]
+
+@enduml
+```
+
 ## 核心模块
 
 核心模块作为 packages 进行提供
@@ -14,32 +42,13 @@
 
 核心模块作为 extensions 进行提供
 
+因为`Ymindmap`是基于`Yjs`进行开发的，所以在设计上需要考虑到数据的同步问题，同时也要考虑到插件系统的扩展性，所以核心模块作为 extensions 进行提供。
+
+目前主要通过以下几个插件提供了一个思维导图系统
+
 - [@ymindmap/extension-mindmap](./extensions/mindmap.md) 通过插件系统实现的思维导图的相关模型，命令，等定义
 
-## 快速创建一个思维导图
-
-通过引入一些核心库，即可快速创建一个思维导图，当然对应的基础封装会提供在对应的`startskit`里
-
-```javascript
-import { Mindmap, getDefaultData } from '@ymindmap/browser';
-import { TextMindmapExtension } from '@ymindmap/extension-text'
-import { MindmapExtension } from '@ymindmap/extension-mindmap'
-
-const mindmap = new Mindmap({
-  el: '#app',
-  data: getDefaultData(),
-  extensions: {
-    Text: TextMindmapExtension,
-    Mindmap: MindmapExtension
-  },
-});
-
-mindmap.on('change', (value) => {
-  localStorage.setItem('data', value)
-})
-```
-
-在浏览器内使用 `YMindmap` 必须提供一个宽高尺寸不为 0 的容器
+相关核心插件会通过`startkits`暴露出的入口文件，自动进行注入
 
 ## 核心流程
 
