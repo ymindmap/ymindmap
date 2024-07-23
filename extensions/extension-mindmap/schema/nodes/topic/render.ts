@@ -6,6 +6,7 @@
 
 import { Box, defineKey } from 'leafer-ui';
 import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
+import { HTMLText } from '@leafer-in/html'
 
 import type { ITopicNodeAttrs } from './attr';
 
@@ -53,6 +54,17 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
             }
         ]
     })
+
+    // const title = new HTMLText({
+    //     className: 'topic-title',
+    //     padding,
+    //     editable: false,
+    //     // tag: 'title',
+    //     text: node.attributes?.title || '请输入内容',
+    //     fill: topicStyle.color,
+    // })
+
+    // topic.add(title);
 
     // 设置无法缩放等功能
     defineKey(topic, 'editConfig', {
