@@ -4,46 +4,96 @@
  * @todo 支持读取text支持的样式
  * @todo 支持latex，支持编辑中变成公式，编辑外变成svg
  */
-import type { ITextDecoration, ITextStyleComputedData } from '@leafer-ui/interface'
+import type {
+    IText,
+    // IUIJSONData,
+    ITextDecoration,
+    ITextStyleComputedData,
+} from '@leafer-ui/interface'
+import { getPadding } from '../../utils';
+
+type EditorAttrs = keyof ITextStyleComputedData | 'fill'
+export const attrList: EditorAttrs[] = [
+    "fill",
+    "fontFamily",
+    "fontSize",
+    "fontWeight",
+    "italic",
+    "letterSpacing",
+    "lineHeight",
+    "paraIndent",
+    "paraSpacing",
+    "textAlign",
+    "textCase",
+    "textDecoration",
+    "textOverflow",
+    "textWrap",
+    "verticalAlign"
+]
 
 export class TextEditor {
     public containerEl: HTMLDivElement;
     private editorEl: HTMLDivElement;
-    private text: string
-    private _textStyle: ITextStyleComputedData = {};
-    constructor(originText = '', style: ITextStyleComputedData = {}) {
+    // private originData: IUIJSONData;
+    private originUI: IText;
+    private ob: MutationObserver;
+    constructor(text: IText, reference: HTMLElement) {
         this.containerEl = document.createElement('div');
         this.editorEl = document.createElement("div");
         this.editorEl.contentEditable = 'true';
-        this.textStyle = style;
-        this.text = originText;
-    }
+        // this.originData = text.toJSON();
+        this.containerEl.appendChild(this.editorEl);
+        this.editorEl.innerText = text.text || '';
 
-    get _text() {
-        // 这里需要考虑双击编辑的情况，如果正在编辑则返回 editorEl 的内容
-        return this.editorEl.textContent || this.text;
-    }
-    set _text(value: string) {
-        this.text = value;
-        this.editorEl.textContent = value;
-    }
+        /**
+         * 根据当前节点位置确定位置
+         * 先重新聚焦到编辑状态后
+         */
+        const { a, d, e, f } = text.getTransform('world');
+        reference.appendChild(this.containerEl);
+        this.editorEl.onblur = this.destroy.bind(this);
+        this.editorEl.focus();
+        this.containerEl.style.position = 'absolute';
+        this.containerEl.style.left = e + 'px';
+        this.containerEl.style.top = f + 'px';
+        // 缩放关系 + padding关系
+        const [topPadding, rightPadding, bottomPadding, leftPadding] = getPadding(text.padding || 0);
+        this.containerEl.style.paddingTop = topPadding + 'px';
+        this.containerEl.style.paddingRight = rightPadding + 'px';
+        this.containerEl.style.paddingBottom = bottomPadding + 'px';
+        this.containerEl.style.paddingLeft = leftPadding + 'px';
+        this.containerEl.style.transformOrigin = 'top left';
+        this.containerEl.style.transform = `scale(${a}, ${d})`;
 
-    get textStyle(): ITextStyleComputedData {
-        return this._textStyle;
-    }
+        this.originUI = text;
+        this.originUI.opacity = 0;
 
-    set textStyle(value: ITextStyleComputedData) {
-        this._textStyle = value;
         this.calculateDomStyle();
+        this.ob = new MutationObserver(([record]) => {
+            if (record.type === 'characterData') {
+                this.originUI.setAttr('text', this.editorEl.innerText);
+            } else {
+                // 更新属性
+            }
+        });
+
+        requestAnimationFrame(() => {
+            this.ob.observe(this.editorEl, { characterData: true, subtree: true });
+        })
     }
 
     calculateDomStyle(): void {
         // 计算map然后自动设置
-        let styleAttr = '';
+        let styleAttr = 'outline: none;';
 
-        Object.keys(this.textStyle).forEach((key) => {
-            const value: any = this.textStyle[key as keyof ITextStyleComputedData];
-            switch (key as keyof ITextStyleComputedData) {
+
+        attrList.forEach((key) => {
+            const value: any = this.originUI.getAttr(key);
+            switch (key as EditorAttrs) {
+                case 'fill': {
+                    styleAttr += `color: ${value};`
+                    break;
+                }
                 case 'fontFamily': {
                     styleAttr += `font-family: ${value};`;
                     break;
@@ -104,10 +154,10 @@ export class TextEditor {
                     styleAttr += `letter-spacing: ${value}px;`;
                     break;
                 }
-                case 'lineHeight': {
-                    styleAttr += `line-height: ${value}px;`;
-                    break;
-                }
+                // case 'lineHeight': {
+                //     styleAttr += `line-height: ${value.value ? value.value : value}px;`;
+                //     break;
+                // }
                 case 'paraIndent': {
                     styleAttr += `text-indent: ${value}px;`;
                     break;
@@ -131,7 +181,7 @@ export class TextEditor {
                 }
                 /** @todo 需要测试 */
                 case 'textOverflow': {
-                    styleAttr += `overflow: ${value}`;
+                    styleAttr += `overflow: ${value === 'show' ? 'visible' : 'hidden'};`;
                     break;
                 }
                 default: break;
@@ -139,5 +189,13 @@ export class TextEditor {
         })
 
         this.editorEl.setAttribute('style', styleAttr);
+    }
+
+    destroy() {
+        this.originUI.opacity = 1;
+        this.ob.disconnect();
+        if (this.containerEl.parentElement) {
+            this.containerEl.parentElement.removeChild(this.containerEl);
+        }
     }
 }

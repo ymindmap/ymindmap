@@ -1,6 +1,6 @@
 import { Board, Options } from '@ymindmap/core'
 import { NodeView, VIEW_KEY } from '@ymindmap/view'
-import { Editor } from './editor'
+import { Editor, registerTextEditor } from './editor'
 import '@leafer-in/state'
 
 export * from '@ymindmap/core';
@@ -46,6 +46,8 @@ export class Mindmap extends Board<{
         });
         this.editor.hittable = false;
         this.view.app.sky.add(this.editor);
+        // 注册自定义的dom编辑器
+        registerTextEditor(this.editor, this.view.app.tree);
     }
 
     get dom(): HTMLDivElement {
