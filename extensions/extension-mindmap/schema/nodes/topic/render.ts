@@ -6,7 +6,7 @@
 
 import { Box, defineKey } from 'leafer-ui';
 import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
-import { HTMLText } from '@leafer-in/html'
+// import { HTMLText } from '@leafer-in/html'
 
 import type { ITopicNodeAttrs } from './attr';
 
