@@ -67,6 +67,7 @@ export class Mindmap extends Board<{
     }
 
     destroy() {
+        // 销毁的方法
         super.destroy();
         if (this.editor) this.editor.destroy();
         if (!this.container) return;
