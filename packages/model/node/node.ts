@@ -92,5 +92,9 @@ export class Node<T extends IAttrs = any> {
         return children;
     }
 
+    get setAttribute() {
+        return this.state.setAttribute.bind(this.state);
+    }
+
     static NodeStateMap = new WeakMap<XmlElement | XmlText, Node<any>>()
 }

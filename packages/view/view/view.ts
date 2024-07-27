@@ -4,6 +4,7 @@
 import { Node, NodeToCanvasContext } from '@ymindmap/model'
 import type { UI } from 'leafer-ui'
 import type { IBoundsData } from '@leafer-ui/interface'
+import { YXmlEvent } from 'yjs';
 
 export const VIEW_KEY = '__Y_MINDMAP_VIEW__'
 
@@ -33,8 +34,18 @@ export class View<T extends UI = UI> {
 
         // 订阅更新移除自己的子节点
         this.node.state.observe((e) => {
-            // 监听到更新啦
-            console.log(e);
+            if (e instanceof YXmlEvent) {
+                // 监听到更新啦
+                console.log(e);
+                // 内容更新
+                if (e.attributesChanged.size) {
+                    this.ui?.forceUpdate();
+                }
+            } else {
+                // 刷新自己
+                // 监听到更新啦
+                console.log(e);
+            }
         })
 
         View.NodeViewMap.set(this.node, this);

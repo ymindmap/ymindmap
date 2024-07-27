@@ -3,7 +3,10 @@
  * 感谢提供思路
  * @see https://leungwensen.github.io/blog/2017/mindmap-drawing-algorithms.html
  * @todo 支持动态注入其他的布局方案
+ * @todo 重新布局问题
+ * @todo 解除事件问题
  */
+import { PropertyEvent, Box } from 'leafer-ui'
 import { structures } from './structure';
 
 import type { Board } from '@ymindmap/core'
@@ -50,8 +53,14 @@ export class LayoutController implements ILayoutController {
         }
 
         this.cacheStorage = {};
+
         // 开始布局
         this.doLayout();
+
+        /**
+         * 自动开始监听
+         */
+        this.mindmap.ui?.on(PropertyEvent.CHANGE, this.handleMindmapUpdate.bind(this));
     }
 
     get layoutMethod(): (this: ILayoutController, nodeVie: NodeView) => void {
@@ -80,5 +89,33 @@ export class LayoutController implements ILayoutController {
 
     doLayout(nodeView: NodeView = this.mindmap) {
         this.layoutMethod.call(this, nodeView)
+    }
+
+    handleMindmapUpdate(e: PropertyEvent) {
+        // 只处理topic的变更
+        if (e.target instanceof Box) {
+            if (e.target.className?.includes('topic') || e.target.className?.includes('mindmap')) {
+                switch (e.attrName) {
+                    case 'hitChildren': break;
+                    case 'width': {
+                        this.doLayout();
+                        break;
+                    }
+                    case 'height': {
+                        this.doLayout();
+                        break;
+                    }
+                    default: {
+                        console.log(e.attrName);
+                        break;
+                    };
+                }
+            }
+        }
+    }
+
+    destroy() {
+        this.cacheStorage = {};
+        this.mindmap.ui?.off(PropertyEvent.CHANGE, this.handleMindmapUpdate.bind(this));
     }
 }

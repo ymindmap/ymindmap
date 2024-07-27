@@ -103,7 +103,7 @@ export class EdgeLine extends Path {
     private _mode: IEdgeLineMode;
     public from: NodeView;
     public to: NodeView;
-    private reconnect: () => void;
+    public reconnect: () => void;
 
     constructor(options: IEdgeLineData) {
         super(options as any);
@@ -155,13 +155,18 @@ export function createLine(this: ILayoutController, from: NodeView, to: NodeView
     const className = getClassName(from, to);
     const { view } = this.board;
 
-    const existedLine = view.ui
-        .findOne(className.split(' ').map(lineClassName => `.${lineClassName}`).join()) as (EdgeLine | null);
     /**
-     * 更新样式
-     * @todo 样式系统
+     * 这块实现leafer ui目前有问题，先全匹配查询
      */
-    if (existedLine) return
+    const existedLine = view.ui.findOne(`.${className}`) as (EdgeLine | null);
+
+    if (existedLine) {
+        /**
+         * 重新连线
+         */
+        existedLine.reconnect();
+        return;
+    }
 
     this.board.view.context.render.add(new EdgeLine({
         strokeWidth: 3,

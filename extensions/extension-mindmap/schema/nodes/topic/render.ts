@@ -4,7 +4,12 @@
  * @todo 支持latex https://jsfiddle.net/3aHQc/39/
  */
 
-import { Box, defineKey } from 'leafer-ui';
+import {
+    Box,
+    Text,
+    defineKey,
+    PropertyEvent
+} from 'leafer-ui';
 import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
 // import { HTMLText } from '@leafer-in/html'
 
@@ -43,16 +48,23 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
         editable: true,
         cursor: 'pointer',
         children: [
-            {
-                className: 'topic-title',
-                tag: 'Text',
-                padding,
-                editable: false,
-                // tag: 'title',
-                text: node.attributes?.title || '请输入内容',
-                fill: topicStyle.color,
-            }
         ]
+    })
+
+    const title = new Text({
+        className: 'topic-title',
+        tag: 'Text',
+        padding,
+        editable: false,
+        // tag: 'title',
+        text: node.attributes?.title || '请输入内容',
+        fill: topicStyle.color,
+    })
+
+    topic.add(title);
+    // 内容更新同步
+    title.on(PropertyEvent.CHANGE, (e: PropertyEvent) => {
+        if (e.attrName === 'text') node.setAttribute('text', e.newValue);
     })
 
     // const title = new HTMLText({
@@ -63,8 +75,6 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
     //     text: node.attributes?.title || '请输入内容',
     //     fill: topicStyle.color,
     // })
-
-    // topic.add(title);
 
     // 设置无法缩放等功能
     defineKey(topic, 'editConfig', {
