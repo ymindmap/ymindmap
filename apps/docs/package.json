@@ -22,9 +22,13 @@
   },
   "dependencies": {
     "@ymindmap/browser": "workspace:*",
+    "@ymindmap/extension-collab": "workspace:^",
     "@ymindmap/extension-mindmap": "workspace:^",
     "@ymindmap/extension-text": "workspace:^",
+    "localforage": "^1.10.0",
+    "qs": "^6.12.3",
     "viewerjs": "^1.11.6",
-    "vitepress-plugin-image-viewer": "^1.1.4"
+    "vitepress-plugin-image-viewer": "^1.1.4",
+    "y-localforage": "^0.1.4"
   }
 }

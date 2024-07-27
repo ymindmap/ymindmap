@@ -35,6 +35,7 @@ export default defineConfig({
       {
         text: '示例',
         items: [
+          { text: '协同', link: '/demos/collab.html' },
         ]
       },
       {

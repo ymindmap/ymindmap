@@ -5,8 +5,13 @@
 - [string2Yjs](#gear-string2yjs)
 - [yjs2string](#gear-yjs2string)
 - [getDefaultData](#gear-getdefaultdata)
+- [getClassName](#gear-getclassname)
+- [connectNodeView](#gear-connectnodeview)
+- [createLine](#gear-createline)
 - [nonLayeredTidyTree](#gear-nonlayeredtidytree)
 - [right2left](#gear-right2left)
+- [layout](#gear-layout)
+- [layout](#gear-layout)
 - [layout](#gear-layout)
 - [moveRootMindmapToCenter](#gear-moverootmindmaptocenter)
 
@@ -40,6 +45,24 @@
 | ---------- | ---------- |
 | `getDefaultData` | `() => string` |
 
+## :gear: getClassName
+
+| Function | Type |
+| ---------- | ---------- |
+| `getClassName` | `(from: NodeView, to: NodeView) => string` |
+
+## :gear: connectNodeView
+
+| Function | Type |
+| ---------- | ---------- |
+| `connectNodeView` | `(this: EdgeLine) => void` |
+
+## :gear: createLine
+
+| Function | Type |
+| ---------- | ---------- |
+| `createLine` | `(this: ILayoutController, from: NodeView, to: NodeView, isHorizontal: boolean) => void` |
+
 ## :gear: nonLayeredTidyTree
 
 | Function | Type |
@@ -52,11 +75,23 @@
 
 | Function | Type |
 | ---------- | ---------- |
-| `right2left` | `(reference: NodeView, child?: View<UI>[] or undefined) => void` |
+| `right2left` | `(reference: NodeView, child?: NodeView[] or undefined) => void` |
 
 ## :gear: layout
 
 获取一个节点是左侧还是右侧
+
+| Function | Type |
+| ---------- | ---------- |
+| `layout` | `(this: ILayoutController, node: View<UI>) => void` |
+
+## :gear: layout
+
+| Function | Type |
+| ---------- | ---------- |
+| `layout` | `(this: ILayoutController, node: View<UI>) => void` |
+
+## :gear: layout
 
 | Function | Type |
 | ---------- | ---------- |
@@ -70,11 +105,14 @@
 | ---------- | ---------- |
 | `moveRootMindmapToCenter` | `() => Command` |
 
+
 # :wrench: Constants
 
 - [VIEW_KEY](#gear-view_key)
 - [theme](#gear-theme)
 - [topic](#gear-topic)
+- [CLASS_NAME](#gear-class_name)
+- [structures](#gear-structures)
 
 ## :gear: VIEW_KEY
 
@@ -93,6 +131,19 @@
 | Constant | Type |
 | ---------- | ---------- |
 | `topic` | `NodeType<NodeSpec<ITopicNodeAttrs>>` |
+
+## :gear: CLASS_NAME
+
+| Constant | Type |
+| ---------- | ---------- |
+| `CLASS_NAME` | `"_mindmap-edge-line_"` |
+
+## :gear: structures
+
+| Constant | Type |
+| ---------- | ---------- |
+| `structures` | `{ left: (this: ILayoutController, node: View<UI>) => void; right: (this: ILayoutController, node: View<UI>) => void; standard: (this: ILayoutController, node: View<...>) => void; }` |
+
 
 # :factory: Schema
 
@@ -123,6 +174,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `(type: string or NodeType<NodeSpec<any>>, attrs: IAttrs, content: INodeContent) => Node<any>` |
+
 
 # :factory: NodeType
 
@@ -156,6 +208,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `<T extends NodeSpec<any>>(options: { name: string; } and T) => NodeType<T>` |
+
 
 # :factory: Node
 
@@ -195,6 +248,7 @@ createNode
 | ---------- | ---------- |
 | `nodeAt` | `(node: Node<any>) => View<UI> or undefined` |
 
+
 # :factory: TextView
 
 ## Methods
@@ -213,6 +267,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
+
 
 # :factory: NodeView
 
@@ -240,6 +295,7 @@ createNode
 | ---------- | ---------- |
 | `getMatrix` | `(inner?: boolean or undefined) => Matrix` |
 
+
 # :factory: State
 
 ## Methods
@@ -250,7 +306,8 @@ createNode
 
 | Method | Type |
 | ---------- | ---------- |
-| `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+| `create` | `(data: Doc or Uint8Array or undefined, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+
 
 # :factory: BoardView
 
@@ -294,6 +351,7 @@ createNode
 | ---------- | ---------- |
 | `create` | `(state: State, theme: Theme, options?: ViewOptions or undefined) => BoardView` |
 
+
 # :factory: CommandManager
 
 ## Methods
@@ -305,6 +363,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `registerCommands` | `(rawCommands: RawCommands) => void` |
+
 
 # :factory: Extension
 
@@ -318,18 +377,33 @@ createNode
 | ---------- | ---------- |
 | `create` | `(options: IExtensionOptions, boardOptions: Record<string, any>) => Extension<Record<string, any>, Record<string, any>>` |
 
+
 # :factory: ExtensionManager
 
 ## Methods
 
-- [onUpdate](#gear-onupdate)
+- [invokeUpdate](#gear-invokeupdate)
+- [invokeCreate](#gear-invokecreate)
+- [invokeDestroy](#gear-invokedestroy)
 - [registerExtension](#gear-registerextension)
 
-### :gear: onUpdate
+### :gear: invokeUpdate
 
 | Method | Type |
 | ---------- | ---------- |
-| `onUpdate` | `() => void` |
+| `invokeUpdate` | `() => void` |
+
+### :gear: invokeCreate
+
+| Method | Type |
+| ---------- | ---------- |
+| `invokeCreate` | `() => void` |
+
+### :gear: invokeDestroy
+
+| Method | Type |
+| ---------- | ---------- |
+| `invokeDestroy` | `() => void` |
 
 ### :gear: registerExtension
 
@@ -337,10 +411,12 @@ createNode
 | ---------- | ---------- |
 | `registerExtension` | `(extensions: Record<string, IExtensionConfig<any, any>>, defaultOptions: Record<string, any>) => void` |
 
+
 # :factory: Board
 
 ## Methods
 
+- [init](#gear-init)
 - [undo](#gear-undo)
 - [redo](#gear-redo)
 - [toDataUrl](#gear-todataurl)
@@ -348,6 +424,12 @@ createNode
 - [getData](#gear-getdata)
 - [toString](#gear-tostring)
 - [destroy](#gear-destroy)
+
+### :gear: init
+
+| Method | Type |
+| ---------- | ---------- |
+| `init` | `(data?: string or Doc or Uint8Array or undefined) => void` |
 
 ### :gear: undo
 
@@ -373,7 +455,7 @@ createNode
 
 | Method | Type |
 | ---------- | ---------- |
-| `toSvg` | `() => string or Promise<any>` |
+| `toSvg` | `() => string or Promise<any> or null` |
 
 ### :gear: getData
 
@@ -395,6 +477,9 @@ createNode
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
+
+# :factory: EdgeLine
+
 # :factory: LayoutController
 
 ## Methods
@@ -402,6 +487,8 @@ createNode
 - [setStructure](#gear-setstructure)
 - [setMargin](#gear-setmargin)
 - [doLayout](#gear-dolayout)
+- [handleMindmapUpdate](#gear-handlemindmapupdate)
+- [destroy](#gear-destroy)
 
 ### :gear: setStructure
 
@@ -421,14 +508,30 @@ createNode
 | ---------- | ---------- |
 | `doLayout` | `(nodeView?: NodeView) => void` |
 
+### :gear: handleMindmapUpdate
+
+| Method | Type |
+| ---------- | ---------- |
+| `handleMindmapUpdate` | `(e: PropertyEvent) => void` |
+
+### :gear: destroy
+
+| Method | Type |
+| ---------- | ---------- |
+| `destroy` | `() => void` |
+
+
 # :tropical_drink: Interfaces
 
 - [NodeSpec](#gear-nodespec)
 - [ISchemaSpec](#gear-ischemaspec)
 - [StateConfig](#gear-stateconfig)
 - [IExtensionConfig](#gear-iextensionconfig)
+- [IEdgeLineData](#gear-iedgelinedata)
 
 ## :gear: NodeSpec
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -439,14 +542,20 @@ createNode
 | `draggable` | `boolean or undefined` |  |
 | `toCanvas` | `((node: Node<K>, context: NodeToCanvasContext) => UI) or undefined` |  |
 
+
 ## :gear: ISchemaSpec
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
 | `nodes` | `{ [key: string]: NodeType<NodeSpec<any>>; }` |  |
 | `topNodeType` | `NodeType<NodeSpec<any>>` |  |
 
+
 ## :gear: StateConfig
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -457,7 +566,10 @@ createNode
 | `selected` | `Node<any>[] or undefined` |  |
 | `pluginState` | `Record<string, any> or undefined` |  |
 
+
 ## :gear: IExtensionConfig
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -466,7 +578,22 @@ createNode
 | `addOptions` | `(() => Record<string, any>) or undefined` |  |
 | `addStorage` | `(() => Record<string, any>) or undefined` |  |
 | `onBeforeCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+| `onCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+| `onDestroy` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
 | `onUpdate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+
+
+## :gear: IEdgeLineData
+
+
+
+| Property | Type | Description |
+| ---------- | ---------- | ---------- |
+| `from` | `NodeView` |  |
+| `to` | `NodeView` |  |
+| `isHorizontal` | `boolean` |  |
+| `mode` | `IEdgeLineMode or undefined` |  |
+
 
 # :cocktail: Types
 
@@ -475,6 +602,7 @@ createNode
 - [ViewOptions](#gear-viewoptions)
 - [IExtensionOptions](#gear-iextensionoptions)
 - [Options](#gear-options)
+- [IEdgeLineMode](#gear-iedgelinemode)
 
 ## :gear: NodeToCanvasContext
 
@@ -516,7 +644,7 @@ createNode
 | Type | Type |
 | ---------- | ---------- |
 | `Options` | `{
-    data: string or Uint8Array;
+    data?: string or Uint8Array;
     width?: number;
     height?: number;
     theme?: string;
@@ -528,3 +656,10 @@ createNode
     schema?: Schema;
     debug?: boolean;
 }` |
+
+## :gear: IEdgeLineMode
+
+| Type | Type |
+| ---------- | ---------- |
+| `IEdgeLineMode` | `'curve' or 'direct' or 'corner' or 'bezier'` |
+

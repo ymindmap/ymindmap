@@ -85,18 +85,30 @@ importers:
       '@ymindmap/browser':
         specifier: workspace:*
         version: link:../../packages/browser
+      '@ymindmap/extension-collab':
+        specifier: workspace:^
+        version: link:../../extensions/extension-collab
       '@ymindmap/extension-mindmap':
         specifier: workspace:^
         version: link:../../extensions/extension-mindmap
       '@ymindmap/extension-text':
         specifier: workspace:^
         version: link:../../extensions/extension-text
+      localforage:
+        specifier: ^1.10.0
+        version: 1.10.0
+      qs:
+        specifier: ^6.12.3
+        version: 6.12.3
       viewerjs:
         specifier: ^1.11.6
         version: 1.11.6
       vitepress-plugin-image-viewer:
         specifier: ^1.1.4
         version: 1.1.4
+      y-localforage:
+        specifier: ^0.1.4
+        version: 0.1.4
     devDependencies:
       '@ymindmap/eslint-config':
         specifier: workspace:*

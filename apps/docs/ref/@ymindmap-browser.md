@@ -3,6 +3,10 @@
 - [string2Yjs](#gear-string2yjs)
 - [yjs2string](#gear-yjs2string)
 - [getDefaultData](#gear-getdefaultdata)
+- [isMac](#gear-ismac)
+- [isWin](#gear-iswin)
+- [getPadding](#gear-getpadding)
+- [registerTextEditor](#gear-registertexteditor)
 
 ## :gear: string2Yjs
 
@@ -22,10 +26,40 @@
 | ---------- | ---------- |
 | `getDefaultData` | `() => string` |
 
+## :gear: isMac
+
+判断是否是mac环境
+
+| Function | Type |
+| ---------- | ---------- |
+| `isMac` | `() => boolean` |
+
+## :gear: isWin
+
+| Function | Type |
+| ---------- | ---------- |
+| `isWin` | `() => boolean` |
+
+## :gear: getPadding
+
+| Function | Type |
+| ---------- | ---------- |
+| `getPadding` | `(value: IFourNumber) => [number, number, number, number]` |
+
+## :gear: registerTextEditor
+
+普通的文本编辑器
+
+| Function | Type |
+| ---------- | ---------- |
+| `registerTextEditor` | `(editor: Editor, leafer: ILeafer) => void` |
+
+
 # :wrench: Constants
 
 - [VIEW_KEY](#gear-view_key)
 - [theme](#gear-theme)
+- [attrList](#gear-attrlist)
 
 ## :gear: VIEW_KEY
 
@@ -38,6 +72,13 @@
 | Constant | Type |
 | ---------- | ---------- |
 | `theme` | `Theme` |
+
+## :gear: attrList
+
+| Constant | Type |
+| ---------- | ---------- |
+| `attrList` | `EditorAttrs[]` |
+
 
 # :factory: Schema
 
@@ -68,6 +109,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `(type: string or NodeType<NodeSpec<any>>, attrs: IAttrs, content: INodeContent) => Node<any>` |
+
 
 # :factory: NodeType
 
@@ -102,6 +144,7 @@ createNode
 | ---------- | ---------- |
 | `createNode` | `<T extends NodeSpec<any>>(options: { name: string; } and T) => NodeType<T>` |
 
+
 # :factory: Node
 
 一个基础的node
@@ -117,7 +160,8 @@ createNode
 
 | Method | Type |
 | ---------- | ---------- |
-| `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+| `create` | `(data: Doc or Uint8Array or undefined, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+
 
 # :factory: View
 
@@ -152,6 +196,7 @@ createNode
 | ---------- | ---------- |
 | `nodeAt` | `(node: Node<any>) => View<UI> or undefined` |
 
+
 # :factory: TextView
 
 ## Methods
@@ -170,6 +215,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
+
 
 # :factory: NodeView
 
@@ -196,6 +242,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `getMatrix` | `(inner?: boolean or undefined) => Matrix` |
+
 
 # :factory: BoardView
 
@@ -239,6 +286,7 @@ createNode
 | ---------- | ---------- |
 | `create` | `(state: State, theme: Theme, options?: ViewOptions or undefined) => BoardView` |
 
+
 # :factory: CommandManager
 
 ## Methods
@@ -250,6 +298,7 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `registerCommands` | `(rawCommands: RawCommands) => void` |
+
 
 # :factory: Extension
 
@@ -263,18 +312,33 @@ createNode
 | ---------- | ---------- |
 | `create` | `(options: IExtensionOptions, boardOptions: Record<string, any>) => Extension<Record<string, any>, Record<string, any>>` |
 
+
 # :factory: ExtensionManager
 
 ## Methods
 
-- [onUpdate](#gear-onupdate)
+- [invokeUpdate](#gear-invokeupdate)
+- [invokeCreate](#gear-invokecreate)
+- [invokeDestroy](#gear-invokedestroy)
 - [registerExtension](#gear-registerextension)
 
-### :gear: onUpdate
+### :gear: invokeUpdate
 
 | Method | Type |
 | ---------- | ---------- |
-| `onUpdate` | `() => void` |
+| `invokeUpdate` | `() => void` |
+
+### :gear: invokeCreate
+
+| Method | Type |
+| ---------- | ---------- |
+| `invokeCreate` | `() => void` |
+
+### :gear: invokeDestroy
+
+| Method | Type |
+| ---------- | ---------- |
+| `invokeDestroy` | `() => void` |
 
 ### :gear: registerExtension
 
@@ -282,10 +346,12 @@ createNode
 | ---------- | ---------- |
 | `registerExtension` | `(extensions: Record<string, IExtensionConfig<any, any>>, defaultOptions: Record<string, any>) => void` |
 
+
 # :factory: Board
 
 ## Methods
 
+- [init](#gear-init)
 - [undo](#gear-undo)
 - [redo](#gear-redo)
 - [toDataUrl](#gear-todataurl)
@@ -293,6 +359,12 @@ createNode
 - [getData](#gear-getdata)
 - [toString](#gear-tostring)
 - [destroy](#gear-destroy)
+
+### :gear: init
+
+| Method | Type |
+| ---------- | ---------- |
+| `init` | `(data?: string or Doc or Uint8Array or undefined) => void` |
 
 ### :gear: undo
 
@@ -318,7 +390,7 @@ createNode
 
 | Method | Type |
 | ---------- | ---------- |
-| `toSvg` | `() => string or Promise<any>` |
+| `toSvg` | `() => string or Promise<any> or null` |
 
 ### :gear: getData
 
@@ -340,6 +412,27 @@ createNode
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
+
+# :factory: TextEditor
+
+## Methods
+
+- [calculateDomStyle](#gear-calculatedomstyle)
+- [destroy](#gear-destroy)
+
+### :gear: calculateDomStyle
+
+| Method | Type |
+| ---------- | ---------- |
+| `calculateDomStyle` | `() => void` |
+
+### :gear: destroy
+
+| Method | Type |
+| ---------- | ---------- |
+| `destroy` | `() => void` |
+
+
 # :factory: Mindmap
 
 网页版的mindmap
@@ -348,9 +441,16 @@ createNode
 
 ## Methods
 
+- [init](#gear-init)
 - [initEditor](#gear-initeditor)
 - [setEditable](#gear-seteditable)
 - [destroy](#gear-destroy)
+
+### :gear: init
+
+| Method | Type |
+| ---------- | ---------- |
+| `init` | `(data: any) => void` |
 
 ### :gear: initEditor
 
@@ -372,6 +472,7 @@ createNode
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
+
 # :tropical_drink: Interfaces
 
 - [NodeSpec](#gear-nodespec)
@@ -380,6 +481,8 @@ createNode
 - [IExtensionConfig](#gear-iextensionconfig)
 
 ## :gear: NodeSpec
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -390,14 +493,20 @@ createNode
 | `draggable` | `boolean or undefined` |  |
 | `toCanvas` | `((node: Node<K>, context: NodeToCanvasContext) => UI) or undefined` |  |
 
+
 ## :gear: ISchemaSpec
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
 | `nodes` | `{ [key: string]: NodeType<NodeSpec<any>>; }` |  |
 | `topNodeType` | `NodeType<NodeSpec<any>>` |  |
 
+
 ## :gear: StateConfig
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -408,7 +517,10 @@ createNode
 | `selected` | `Node<any>[] or undefined` |  |
 | `pluginState` | `Record<string, any> or undefined` |  |
 
+
 ## :gear: IExtensionConfig
+
+
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -417,7 +529,10 @@ createNode
 | `addOptions` | `(() => Record<string, any>) or undefined` |  |
 | `addStorage` | `(() => Record<string, any>) or undefined` |  |
 | `onBeforeCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+| `onCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+| `onDestroy` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
 | `onUpdate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+
 
 # :cocktail: Types
 
@@ -467,7 +582,7 @@ createNode
 | Type | Type |
 | ---------- | ---------- |
 | `Options` | `{
-    data: string or Uint8Array;
+    data?: string or Uint8Array;
     width?: number;
     height?: number;
     theme?: string;
@@ -479,3 +594,4 @@ createNode
     schema?: Schema;
     debug?: boolean;
 }` |
+

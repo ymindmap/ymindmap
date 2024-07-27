@@ -78,7 +78,7 @@ createNode
 
 | Method | Type |
 | ---------- | ---------- |
-| `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
+| `create` | `(data: Doc or Uint8Array or undefined, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
 
 
 # :tropical_drink: Interfaces
