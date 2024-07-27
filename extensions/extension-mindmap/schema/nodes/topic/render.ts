@@ -14,6 +14,7 @@ import { Node, NodeToCanvasContext, Theme, TopicStyle } from '@ymindmap/model';
 // import { HTMLText } from '@leafer-in/html'
 
 import type { ITopicNodeAttrs } from './attr';
+import type { YXmlEvent } from 'yjs';
 
 function getTopicTheme(node: Node<ITopicNodeAttrs>, theme: Theme): TopicStyle {
     let topicTheme = theme.childTopic;
@@ -65,6 +66,14 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
     // 内容更新同步
     title.on(PropertyEvent.CHANGE, (e: PropertyEvent) => {
         if (e.attrName === 'text') node.setAttribute('title', e.newValue);
+    })
+
+    node.state.observe((e: any) => {
+        (e as YXmlEvent).attributesChanged.forEach(key => {
+            if (key === 'title') {
+                title.setAttr('text', node.attributes.title || '');
+            }
+        })
     })
 
     // const title = new HTMLText({

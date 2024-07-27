@@ -3,11 +3,12 @@ import { TextMindmapExtension } from '@ymindmap/extension-text'
 import { MindmapExtension } from '@ymindmap/extension-mindmap'
 import { CollabExtension } from '@ymindmap/extension-collab'
 import { LocalForageProvider } from 'y-localforage'
+import { applyUpdate } from 'yjs';
 import qs from 'qs';
 import localforage from 'localforage';
 import "./style.css";
 
-import type { Doc } from 'yjs';
+import { Doc } from 'yjs';
 import type { IExtensionConfig } from '@ymindmap/browser';
 
 let data: string | undefined = undefined;
@@ -32,6 +33,22 @@ async function init() {
         handlerYdoc(ydoc: Doc, callback: () => void) {
           const provider = new LocalForageProvider(DocStore, ydoc);
           provider.on('synced', callback);
+
+          if (BroadcastChannel) {
+            const bc = new BroadcastChannel("yjs")
+
+            ydoc.on("update", (update: Uint8Array) => {
+              bc.postMessage({ client: ydoc.clientID, update })
+            })
+
+            bc.addEventListener("message", (msg) => {
+              const { data } = msg
+              if (data.client !== ydoc.clientID) {
+                applyUpdate(ydoc, data.update)
+              }
+            })
+          }
+
           return provider;
         }
       }

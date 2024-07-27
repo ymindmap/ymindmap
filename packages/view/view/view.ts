@@ -35,16 +35,18 @@ export class View<T extends UI = UI> {
         // 订阅更新移除自己的子节点
         this.node.state.observe((e) => {
             if (e instanceof YXmlEvent) {
-                // 监听到更新啦
-                console.log(e);
                 // 内容更新
                 if (e.attributesChanged.size) {
+                    /**
+                     * 设置不一致的属性
+                     * @todo 处理一些额外属性或者弄到node上进行更新，这个有转换和绑定关系, 暂时在render里绑定
+                     */
                     this.ui?.forceUpdate();
                 }
             } else {
                 // 刷新自己
                 // 监听到更新啦
-                console.log(e);
+                console.log(e, '文字部分');
             }
         })
 
