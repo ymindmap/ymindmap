@@ -99,7 +99,7 @@ onMounted(async () => {
   const { CollabExtension } = await import('@ymindmap/extension-collab');
   const { LocalForageProvider } = await import('y-localforage');
   const { applyUpdate } = await import('yjs');
-  const localforage = await import('localforage');
+  const localforage = await import('localforage').then(res => res.default);
 
   new Mindmap({
     el: '.demo',
