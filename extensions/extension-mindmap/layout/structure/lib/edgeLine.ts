@@ -154,6 +154,7 @@ export function createLine(this: ILayoutController, from: NodeView, to: NodeView
     if (!from.ui || !to.ui) return;
     const className = getClassName(from, to);
     const { view } = this.board;
+    if (!view) return;
 
     /**
      * 这块实现leafer ui目前有问题，先全匹配查询
@@ -168,7 +169,7 @@ export function createLine(this: ILayoutController, from: NodeView, to: NodeView
         return;
     }
 
-    this.board.view.context.render.add(new EdgeLine({
+    view.context.render.add(new EdgeLine({
         strokeWidth: 3,
         stroke: 'rgb(50,205,121)',
         className,

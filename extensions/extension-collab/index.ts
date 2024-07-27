@@ -5,7 +5,7 @@ import type { IExtensionConfig } from '@ymindmap/core'
 export abstract class IProvider {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     on(event: 'synced', listener: (provider: IProvider) => void): void {
-
+        console.log(event, listener);
     }
 }
 
