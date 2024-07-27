@@ -64,7 +64,7 @@ export function createTopic(node: Node<ITopicNodeAttrs>, context: NodeToCanvasCo
     topic.add(title);
     // 内容更新同步
     title.on(PropertyEvent.CHANGE, (e: PropertyEvent) => {
-        if (e.attrName === 'text') node.setAttribute('text', e.newValue);
+        if (e.attrName === 'text') node.setAttribute('title', e.newValue);
     })
 
     // const title = new HTMLText({

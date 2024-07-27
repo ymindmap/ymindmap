@@ -29,8 +29,9 @@ async function init() {
       extensions.Collab = CollabExtension;
       options.Collab = {
         defaultData: getDefaultData(),
-        handlerYdoc(ydoc: Doc) {
+        handlerYdoc(ydoc: Doc, callback: () => void) {
           const provider = new LocalForageProvider(DocStore, ydoc);
+          provider.on('synced', callback);
           return provider;
         }
       }
