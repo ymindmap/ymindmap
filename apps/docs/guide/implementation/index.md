@@ -57,7 +57,7 @@ State --> [*]
 用户 -> YMindmap: 数据 + Extension列表
 YMindmap -> Extension系统: addCommands，addNode，创建Schema + 命令
 Extension系统 -> schema: 生成schema
-Extension系统 -> Extension系统: onCreate
+Extension系统 -> Extension系统: onBeforeCreate
 Extension系统 -> YMindmap: 初始化完毕
 YMindmap -> core: 初始化leaferjs app
 core -> core: 根据data生成yjs

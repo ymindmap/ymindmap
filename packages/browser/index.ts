@@ -34,6 +34,13 @@ export class Mindmap extends Board<{
         this.setEditable(options.editable);
     }
 
+    init(data: any) {
+        super.init(data);
+        if (this.editor) this.editor.destroy();
+        this.editor = null;
+        this.initEditor();
+    }
+
     initEditor() {
         if (this.editor) return;
         /**
@@ -45,9 +52,13 @@ export class Mindmap extends Board<{
 
         });
         this.editor.hittable = false;
-        this.view.app.sky.add(this.editor);
-        // 注册自定义的dom编辑器
-        registerTextEditor(this.editor, this.view.app.tree);
+        if (this.view) {
+            this.view.app.sky.add(this.editor);
+            // 注册自定义的dom编辑器
+            registerTextEditor(this.editor, this.view.app.tree);
+        } else {
+            throw new Error('can not find view for editor init');
+        }
     }
 
     get dom(): HTMLDivElement {

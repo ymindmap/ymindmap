@@ -11,6 +11,7 @@ import {
     UndoManager
 } from 'yjs';
 import { Schema, Node } from '@ymindmap/model';
+export type { Doc } from 'yjs';
 
 export interface StateConfig {
     schema: Schema;
@@ -73,14 +74,17 @@ export class State {
         }
     }
 
-    static create(data: Uint8Array | undefined, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
-        const doc = new Doc();
-        const undoManager = new UndoManager(doc.getXmlFragment('default'));
-        // 注入数据
-        if (data) {
-            applyUpdateV2(doc, data);
-            doc.once('updateV2', () => setTimeout(() => undoManager.clear()));
+    static create(data: Uint8Array | undefined | Doc, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
+        let doc: Doc;
+        if (data instanceof Doc) {
+            doc = data;
+        } else {
+            doc = new Doc();
+            // 注入数据
+            if (data) applyUpdateV2(doc, data);
         }
+
+        const undoManager = new UndoManager(doc.get('default'));
 
         return new State({
             schema: config.schema,

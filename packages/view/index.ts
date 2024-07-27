@@ -51,19 +51,6 @@ export class BoardView extends NodeView {
         // 订阅state变化
         this.state = state;
         this.ui = this.app.tree as Leafer;
-
-        // // 选区自动同步
-        // const onCanvasSelectionChange = () => {
-        //     this.state.selected = this.canvas.getActiveObjects()
-        //         .map(item => {
-        //             const view: NodeView | undefined = Reflect.get(item, VIEW_KEY);
-        //             return view?.node;
-        //         })
-        //         .filter((item) => !!item) as Node[];
-        // }
-        // this.canvas.on('selection:cleared', onCanvasSelectionChange);
-        // this.canvas.on('selection:created', onCanvasSelectionChange);
-        // this.canvas.on('selection:updated', onCanvasSelectionChange);
     }
 
     get schema() {

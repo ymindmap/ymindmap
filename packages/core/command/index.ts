@@ -1,16 +1,17 @@
 /**
  * 命令注册机制
  */
+import type { Board } from '../board';
 import type { BoardView } from '@ymindmap/view';
 import type {
     RawCommands
 } from './type.d'
 
 export class CommandManager {
-    view: BoardView;
+    board: Board;
     rawCommands: RawCommands = {}
-    constructor(view: BoardView, rawCommands: RawCommands = {}) {
-        this.view = view;
+    constructor(board: Board, rawCommands: RawCommands = {}) {
+        this.board = board;
         this.rawCommands = rawCommands
     }
 
@@ -20,6 +21,7 @@ export class CommandManager {
 
     get commands() {
         const { view } = this;
+        if (!view) return {};
         const { state } = view;
         return Object.fromEntries(
             Object.entries(this.rawCommands)
@@ -31,6 +33,10 @@ export class CommandManager {
                     return [name, method]
                 })
         )
+    }
+
+    get view(): BoardView {
+        return this.board.view
     }
 
     get state() {

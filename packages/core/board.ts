@@ -13,6 +13,8 @@ import { yjs2string, string2Yjs } from './bridge'
 
 import { Schema, type Theme } from '@ymindmap/model'
 
+import type { Doc } from '@ymindmap/state'
+
 export type Options = {
     data?: string | Uint8Array;
     width?: number;
@@ -35,17 +37,24 @@ export class Board<T extends Record<EventType, unknown> = any> {
 
     themeName = 'default'
 
-    view: BoardView;
+    options: Record<string, any>;
+
+    view: BoardView | null = null;
 
     commandManager: CommandManager;
 
     extensionManager: ExtensionManager;
+
+    schema: Schema;
+
+    stateUpdateHandler: () => void;
 
     private emitter = mitt<T & {
         change: string
     }>()
 
     constructor(options: Options) {
+        this.options = options;
         const { data, theme, themeList } = options;
         this.themeName = theme || 'default';
 
@@ -57,51 +66,60 @@ export class Board<T extends Record<EventType, unknown> = any> {
                 ['default']: defaultTheme,
             }
         }
-        const themeConfig = this.theme;
-
         // 注册schema
-        const schema = options.schema || new Schema({
+        this.schema = options.schema || new Schema({
             nodes: {}
         })
         Object.values(options.extensions || {}).forEach((extensionConfig) => {
             if (extensionConfig.addNodes) {
                 const nodeTypes = extensionConfig.addNodes();
                 Object.values(nodeTypes).forEach((nodeType) => {
-                    schema.registerNode(nodeType);
+                    this.schema.registerNode(nodeType);
                 })
             }
         })
-
-        // 开始生成基础数据
-        const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
-        // 创建绑定view层
-        this.view = BoardView.create(
-            State.create(yjsUpdate, {
-                plugins: [],
-                schema
-            }),
-            themeConfig,
-            {
-                width: options.width,
-                height: options.height,
-                container: options.container
-            }
-        )
+        this.stateUpdateHandler = () => {
+            this.emitter.emit('change', this.toString() as any);
+            this.extensionManager.invokeUpdate();
+        }
 
         // 绑定commandMager
-        this.commandManager = new CommandManager(this.view);
+        this.commandManager = new CommandManager(this);
 
         // 绑定插件系统
         this.extensionManager = new ExtensionManager(this);
-        this.extensionManager.registerExtension(options.extensions || {}, options);
+        this.extensionManager.registerExtension(this.options.extensions || {}, this.options);
+
+        this.init(data);
+    }
+
+    init(data?: string | Uint8Array | Doc | undefined) {
+        // 一些初始化的部分，可以重新初始化
+        // 开始生成基础数据
+        const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
+        // 创建绑定view层
+        if (this.view) {
+            this.view.state.doc.off('update', this.stateUpdateHandler);
+            this.view.destroy();
+        }
+        this.view = BoardView.create(
+            State.create(yjsUpdate, {
+                plugins: [],
+                schema: this.schema
+            }),
+            this.theme,
+            {
+                width: this.options.width,
+                height: this.options.height,
+                container: this.options.container
+            }
+        )
 
         /**
          * chang事件绑定
          */
-        this.state.doc.on('update', () => {
-            this.emitter.emit('change', this.toString() as any)
-            this.extensionManager.onUpdate()
-        })
+        this.view.state.doc.on('update', this.stateUpdateHandler);
+        this.extensionManager.invokeCreate();
     }
 
     get theme(): Theme {
@@ -127,7 +145,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
     }
 
     get state() {
-        return this.view.state;
+        return this.view?.state;
     }
 
     get commands() {
@@ -135,12 +153,16 @@ export class Board<T extends Record<EventType, unknown> = any> {
     }
 
     get $anchor() {
-        const { empty, nodes } = this.state.$selection;
-        return empty ? null : nodes[0];
+        if (this.state) {
+            const { empty, nodes } = this.state.$selection;
+            return empty ? null : nodes[0];
+        }
+        return null;
     }
 
     get canvas() {
-        return this.view.canvas;
+        if (this.view) return this.view.canvas;
+        return null;
     }
 
     get on() {
@@ -156,11 +178,13 @@ export class Board<T extends Record<EventType, unknown> = any> {
     }
 
     get undoSize() {
-        return this.state.undoManager.undoStack.length;
+        if (this.state) return this.state.undoManager.undoStack.length;
+        return 0;
     }
 
     get redoSize() {
-        return this.state.undoManager.redoStack.length;
+        if (this.state) return this.state.undoManager.redoStack.length;
+        return 0;
     }
 
     get storage() {
@@ -176,15 +200,16 @@ export class Board<T extends Record<EventType, unknown> = any> {
     }
 
     undo() {
-        this.state.undoManager.undo()
+        this.state && this.state.undoManager.undo()
     }
 
     redo() {
-        this.state.undoManager.redo()
+        this.state && this.state.undoManager.redo()
     }
 
     toDataUrl(type: "jpg" | "png" | "webp" = 'png', quality?: number | undefined) {
-        return this.view.toDataUrl(type, quality)
+        if (this.view) return this.view.toDataUrl(type, quality);
+        return '';
     }
 
     /**
@@ -193,7 +218,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
      * @returns 
      */
     toSvg() {
-        return this.view.toSvg()
+        if (this.view) return this.view.toSvg();
+        return null;
     }
 
     getData() {
@@ -201,7 +227,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
     }
 
     toString() {
-        return yjs2string(this.state.doc);
+        if (this.state) return yjs2string(this.state.doc);
+        return ''
     }
 
     /**
@@ -209,7 +236,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
      */
     destroy() {
         this.emitter.all.clear();
+        this.extensionManager.invokeDestroy();
         // 销毁dom/数据层
-        this.view.destroy();
+        if (this.view) this.view.destroy();
     }
 }

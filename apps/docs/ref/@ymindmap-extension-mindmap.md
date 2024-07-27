@@ -70,7 +70,6 @@
 | ---------- | ---------- |
 | `moveRootMindmapToCenter` | `() => Command` |
 
-
 # :wrench: Constants
 
 - [VIEW_KEY](#gear-view_key)
@@ -94,7 +93,6 @@
 | Constant | Type |
 | ---------- | ---------- |
 | `topic` | `NodeType<NodeSpec<ITopicNodeAttrs>>` |
-
 
 # :factory: Schema
 
@@ -125,7 +123,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `(type: string or NodeType<NodeSpec<any>>, attrs: IAttrs, content: INodeContent) => Node<any>` |
-
 
 # :factory: NodeType
 
@@ -159,7 +156,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `createNode` | `<T extends NodeSpec<any>>(options: { name: string; } and T) => NodeType<T>` |
-
 
 # :factory: Node
 
@@ -199,7 +195,6 @@ createNode
 | ---------- | ---------- |
 | `nodeAt` | `(node: Node<any>) => View<UI> or undefined` |
 
-
 # :factory: TextView
 
 ## Methods
@@ -218,7 +213,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `update` | `() => boolean` |
-
 
 # :factory: NodeView
 
@@ -246,7 +240,6 @@ createNode
 | ---------- | ---------- |
 | `getMatrix` | `(inner?: boolean or undefined) => Matrix` |
 
-
 # :factory: State
 
 ## Methods
@@ -258,7 +251,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `create` | `(data: Uint8Array, config: Omit<StateConfig, "doc" or "undoManager">) => State` |
-
 
 # :factory: BoardView
 
@@ -302,7 +294,6 @@ createNode
 | ---------- | ---------- |
 | `create` | `(state: State, theme: Theme, options?: ViewOptions or undefined) => BoardView` |
 
-
 # :factory: CommandManager
 
 ## Methods
@@ -315,7 +306,6 @@ createNode
 | ---------- | ---------- |
 | `registerCommands` | `(rawCommands: RawCommands) => void` |
 
-
 # :factory: Extension
 
 ## Methods
@@ -327,7 +317,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `create` | `(options: IExtensionOptions, boardOptions: Record<string, any>) => Extension<Record<string, any>, Record<string, any>>` |
-
 
 # :factory: ExtensionManager
 
@@ -347,7 +336,6 @@ createNode
 | Method | Type |
 | ---------- | ---------- |
 | `registerExtension` | `(extensions: Record<string, IExtensionConfig<any, any>>, defaultOptions: Record<string, any>) => void` |
-
 
 # :factory: Board
 
@@ -407,7 +395,6 @@ createNode
 | ---------- | ---------- |
 | `destroy` | `() => void` |
 
-
 # :factory: LayoutController
 
 ## Methods
@@ -434,7 +421,6 @@ createNode
 | ---------- | ---------- |
 | `doLayout` | `(nodeView?: NodeView) => void` |
 
-
 # :tropical_drink: Interfaces
 
 - [NodeSpec](#gear-nodespec)
@@ -443,8 +429,6 @@ createNode
 - [IExtensionConfig](#gear-iextensionconfig)
 
 ## :gear: NodeSpec
-
-
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -455,20 +439,14 @@ createNode
 | `draggable` | `boolean or undefined` |  |
 | `toCanvas` | `((node: Node<K>, context: NodeToCanvasContext) => UI) or undefined` |  |
 
-
 ## :gear: ISchemaSpec
-
-
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
 | `nodes` | `{ [key: string]: NodeType<NodeSpec<any>>; }` |  |
 | `topNodeType` | `NodeType<NodeSpec<any>>` |  |
 
-
 ## :gear: StateConfig
-
-
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -479,10 +457,7 @@ createNode
 | `selected` | `Node<any>[] or undefined` |  |
 | `pluginState` | `Record<string, any> or undefined` |  |
 
-
 ## :gear: IExtensionConfig
-
-
 
 | Property | Type | Description |
 | ---------- | ---------- | ---------- |
@@ -490,9 +465,8 @@ createNode
 | `addNodes` | `(() => Record<string, NodeType<NodeSpec<any>>>) or undefined` |  |
 | `addOptions` | `(() => Record<string, any>) or undefined` |  |
 | `addStorage` | `(() => Record<string, any>) or undefined` |  |
-| `onCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
+| `onBeforeCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
 | `onUpdate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
-
 
 # :cocktail: Types
 
@@ -554,4 +528,3 @@ createNode
     schema?: Schema;
     debug?: boolean;
 }` |
-

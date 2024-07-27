@@ -14,7 +14,11 @@ export interface IExtensionConfig<IOptions = any, IStorage = any> {
 
     addStorage?: () => Record<string, any>
 
+    onBeforeCreate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
+
     onCreate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
+
+    onDestroy?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 
     onUpdate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 }
@@ -65,13 +69,45 @@ export class ExtensionManager {
         callback: (this: Extension, board: Board) => void
     })[] = []
 
+    onCreateCallbackList: ({
+        name: string,
+        callback: (this: Extension, board: Board) => void
+    })[] = []
+
+    onDestroyCallbackList: ({
+        name: string,
+        callback: (this: Extension, board: Board) => void
+    })[] = []
+
     constructor(board: Board) {
         this.board = board;
     }
 
-    onUpdate() {
+    invokeUpdate() {
         const { extensions } = this;
         this.onUpdateCallbackList.forEach(({
+            name,
+            callback
+        }) => {
+            const extensionInstance = extensions[name];
+            if (extensionInstance) callback.call(extensionInstance, this.board)
+        });
+    }
+
+    invokeCreate() {
+        const { extensions } = this;
+        this.onCreateCallbackList.forEach(({
+            name,
+            callback
+        }) => {
+            const extensionInstance = extensions[name];
+            if (extensionInstance) callback.call(extensionInstance, this.board)
+        });
+    }
+
+    invokeDestroy() {
+        const { extensions } = this;
+        this.onDestroyCallbackList.forEach(({
             name,
             callback
         }) => {
@@ -95,7 +131,21 @@ export class ExtensionManager {
                 });
             }
 
-            if (extensionConfig.onCreate) extensionConfig.onCreate.call(extensionInstance, this.board);
+            if (extensionConfig.onCreate) {
+                this.onCreateCallbackList.push({
+                    name,
+                    callback: extensionConfig.onCreate
+                });
+            }
+
+            if (extensionConfig.onDestroy) {
+                this.onDestroyCallbackList.push({
+                    name,
+                    callback: extensionConfig.onDestroy
+                });
+            }
+
+            if (extensionConfig.onBeforeCreate) extensionConfig.onBeforeCreate.call(extensionInstance, this.board);
         })
     }
 }

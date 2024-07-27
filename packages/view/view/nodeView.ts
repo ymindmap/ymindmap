@@ -29,6 +29,16 @@ export class NodeView extends View<UI> {
         if (this.ui && this.node.state instanceof XmlElement) {
             // 更新 ui 对象 更新对应的attributes
             this.ui.set(this.node.attributes);
+
+            /**
+             * 重新走一遍子节点判断是否存在
+             * @todo 完善相关逻辑
+             */
+            this.node.state.forEach((childFragment) => {
+                console.log(childFragment);
+                // this.createChildView(childFragment)
+            });
+
             return true;
         }
         return false;
