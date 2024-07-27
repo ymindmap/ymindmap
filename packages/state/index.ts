@@ -73,11 +73,14 @@ export class State {
         }
     }
 
-    static create(data: Uint8Array, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
+    static create(data: Uint8Array | undefined, config: Omit<StateConfig, 'doc' | 'undoManager'>) {
         const doc = new Doc();
         const undoManager = new UndoManager(doc.getXmlFragment('default'));
-        applyUpdateV2(doc, data);
-        doc.once('updateV2', () => setTimeout(() => undoManager.clear()));
+        // 注入数据
+        if (data) {
+            applyUpdateV2(doc, data);
+            doc.once('updateV2', () => setTimeout(() => undoManager.clear()));
+        }
 
         return new State({
             schema: config.schema,

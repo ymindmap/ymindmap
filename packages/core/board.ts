@@ -14,7 +14,7 @@ import { yjs2string, string2Yjs } from './bridge'
 import { Schema, type Theme } from '@ymindmap/model'
 
 export type Options = {
-    data: string | Uint8Array;
+    data?: string | Uint8Array;
     width?: number;
     height?: number;
     theme?: string;
@@ -59,9 +59,6 @@ export class Board<T extends Record<EventType, unknown> = any> {
         }
         const themeConfig = this.theme;
 
-        // 开始生成基础数据
-        const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
-
         // 注册schema
         const schema = options.schema || new Schema({
             nodes: {}
@@ -75,6 +72,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
             }
         })
 
+        // 开始生成基础数据
+        const yjsUpdate = typeof data === 'string' ? string2Yjs(data) : data;
         // 创建绑定view层
         this.view = BoardView.create(
             State.create(yjsUpdate, {

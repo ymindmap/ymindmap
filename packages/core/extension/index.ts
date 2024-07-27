@@ -33,7 +33,7 @@ export class Extension<IOptions = Record<string, any>, IStorage = Record<string,
     constructor(options: IExtensionOptions, boardOptions: Record<string, any>) {
         this.board = options.board
         this.name = options.name
-        this.options = Reflect.get((boardOptions || {}), options.name)
+        this.options = Reflect.get((boardOptions.options || {}), options.name)
         if (options.addOptions) {
             this.options = {
                 ...options.addOptions(),

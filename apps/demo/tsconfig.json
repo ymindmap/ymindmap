@@ -1,6 +1,7 @@
 {
   "extends": "@ymindmap/typescript-config/vite.json",
   "include": [
-    "src"
+    "src",
+    "types"
   ]
 }
