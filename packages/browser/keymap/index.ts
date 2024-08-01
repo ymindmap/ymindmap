@@ -1,232 +1,77 @@
 /**
- * 
+ * @see https://github.com/ProseMirror/prosemirror-keymap/blob/master/src/keymap.ts
+ * 一个绑定快捷键的系统
  */
-import { isMac } from '../utils';
+import { base, keyName } from "w3c-keyname"
+import { isMac } from '../utils'
 
-interface KeyMap {
-    keys: string;
-    handler: (e?: KeyboardEvent) => any;
-    desc?: string;
+import type { Command, Board } from '@ymindmap/core'
+
+const mac = isMac();
+
+function normalizeKeyName(name: string) {
+    const parts = name.split(/-(?!$)/)
+    let result = parts[parts.length - 1]
+    if (result == "Space") result = " "
+    let alt, ctrl, shift, meta
+    for (let i = 0; i < parts.length - 1; i++) {
+        const mod = parts[i]
+        if (/^(cmd|meta|m)$/i.test(mod)) meta = true
+        else if (/^a(lt)?$/i.test(mod)) alt = true
+        else if (/^(c|ctrl|control)$/i.test(mod)) ctrl = true
+        else if (/^s(hift)?$/i.test(mod)) shift = true
+        else if (/^mod$/i.test(mod)) { if (mac) meta = true; else ctrl = true }
+        else throw new Error("Unrecognized modifier name: " + mod)
+    }
+    if (alt) result = "Alt-" + result
+    if (ctrl) result = "Ctrl-" + result
+    if (meta) result = "Meta-" + result
+    if (shift) result = "Shift-" + result
+    return result
 }
 
-type HandledKeyMap = KeyMap & { rawKeys: string; keyList: string[] };
-
-type KeymapStrategy = 'memoryAll' | 'memoryCompose';
-type Handler = (dom: HTMLElement, maps: HandledKeyMap[]) => () => void;
-
-/**
- * 把'meta+x' 'ctrl+x'这种按键组合转成小写和分割成数组
- */
-function handleKeys(keys: string): [string, string[]] {
-    keys = keys.toLowerCase();
-    const moc = isMac() ? 'meta' : 'control';
-
-    function isMOC(key: string): boolean {
-        const mc = 'MetaOrControl'.toLowerCase();
-        const cc = 'CommandOrControl'.toLowerCase();
-        return key === mc || key === cc;
-    }
-    function replace(key: string): string {
-        if (isMOC(key)) return moc;
-        return key === 'command' ? 'meta' : key;
-    }
-    // const keyList = keys.replace(/\+(\+)?/g, ' $1').split(' ');
-    const keyList = keys.split(/(?<!\+)\+/).map((key) => replace(key));
-    return [keys, keyList];
+function normalize(map: { [key: string]: Command }) {
+    const copy: { [key: string]: Command } = Object.create(null)
+    for (const prop in map) copy[normalizeKeyName(prop)] = map[prop]
+    return copy
 }
 
-const keymapStrategy: Record<KeymapStrategy, Handler> = {
-    // 记忆全部按下的按键
-    memoryAll(dom, maps) {
-        const keySet = new Set<string>();
+function modifiers(name: string, event: KeyboardEvent, shift = true) {
+    if (event.altKey) name = "Alt-" + name
+    if (event.ctrlKey) name = "Ctrl-" + name
+    if (event.metaKey) name = "Meta-" + name
+    if (shift && event.shiftKey) name = "Shift-" + name
+    return name
+}
 
-        const keydownHandler = (e: KeyboardEvent) => {
-            const key = e.key.toLowerCase();
-            keySet.add(key);
-
-            const find = maps.find((item) => {
-                if (item.keyList.length !== keySet.size) return;
-                if (!item.keyList.every((k) => keySet.has(k))) return;
-                return true;
-            });
-
-            console.log('keymap', keySet);
-
-            return find?.handler(e);
-        };
-
-        const keyupHandler = (e: KeyboardEvent) => {
-            const key = e.key.toLowerCase();
-            console.log('keymap', 'keyup', key);
-            keySet.delete(key);
-            // 在mac中按下meta组合键后释放其他按键会漏掉事件
-            if (key === 'meta') keySet.clear();
-        };
-
-        const blurHandler = () => keySet.clear();
-
-        dom.addEventListener('keydown', keydownHandler);
-        dom.addEventListener('keyup', keyupHandler);
-        window.addEventListener('blur', blurHandler);
-        return function () {
-            dom.removeEventListener('keydown', keydownHandler);
-            dom.removeEventListener('keyup', keyupHandler);
-            window.removeEventListener('blur', blurHandler);
-        };
-    },
-    // 只记组合键,如果是复合普通键的话是无效的，可以使用memoryAll
-    memoryCompose: (function () {
-        enum ComposeKey {
-            meta = 'meta',
-            shift = 'shift',
-            control = 'control',
-            alt = 'alt',
+export function keydownHandler(
+    bindings: { [key: string]: Command },
+    board: Board
+): (event: KeyboardEvent) => boolean {
+    const map = normalize(bindings);
+    return function (event) {
+        const name = keyName(event)
+        let baseName
+        const direct = map[modifiers(name, event)]
+        if (direct && direct(board.state as any, board.view as any)) return true
+        // A character key
+        if (name.length == 1 && name != " ") {
+            if (event.shiftKey) {
+                // In case the name was already modified by shift, try looking
+                // it up without its shift modifier
+                const noShift = map[modifiers(name, event, false)]
+                if (noShift && noShift(board.state as any, board.view as any)) return true
+            }
+            if ((event.shiftKey || event.altKey || event.metaKey || name.charCodeAt(0) > 127) &&
+                (baseName = base[event.keyCode]) && baseName != name) {
+                // Try falling back to the keyCode when there's a modifier
+                // active or the character produced isn't ASCII, and our table
+                // produces a different name from the the keyCode. See #668,
+                // #1060
+                const fromCode = map[modifiers(baseName, event)]
+                if (fromCode && fromCode(board.state as any, board.view as any)) return true
+            }
         }
-
-        const composeKeySet = new Set([
-            ComposeKey.alt,
-            ComposeKey.shift,
-            ComposeKey.control,
-            ComposeKey.meta,
-        ]);
-
-        function isComposeKey(key: any): key is ComposeKey {
-            return composeKeySet.has(key);
-        }
-
-        function classifyKey(keyList: string[]): { key: string; composeKeys: ComposeKey[] } {
-            return keyList.reduce(
-                (res, key) => {
-                    key = key.toLowerCase();
-                    if (isComposeKey(key)) {
-                        res.composeKeys.push(key);
-                    } else {
-                        res.key = key;
-                    }
-                    return res;
-                },
-                { key: '', composeKeys: [] as ComposeKey[] },
-            );
-        }
-
-        return function keymap(dom, maps) {
-            // 记录按下的组合键，普通键不记录，因为meta键和非组合键同时按的时候，非组合键释放不会触发事件
-            // 这样实际是比原来的记录所有按下的键适用性更窄，只是刚好可以解决这个问题，如果系统升级后解决了这个问题可以还原回去
-            const pressComposeKeySet = new Set<ComposeKey>();
-
-            const keydownHandler = (e: KeyboardEvent) => {
-                const key = e.key.toLowerCase();
-
-                if (isComposeKey(key)) {
-                    pressComposeKeySet.add(key);
-                    return;
-                }
-
-                const find = maps.find((item) => {
-                    const ck = classifyKey(item.keyList);
-                    if (ck.key !== key) return;
-
-                    if (
-                        ck.composeKeys.length !== pressComposeKeySet.size ||
-                        ck.composeKeys.some((key) => !pressComposeKeySet.has(key))
-                    )
-                        return;
-
-                    return true;
-                });
-
-                console.log('keymap', pressComposeKeySet, key);
-
-                find?.handler(e);
-            };
-
-            const keyupHandler = (e: KeyboardEvent) => {
-                const key = e.key.toLowerCase();
-                console.log('keymap', 'keyup', key);
-                // 在mac中按下meta组合键后释放其他按键会漏掉事件
-                if (isComposeKey(key)) pressComposeKeySet.delete(key);
-            };
-
-            const blurHandler = () => pressComposeKeySet.clear();
-
-            dom.addEventListener('keydown', keydownHandler);
-            dom.addEventListener('keyup', keyupHandler);
-            window.addEventListener('blur', blurHandler);
-            return function () {
-                dom.removeEventListener('keydown', keydownHandler);
-                dom.removeEventListener('keyup', keyupHandler);
-                window.removeEventListener('blur', blurHandler);
-            };
-        };
-    })(),
-};
-
-/**
- * 生成keymap绑定
- * @param maps 
- * @param dom 
- * @param strategy 
- * @returns 
- */
-export function useKeymap(
-    maps: KeyMap[],
-    dom: HTMLElement,
-    strategy: KeymapStrategy = 'memoryCompose',
-) {
-    // 处理keys
-    function handleMaps(maps: KeyMap[]) {
-        return maps.map<HandledKeyMap>((item) => {
-            const [keys, keyList] = handleKeys(item.keys);
-            return { ...item, rawKeys: item.keys, keys, keyList };
-        });
+        return false
     }
-
-    const handledMaps = handleMaps(maps);
-    const cancel = keymapStrategy[strategy](dom, handledMaps);
-
-    const operator = {
-        cancel,
-        /**
-         * 传入快捷键，手动触发
-         */
-        trigger(keys: string) {
-            const [handledKeys, keyList] = handleKeys(keys);
-
-            const find = handledMaps.find((map) => {
-                if (map.keys === handledKeys) return true;
-                if (map.keyList.length !== keyList.length) return false;
-                return map.keyList.every((key) => keyList.includes(key));
-            });
-
-            if (!find) return;
-
-            find.handler();
-        },
-        log(): void {
-            const info = handledMaps.map((item) => ({
-                desc: item.desc,
-                keys: item.rawKeys,
-                realKeys: JSON.stringify(item.keyList),
-            }));
-            console.table(info);
-        },
-        has(keys: string): boolean {
-            return handledMaps.some((item) => item.rawKeys === keys);
-        },
-        add(map: KeyMap): boolean {
-            const exist = operator.has(map.keys);
-            !exist && handledMaps.push(...handleMaps([map]));
-            return !exist;
-        },
-        remove(keys: string): void {
-            const index = handledMaps.findIndex((item) => item.rawKeys === keys);
-            if (index === -1) return;
-            handledMaps.splice(index, 1);
-        },
-        clear(): void {
-            operator.cancel();
-            handledMaps.length = 0;
-        },
-    };
-    return operator;
 }

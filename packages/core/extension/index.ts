@@ -1,6 +1,7 @@
 import type { NodeType } from '@ymindmap/model';
 import type { Board } from '../board';
 import type {
+    Command,
     RawCommands
 } from '../command/type.d'
 
@@ -13,6 +14,8 @@ export interface IExtensionConfig<IOptions = any, IStorage = any> {
     addOptions?: () => Record<string, any>
 
     addStorage?: () => Record<string, any>
+
+    addKeymap?: () => Record<string, Command>
 
     onBeforeCreate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 
@@ -45,13 +48,14 @@ export class Extension<IOptions = Record<string, any>, IStorage = Record<string,
             }
         }
 
-        if (options.addStorage) {
-            this.storage = options.addStorage() as any;
-        }
+        // 创建storage
+        if (options.addStorage) this.storage = options.addStorage() as any;
 
-        if (options.addCommands && this.board.commandManager) {
-            this.board.commandManager.registerCommands(options.addCommands(this))
-        }
+        // 绑定命令
+        if (options.addCommands && this.board.commandManager) this.board.commandManager.registerCommands(options.addCommands(this))
+
+        // 绑定快捷键
+        if (options.addKeymap) Object.assign(this.board.keymapBinding, options.addKeymap());
     }
 
     static create(options: IExtensionOptions, boardOptions: Record<string, any>) {

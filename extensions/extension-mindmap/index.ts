@@ -36,6 +36,15 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
         }
     },
 
+    addKeymap() {
+        return {
+            "Tab": (state, view) => {
+                if (state.selected.length === 1) return createSubTopic(state.selected[0])(state, view);
+                return false;
+            }
+        }
+    },
+
     async onCreate(board) {
         if (!board.view) return;
         if (board.commands.moveRootMindmapToCenter) board.commands.moveRootMindmapToCenter();

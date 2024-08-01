@@ -8,7 +8,7 @@ import type { ILeafer, IPointerEvent } from '@leafer-ui/interface';
 import type { Editor } from '@leafer-in/editor';
 import { TextEditor } from './text';
 
-export { Editor, InnerEditor } from '@leafer-in/editor';
+export { Editor, InnerEditor, EditorEvent } from '@leafer-in/editor';
 export { TextEditor } from './text';
 
 /**

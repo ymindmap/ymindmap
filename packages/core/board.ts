@@ -14,6 +14,7 @@ import { yjs2string, string2Yjs } from './bridge'
 import { Schema, type Theme } from '@ymindmap/model'
 
 import type { Doc } from '@ymindmap/state'
+import { Command } from './command/type';
 
 export type Options = {
     data?: string | Uint8Array;
@@ -44,6 +45,8 @@ export class Board<T extends Record<EventType, unknown> = any> {
     commandManager: CommandManager;
 
     extensionManager: ExtensionManager;
+
+    keymapBinding: Record<string, Command> = {};
 
     schema: Schema;
 

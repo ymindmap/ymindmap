@@ -256,6 +256,9 @@ importers:
       '@ymindmap/view':
         specifier: workspace:*
         version: link:../view
+      w3c-keyname:
+        specifier: ^2.2.8
+        version: 2.2.8
     devDependencies:
       '@types/lodash-es':
         specifier: ^4.17.12
@@ -4260,6 +4263,10 @@ packages:
       '@vue/shared': 3.4.33
       typescript: 5.3.3
     dev: true
+
+  /w3c-keyname@2.2.8:
+    resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
+    dev: false
 
   /web-worker@1.3.0:
     resolution: {integrity: sha512-BSR9wyRsy/KOValMgd5kMyr3JzpdeoR9KVId8u5GVlTTAtNChlsE4yTxeY7zMdNSyOmoKBv8NH2qeRY9Tg+IaA==}

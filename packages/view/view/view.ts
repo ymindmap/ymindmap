@@ -43,6 +43,11 @@ export class View<T extends UI = UI> {
                      */
                     this.ui?.forceUpdate();
                 }
+
+                // 子节点变更
+                if (e.delta) {
+                    console.log(e.delta);
+                }
             } else {
                 // 刷新自己
                 // 监听到更新啦

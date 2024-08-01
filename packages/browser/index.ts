@@ -1,6 +1,8 @@
 import { Board, Options } from '@ymindmap/core'
 import { NodeView, VIEW_KEY } from '@ymindmap/view'
-import { Editor, registerTextEditor } from './editor'
+import { KeyEvent } from 'leafer-ui';
+import { keydownHandler } from './keymap';
+import { Editor, registerTextEditor, EditorEvent } from './editor'
 import '@leafer-in/state'
 
 export * from '@ymindmap/core';
@@ -10,11 +12,16 @@ export * from '@ymindmap/core';
  * 支持事件上的缩放，增加事件回调
  * 同时如果获取了canvas的dom，就需要初始化一个quill editor
  */
-export class Mindmap extends Board<{
-    "keydown": KeyboardEvent
-}> {
+export class Mindmap extends Board {
     private editor: Editor | null = null;
     private container: HTMLDivElement | null = null;
+    private keydownHandler: any;
+    private syncSelection: (e: EditorEvent) => void = (e) => {
+        if (this.state) this.state.selected = e.list
+            .map(item => Reflect.get(item, VIEW_KEY) as NodeView | null)
+            .filter(item => item)
+            .map(nodeView => (nodeView as NodeView).node);
+    };
 
     constructor(options: Options & { editable?: boolean, el: HTMLElement | string }) {
         const container = document.createElement('div');
@@ -32,6 +39,13 @@ export class Mindmap extends Board<{
 
         this.initEditor();
         this.setEditable(options.editable);
+
+        /**
+         * 绑定键盘事件
+         */
+        this.keydownHandler = keydownHandler(this.keymapBinding, this)
+        this.container.addEventListener('keydown', this.keydownHandler, true);
+        this.view?.context.render.on(KeyEvent.DOWN, this.keydownHandler);
     }
 
     init(data: any) {
@@ -52,6 +66,10 @@ export class Mindmap extends Board<{
 
         });
         this.editor.hittable = false;
+        this.editor.on(EditorEvent.SELECT, this.syncSelection);
+
+        // editor绑定选区事件同步给state
+
         if (this.view) {
             this.view.app.sky.add(this.editor);
             // 注册自定义的dom编辑器
@@ -69,12 +87,6 @@ export class Mindmap extends Board<{
         return this.editor ? this.editor.hittable : false;
     }
 
-    get selected(): NodeView[] {
-        return (this.editor ? this.editor.leafList.list : [])
-            .filter(leaf => Reflect.has(leaf, VIEW_KEY))
-            .map(leaf => Reflect.get(leaf, VIEW_KEY) as NodeView)
-    }
-
     setEditable(value: boolean = false) {
         if (this.editor) this.editor.hittable = value
     }
@@ -82,8 +94,13 @@ export class Mindmap extends Board<{
     destroy() {
         // 销毁的方法
         super.destroy();
-        if (this.editor) this.editor.destroy();
+        if (this.editor) {
+            this.editor.off(EditorEvent.SELECT, this.syncSelection);
+            this.editor.destroy()
+        };
         if (!this.container) return;
+        this.container.removeEventListener('keydown', this.keydownHandler, true);
+        this.view?.context.render.off(KeyEvent.DOWN, this.keydownHandler);
         if (this.container.parentElement) {
             this.container.parentElement.removeChild(this.container.parentElement);
             this.container = null;

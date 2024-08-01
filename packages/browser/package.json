@@ -21,6 +21,7 @@
     "@ymindmap/core": "workspace:*",
     "@ymindmap/model": "workspace:*",
     "@ymindmap/state": "workspace:*",
-    "@ymindmap/view": "workspace:*"
+    "@ymindmap/view": "workspace:*",
+    "w3c-keyname": "^2.2.8"
   }
 }
