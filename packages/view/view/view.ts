@@ -43,11 +43,6 @@ export class View<T extends UI = UI> {
                      */
                     this.ui?.forceUpdate();
                 }
-
-                // 子节点变更
-                if (e.delta) {
-                    console.log(e.delta);
-                }
             } else {
                 // 刷新自己
                 // 监听到更新啦
@@ -129,11 +124,6 @@ export class View<T extends UI = UI> {
         }
 
         return { object: this.ui, offset: pos };
-    }
-
-    // 更新
-    update(): boolean {
-        return false;
     }
 
     destroy() {
