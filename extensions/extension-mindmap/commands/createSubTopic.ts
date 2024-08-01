@@ -17,7 +17,7 @@ import type { Node } from '@ymindmap/model';
 export const createSubTopic: (topic: Node<any>) => Command = (topic) => () => {
     if (topic.type === topicNodeType || topic.type === mindmapNodeType) {
         const subTopic = topicNodeType.create();
-        topic.appendChild(subTopic, topic.children[1]);
+        topic.appendChild(subTopic);
         return true
     }
     return false;
