@@ -4,7 +4,12 @@ import type { IAttrs } from './attr.d';
 
 export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | string | null;
 
-function findNodeIndex(this: Node, reference: Node, currentItem: null | Item = null, currentIndex = 0) {
+function findNodeIndex(
+    this: Node,
+    reference: Node,
+    currentItem: null | Item = null,
+    currentIndex = 0
+): number {
     if (currentItem === null) return -1;
     if (currentItem === reference.state._item) return currentIndex;
     return findNodeIndex.call(this, reference, currentItem.next, currentIndex + 1);

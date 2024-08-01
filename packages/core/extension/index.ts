@@ -9,7 +9,7 @@ export interface IExtensionConfig<IOptions = any, IStorage = any> {
     // 注册命令
     addCommands?: (this: Extension<IOptions, IStorage>, extension: Extension<IOptions, IStorage>) => RawCommands
 
-    addNodes?: (this: Extension<IOptions, IStorage>) => Record<string, NodeType>
+    addNodes?: (this: Board) => Record<string, NodeType>
 
     addOptions?: (this: Extension<IOptions, IStorage>) => Record<string, any>
 

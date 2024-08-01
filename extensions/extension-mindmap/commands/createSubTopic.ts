@@ -22,7 +22,7 @@ export const createSubTopic: (topic: Node<any>, storage: IStorage) => Command = 
         /**
          * 创建后自动重新layout
          */
-        const findMindmap = (topic: Node<any>) => {
+        const findMindmap = (topic: Node<any>): Node<any> | null => {
             if (topic.type === mindmapNodeType) return topic;
             if (!topic) return null;
             if (!topic.parent) return null;

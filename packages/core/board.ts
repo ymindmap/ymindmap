@@ -75,7 +75,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
         })
         Object.values(options.extensions || {}).forEach((extensionConfig) => {
             if (extensionConfig.addNodes) {
-                const nodeTypes = extensionConfig.addNodes();
+                const nodeTypes = extensionConfig.addNodes.call(this);
                 Object.values(nodeTypes).forEach((nodeType) => {
                     this.schema.registerNode(nodeType);
                 })
