@@ -33,6 +33,8 @@ export const createSubTopic: (topic: Node<any>, storage: IStorage) => Command = 
         if (mindmapView && storage.nodeLayoutControllerMap.has(mindmapView as NodeView)) {
             const layout = storage.nodeLayoutControllerMap.get(mindmapView as NodeView)
             layout?.doLayout();
+            // 需要第二次排版，第一次可能文字导致宽高变化
+            setTimeout(() => layout?.doLayout(), 0)
         }
 
         return true
