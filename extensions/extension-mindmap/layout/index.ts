@@ -3,7 +3,6 @@
  * 感谢提供思路
  * @see https://leungwensen.github.io/blog/2017/mindmap-drawing-algorithms.html
  * @todo 支持动态注入其他的布局方案
- * @todo 重新布局问题
  * @todo 解除事件问题
  */
 import { PropertyEvent, Box } from 'leafer-ui'

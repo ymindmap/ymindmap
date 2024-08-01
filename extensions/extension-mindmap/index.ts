@@ -5,7 +5,8 @@ import {
 import { topic, mindmap } from './schema'
 import { LayoutController } from './layout'
 import {
-    moveRootMindmapToCenter
+    moveRootMindmapToCenter,
+    createSubTopic
 } from './commands'
 import type { IExtensionConfig } from '@ymindmap/core'
 
@@ -30,6 +31,7 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
 
     addCommands() {
         return {
+            createSubTopic,
             moveRootMindmapToCenter
         }
     },

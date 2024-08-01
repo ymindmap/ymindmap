@@ -1,8 +1,14 @@
-import { XmlElement, XmlText } from 'yjs';
+import { Item, XmlElement, XmlText } from 'yjs';
 import { NodeType } from './type';
 import type { IAttrs } from './attr.d';
 
 export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | XmlText | string | null;
+
+function findNodeIndex(this: Node, reference: Node, currentItem: null | Item = null, currentIndex = 0) {
+    if (currentItem === null) return -1;
+    if (currentItem === reference.state._item) return currentIndex;
+    return findNodeIndex.call(this, reference, currentItem.next, currentIndex + 1);
+}
 
 /**
  * 一个基础的node
@@ -10,7 +16,7 @@ export type INodeContent = Array<XmlElement | XmlText | Node> | XmlElement | Xml
  */
 // eslint-disable-next-line 
 export class Node<T extends IAttrs = any> {
-    type: NodeType;
+    public type: NodeType;
     private _yAbstractType: XmlElement | XmlText;
     constructor(
         type: NodeType,
@@ -57,6 +63,20 @@ export class Node<T extends IAttrs = any> {
         }
 
         Node.NodeStateMap.set(this.state, this);
+    }
+
+    // 增加子节点
+    appendChild(node: Node, reference?: Node) {
+        if (!(this.state instanceof XmlElement)) return
+        let index = this.state.length;
+        if (reference) index = findNodeIndex.call(this, reference, this.state._first)
+        this.state.insert(index, [node.state]);
+    }
+
+    removeChild(node: Node) {
+        const index = findNodeIndex.call(this, node, this.state._first);
+        if (index === -1) return;
+        this.state.delete(index, 1);
     }
 
     get state() {
