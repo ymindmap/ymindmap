@@ -2,10 +2,11 @@
  * @see https://github.com/ProseMirror/prosemirror-keymap/blob/master/src/keymap.ts
  * 一个绑定快捷键的系统
  */
-import { base, keyName } from "w3c-keyname"
+import { keyName } from "w3c-keyname"
 import { isMac } from '../utils'
 
 import type { Command, Board } from '@ymindmap/core'
+import type { IKeyEvent } from '@leafer-ui/interface';
 
 const mac = isMac();
 
@@ -36,7 +37,7 @@ function normalize(map: { [key: string]: Command }) {
     return copy
 }
 
-function modifiers(name: string, event: KeyboardEvent, shift = true) {
+function modifiers(name: string, event: IKeyEvent, shift = true) {
     if (event.altKey) name = "Alt-" + name
     if (event.ctrlKey) name = "Ctrl-" + name
     if (event.metaKey) name = "Meta-" + name
@@ -47,29 +48,36 @@ function modifiers(name: string, event: KeyboardEvent, shift = true) {
 export function keydownHandler(
     bindings: { [key: string]: Command },
     board: Board
-): (event: KeyboardEvent) => boolean {
+): (event: IKeyEvent) => boolean {
     const map = normalize(bindings);
     return function (event) {
-        const name = keyName(event)
-        let baseName
+        const name = keyName(event as unknown as Event)
         const direct = map[modifiers(name, event)]
-        if (direct && direct(board.state as any, board.view as any)) return true
+        if (direct && direct(board.state as any, board.view as any)) {
+            if (event.origin instanceof Event) event.origin.preventDefault();
+            return true;
+        }
         // A character key
         if (name.length == 1 && name != " ") {
             if (event.shiftKey) {
                 // In case the name was already modified by shift, try looking
                 // it up without its shift modifier
                 const noShift = map[modifiers(name, event, false)]
-                if (noShift && noShift(board.state as any, board.view as any)) return true
+                if (noShift && noShift(board.state as any, board.view as any)) {
+                    if (event.origin instanceof Event) event.origin.preventDefault();
+                    return true;
+                }
             }
-            if ((event.shiftKey || event.altKey || event.metaKey || name.charCodeAt(0) > 127) &&
-                (baseName = base[event.keyCode]) && baseName != name) {
+            if (event.shiftKey || event.altKey || event.metaKey || name.charCodeAt(0) > 127) {
                 // Try falling back to the keyCode when there's a modifier
                 // active or the character produced isn't ASCII, and our table
                 // produces a different name from the the keyCode. See #668,
                 // #1060
-                const fromCode = map[modifiers(baseName, event)]
-                if (fromCode && fromCode(board.state as any, board.view as any)) return true
+                const fromCode = map[modifiers(name, event)]
+                if (fromCode && fromCode(board.state as any, board.view as any)) {
+                    if (event.origin instanceof Event) event.origin.preventDefault();
+                    return true
+                }
             }
         }
         return false

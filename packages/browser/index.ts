@@ -44,7 +44,6 @@ export class Mindmap extends Board {
          * 绑定键盘事件
          */
         this.keydownHandler = keydownHandler(this.keymapBinding, this)
-        this.container.addEventListener('keydown', this.keydownHandler, true);
         this.view?.context.render.on(KeyEvent.DOWN, this.keydownHandler);
     }
 
@@ -99,7 +98,6 @@ export class Mindmap extends Board {
             this.editor.destroy()
         };
         if (!this.container) return;
-        this.container.removeEventListener('keydown', this.keydownHandler, true);
         this.view?.context.render.off(KeyEvent.DOWN, this.keydownHandler);
         if (this.container.parentElement) {
             this.container.parentElement.removeChild(this.container.parentElement);
