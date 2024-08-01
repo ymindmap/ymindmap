@@ -7,15 +7,15 @@ import type {
 
 export interface IExtensionConfig<IOptions = any, IStorage = any> {
     // 注册命令
-    addCommands?: (extension: Extension<IOptions, IStorage>) => RawCommands
+    addCommands?: (this: Extension<IOptions, IStorage>, extension: Extension<IOptions, IStorage>) => RawCommands
 
-    addNodes?: () => Record<string, NodeType>
+    addNodes?: (this: Extension<IOptions, IStorage>) => Record<string, NodeType>
 
-    addOptions?: () => Record<string, any>
+    addOptions?: (this: Extension<IOptions, IStorage>) => Record<string, any>
 
-    addStorage?: () => Record<string, any>
+    addStorage?: (this: Extension<IOptions, IStorage>) => Record<string, any>
 
-    addKeymap?: () => Record<string, Command>
+    addKeymap?: (this: Extension<IOptions, IStorage>) => Record<string, Command>
 
     onBeforeCreate?: (this: Extension<IOptions, IStorage>, board: Board) => void;
 
@@ -43,19 +43,19 @@ export class Extension<IOptions = Record<string, any>, IStorage = Record<string,
         this.options = Reflect.get((boardOptions.options || {}), options.name)
         if (options.addOptions) {
             this.options = {
-                ...options.addOptions(),
+                ...options.addOptions.call(this),
                 ...this.options
             }
         }
 
         // 创建storage
-        if (options.addStorage) this.storage = options.addStorage() as any;
+        if (options.addStorage) this.storage = options.addStorage.call(this) as any;
 
         // 绑定命令
-        if (options.addCommands && this.board.commandManager) this.board.commandManager.registerCommands(options.addCommands(this))
+        if (options.addCommands && this.board.commandManager) this.board.commandManager.registerCommands(options.addCommands.call(this, this))
 
         // 绑定快捷键
-        if (options.addKeymap) Object.assign(this.board.keymapBinding, options.addKeymap());
+        if (options.addKeymap) Object.assign(this.board.keymapBinding, options.addKeymap.call(this));
     }
 
     static create(options: IExtensionOptions, boardOptions: Record<string, any>) {

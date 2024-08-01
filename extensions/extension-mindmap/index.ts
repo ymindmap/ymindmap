@@ -10,8 +10,8 @@ import {
 } from './commands'
 import type { IExtensionConfig } from '@ymindmap/core'
 
-type IOptions = NonNullable<unknown>
-type IStorage = {
+export type IOptions = NonNullable<unknown>
+export type IStorage = {
     nodeLayoutControllerMap: WeakMap<NodeView, LayoutController>
 }
 
@@ -37,9 +37,10 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
     },
 
     addKeymap() {
+        const { storage } = this;
         return {
             "Tab": (state, view) => {
-                if (state.selected.length === 1) return createSubTopic(state.selected[0])(state, view);
+                if (state.selected.length === 1) return createSubTopic(state.selected[0], storage)(state, view);
                 return false;
             }
         }

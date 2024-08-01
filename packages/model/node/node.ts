@@ -79,6 +79,10 @@ export class Node<T extends IAttrs = any> {
         this.state.delete(index, 1);
     }
 
+    get parent(): Node | null {
+        return Node.NodeStateMap.get(this.state.parent as XmlElement | XmlText) || null;
+    }
+
     get state() {
         return this._yAbstractType;
     }

@@ -1,5 +1,5 @@
 import type { State } from "@ymindmap/state";
-import { BoardView } from "@ymindmap/view";
+import type { BoardView } from "@ymindmap/view";
 
 export type Command = (state: State, view: BoardView) => boolean;
 export type Commands = Record<string, Command>
