@@ -20,12 +20,13 @@
   },
   "dependencies": {
     "@ymindmap/browser": "workspace:*",
+    "@ymindmap/extension-collab": "workspace:^",
     "@ymindmap/extension-mindmap": "workspace:^",
     "@ymindmap/extension-text": "workspace:^",
-    "@ymindmap/extension-collab": "workspace:^",
     "localforage": "^1.10.0",
     "qs": "^6.12.3",
     "y-localforage": "^0.1.4",
-    "yjs": "^13.6.16"
+    "yjs": "^13.6.16",
+    "ymindmap": "workspace:^"
   }
 }
