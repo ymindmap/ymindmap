@@ -32,17 +32,10 @@ features:
 import { onMounted } from 'vue'
 
 onMounted(async () => {
-  const { Mindmap, getDefaultData } = await import('@ymindmap/browser');
-  const { TextMindmapExtension } = await import('@ymindmap/extension-text');
-  const { MindmapExtension } = await import('@ymindmap/extension-mindmap');
-  new Mindmap({
-    el: '.demo',
+  const { getDefaultData } = await import('@ymindmap/browser');
+  const { createMindmap } = await import('ymindmap')
+  createMindmap('.demo', {
     data: getDefaultData(),
-    editable: true,
-    extensions: {
-      Text: TextMindmapExtension,
-      Mindmap: MindmapExtension
-    },
   })
 })
 </script>

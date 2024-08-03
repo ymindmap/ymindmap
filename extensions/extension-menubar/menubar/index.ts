@@ -15,6 +15,7 @@ export function registerMenubar(board: Board, options: MenubarExtensionOptions, 
             margin: 8px;
             box-shadow: 1px 1px 8px #eee;
             border-radius: 4px;
+            color: #000;
         }`
         storage.style = style;
         document.head.appendChild(style);

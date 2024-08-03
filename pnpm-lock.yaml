@@ -118,6 +118,9 @@ importers:
       y-localforage:
         specifier: ^0.1.4
         version: 0.1.4
+      ymindmap:
+        specifier: workspace:^
+        version: link:../../startkits/valleyjs
     devDependencies:
       '@ymindmap/eslint-config':
         specifier: workspace:*
