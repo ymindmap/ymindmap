@@ -3,7 +3,9 @@ import type { StatelessProps } from 'tsx-create-element';
 
 export type MenubarDomMap = Map<string, HTMLElement>
 export type MenubarExtensionOptions = {
-    enable: boolean
+    enable: boolean,
+    min: number,
+    max: number,
 }
 
 export type MenubarExtensionStorage = {
@@ -14,7 +16,6 @@ export type MenubarExtensionStorage = {
 
 export type MenubarProps = StatelessProps<{
     board: Board,
-    map: MenubarDomMap
+    menubarDomMap: MenubarDomMap,
+    options: MenubarExtensionOptions
 }>
-
-export type MenubarRegister = (board: Board, map: MenubarDomMap) => HTMLElement

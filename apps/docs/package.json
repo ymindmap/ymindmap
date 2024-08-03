@@ -27,6 +27,7 @@
     "qs": "^6.12.3",
     "viewerjs": "^1.11.6",
     "vitepress-plugin-image-viewer": "^1.1.4",
-    "y-localforage": "^0.1.4"
+    "y-localforage": "^0.1.4",
+    "ymindmap": "workspace:^"
   }
 }
