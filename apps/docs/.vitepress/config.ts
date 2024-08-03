@@ -3,6 +3,7 @@ import MarkdownItTextualUml from 'markdown-it-textual-uml';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: '/ymindmap/',
   title: "YMindmap",
   description: "A mindmap with yjs and Leafer.js",
   head: [
