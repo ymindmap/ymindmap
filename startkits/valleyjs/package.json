@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@ymindmap/browser": "workspace:^",
+    "@ymindmap/extension-menubar": "workspace:^",
     "@ymindmap/extension-mindmap": "workspace:^",
     "@ymindmap/extension-text": "workspace:^"
   }

@@ -5,6 +5,8 @@
     "lib": [
       "ESNext"
     ],
+    "jsx": "react",
+    "jsxFactory": "createElement",
     "composite": false,
     "declaration": true,
     "declarationMap": true,

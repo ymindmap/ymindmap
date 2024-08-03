@@ -47,7 +47,6 @@ export const MindmapExtension: IExtensionConfig<IOptions, IStorage> = {
     },
 
     async onCreate(board) {
-        if (!board.view) return;
         if (board.commands.moveRootMindmapToCenter) board.commands.moveRootMindmapToCenter();
 
         // 目前mindmap必须在第一层可以直接靠getObjects获取，之后可能会改成迭代遍历

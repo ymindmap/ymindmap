@@ -3,6 +3,8 @@
  */
 
 import { Mindmap } from '@ymindmap/browser';
+
+import { MenubarExtension } from '@ymindmap/extension-menubar';
 import { TextMindmapExtension } from '@ymindmap/extension-text'
 import { MindmapExtension } from '@ymindmap/extension-mindmap'
 
@@ -12,7 +14,8 @@ import type { IExtensionConfig } from '@ymindmap/browser';
  */
 const defaultExtensions: Record<string, IExtensionConfig> = {
     Text: TextMindmapExtension,
-    Mindmap: MindmapExtension
+    Mindmap: MindmapExtension,
+    Menubar: MenubarExtension
 }
 
 export type MindmapOptions = {

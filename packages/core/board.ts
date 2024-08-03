@@ -40,7 +40,7 @@ export class Board<T extends Record<EventType, unknown> = any> {
 
     options: Record<string, any>;
 
-    view: BoardView | null = null;
+    view!: BoardView;
 
     commandManager: CommandManager;
 

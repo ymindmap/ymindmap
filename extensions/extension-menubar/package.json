@@ -1,5 +1,5 @@
 {
-  "name": "@ymindmap/extension-collab",
+  "name": "@ymindmap/extension-menubar",
   "version": "0.0.0",
   "exports": {
     ".": "./index.ts"
