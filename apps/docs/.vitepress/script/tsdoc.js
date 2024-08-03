@@ -40,7 +40,10 @@ generateDocumentation({
     },
     buildOptions: {
         types: true,
-        explore: true
+        explore: true,
+        repo: {
+            url: 'https://github.com/ymindmap/ymindmap'
+        }
       }
 });
 })
