@@ -6,6 +6,8 @@ export const MenubarExtension: IExtensionConfig<MenubarExtensionOptions, Menubar
     addOptions() {
         return {
             enable: false,
+            min: 0.1,
+            max: 2,
         }
     },
     addStorage() {
@@ -19,7 +21,7 @@ export const MenubarExtension: IExtensionConfig<MenubarExtensionOptions, Menubar
     onCreate() {
         if (!document) return;
         const { board } = this;
-        registerMenubar(board, this.storage);
+        registerMenubar(board, this.options, this.storage);
     },
 
     onDestroy() {

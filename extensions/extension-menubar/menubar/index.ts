@@ -1,8 +1,8 @@
 import { ScaleMenubar } from './scale';
 
 import type { Board } from '@ymindmap/core';
-import type { MenubarExtensionStorage } from '../type.d'
-export function registerMenubar(board: Board, storage: MenubarExtensionStorage) {
+import type { MenubarExtensionOptions, MenubarExtensionStorage } from '../type.d'
+export function registerMenubar(board: Board, options: MenubarExtensionOptions, storage: MenubarExtensionStorage) {
     /**
      * 样式注册
      */
@@ -14,6 +14,7 @@ export function registerMenubar(board: Board, storage: MenubarExtensionStorage) 
             background: #ffffff;
             margin: 8px;
             box-shadow: 1px 1px 8px #eee;
+            border-radius: 4px;
         }`
         storage.style = style;
         document.head.appendChild(style);
@@ -27,7 +28,8 @@ export function registerMenubar(board: Board, storage: MenubarExtensionStorage) 
     const menubar: Record<string, HTMLElement | JSX.Element> = {
         scale: ScaleMenubar({
             board,
-            map: storage.menubarDomMap,
+            menubarDomMap: storage.menubarDomMap,
+            options
         })
     }
 
