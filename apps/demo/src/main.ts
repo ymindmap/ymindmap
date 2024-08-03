@@ -1,6 +1,5 @@
-import { Mindmap, getDefaultData } from '@ymindmap/browser';
-import { TextMindmapExtension } from '@ymindmap/extension-text'
-import { MindmapExtension } from '@ymindmap/extension-mindmap'
+import { createMindmap } from 'ymindmap';
+import { getDefaultData } from '@ymindmap/browser';
 import { CollabExtension } from '@ymindmap/extension-collab'
 import { LocalForageProvider } from 'y-localforage'
 import { applyUpdate } from 'yjs';
@@ -13,10 +12,7 @@ import type { IExtensionConfig } from '@ymindmap/browser';
 
 let data: string | undefined = undefined;
 const options: Record<string, any> = {};
-const extensions: Record<string, IExtensionConfig> = {
-  Text: TextMindmapExtension,
-  Mindmap: MindmapExtension
-}
+const extensions: Record<string, IExtensionConfig> = {}
 
 const query = qs.parse(location.search.replace(/^\?/, ''));
 const collabId = query.collab;
@@ -57,8 +53,7 @@ async function init() {
     data = getDefaultData();
   }
 
-  const mindmap = new Mindmap({
-    el: '#app',
+  const mindmap = createMindmap("#app", {
     data,
     editable: true,
     extensions,

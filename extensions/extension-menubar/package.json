@@ -1,0 +1,22 @@
+{
+  "name": "@ymindmap/extension-menubar",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\""
+  },
+  "devDependencies": {
+    "@ymindmap/core": "workspace:*",
+    "@ymindmap/eslint-config": "workspace:*",
+    "@ymindmap/state": "workspace:*",
+    "@ymindmap/typescript-config": "workspace:*",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@ymindmap/model": "workspace:*"
+  }
+}

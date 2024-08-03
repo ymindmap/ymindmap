@@ -36,7 +36,7 @@ export class CommandManager {
     }
 
     get view(): BoardView {
-        return this.board.view as BoardView
+        return this.board.view
     }
 
     get state() {

@@ -1,0 +1,23 @@
+{
+  "name": "ymindmap",
+  "version": "0.0.0",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts\""
+  },
+  "devDependencies": {
+    "@ymindmap/eslint-config": "workspace:*",
+    "@ymindmap/typescript-config": "workspace:*",
+    "eslint": "^8.57.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@ymindmap/browser": "workspace:^",
+    "@ymindmap/extension-menubar": "workspace:^",
+    "@ymindmap/extension-mindmap": "workspace:^",
+    "@ymindmap/extension-text": "workspace:^"
+  }
+}

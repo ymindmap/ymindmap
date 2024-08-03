@@ -11,9 +11,9 @@ export interface IExtensionConfig<IOptions = any, IStorage = any> {
 
     addNodes?: (this: Board) => Record<string, NodeType>
 
-    addOptions?: (this: Extension<IOptions, IStorage>) => Record<string, any>
+    addOptions?: (this: Extension<IOptions, IStorage>) => IOptions
 
-    addStorage?: (this: Extension<IOptions, IStorage>) => Record<string, any>
+    addStorage?: (this: Extension<IOptions, IStorage>) => IStorage
 
     addKeymap?: (this: Extension<IOptions, IStorage>) => Record<string, Command>
 
