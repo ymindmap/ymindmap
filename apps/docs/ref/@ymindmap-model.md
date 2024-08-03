@@ -1,6 +1,6 @@
 # :factory: Schema
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/schema/index.ts#L16)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/schema/index.ts#L16)
 
 ## Methods
 
@@ -14,7 +14,7 @@
 | ---------- | ---------- |
 | `registerNode` | `(node: NodeType<NodeSpec<any>>) => void` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/schema/index.ts#L34)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/schema/index.ts#L34)
 
 ### :gear: parseNode
 
@@ -24,7 +24,7 @@ parseNode from xmlElement
 | ---------- | ---------- |
 | `parseNode` | `(xml: YXmlElement<{ [key: string]: string; }> or YXmlText) => Node<any> or null` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/schema/index.ts#L55)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/schema/index.ts#L55)
 
 ### :gear: createNode
 
@@ -34,12 +34,12 @@ createNode
 | ---------- | ---------- |
 | `createNode` | `(type: string or NodeType<NodeSpec<any>>, attrs: IAttrs, content: INodeContent) => Node<any>` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/schema/index.ts#L63)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/schema/index.ts#L63)
 
 
 # :factory: NodeType
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/type.ts#L7)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/type.ts#L7)
 
 ## Methods
 
@@ -54,7 +54,7 @@ createNode
 | ---------- | ---------- |
 | `setSchema` | `(schema: Schema) => void` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/type.ts#L17)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/type.ts#L17)
 
 ### :gear: create
 
@@ -62,7 +62,7 @@ createNode
 | ---------- | ---------- |
 | `create` | `(attrs?: IAttrs, content?: INodeContent, initYFragment?: YXmlElement<{ [key: string]: string; }> or YXmlText or null) => Node<any>` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/type.ts#L21)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/type.ts#L21)
 
 ### :gear: parse
 
@@ -70,7 +70,7 @@ createNode
 | ---------- | ---------- |
 | `parse` | `(xml: YXmlElement<{ [key: string]: string; }> or YXmlText) => Node<any>` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/type.ts#L45)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/type.ts#L45)
 
 ### :gear: createNode
 
@@ -78,7 +78,7 @@ createNode
 | ---------- | ---------- |
 | `createNode` | `<T extends NodeSpec<any>>(options: { name: string; } and T) => NodeType<T>` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/type.ts#L49)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/type.ts#L49)
 
 
 # :factory: Node
@@ -86,7 +86,7 @@ createNode
 一个基础的node
 作为定义转为yjs的代理
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/node.ts#L23)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/node.ts#L23)
 
 ## Methods
 
@@ -99,7 +99,7 @@ createNode
 | ---------- | ---------- |
 | `appendChild` | `(node: Node<any>, reference?: Node<any> or undefined) => void` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/node.ts#L74)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/node.ts#L74)
 
 ### :gear: removeChild
 
@@ -107,7 +107,7 @@ createNode
 | ---------- | ---------- |
 | `removeChild` | `(node: Node<any>) => void` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/node.ts#L81)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/node.ts#L81)
 
 
 # :tropical_drink: Interfaces
@@ -153,7 +153,7 @@ createNode
     render: Leafer;
 }` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/spec.ts#L6)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/spec.ts#L6)
 
 ## :gear: INodeContent
 
@@ -161,5 +161,5 @@ createNode
 | ---------- | ---------- |
 | `INodeContent` | `Array<XmlElement or XmlText or Node> or XmlElement or XmlText or string or null` |
 
-[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/../packages/model/node/node.ts#L5)
+[:link: Source](https://github.com/ymindmap/ymindmap/tree/main/packages/model/node/node.ts#L5)
 

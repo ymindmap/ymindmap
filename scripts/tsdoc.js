@@ -1,6 +1,7 @@
-import { generateDocumentation } from 'tsdoc-markdown';
-import path from 'path';
-const rootPath = path.join(import.meta.url.replace('file://', ''), '..', '..', '..', '..', '..');
+/* eslint-disable @typescript-eslint/no-var-requires */
+const { generateDocumentation } = require('tsdoc-markdown');
+const path = require('path');
+const rootPath = path.join(__dirname, '..');
 
 const docs = [
     {
@@ -42,7 +43,8 @@ generateDocumentation({
         types: true,
         explore: true,
         repo: {
-            url: 'https://github.com/ymindmap/ymindmap'
+            url: 'https://github.com/ymindmap/ymindmap/',
+            branch: 'main'
         }
       }
 });

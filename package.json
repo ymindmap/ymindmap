@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "doc": "node ./scripts/tsdoc.js",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
@@ -11,6 +12,7 @@
     "@ymindmap/eslint-config": "workspace:*",
     "eslint": "^8.57.0",
     "prettier": "^3.2.5",
+    "tsdoc-markdown": "^0.6.0",
     "turbo": "latest"
   },
   "packageManager": "pnpm@8.15.6",

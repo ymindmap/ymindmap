@@ -22,7 +22,7 @@ jobs:
         run: pnpm install
 
       - name: Generate docs
-        run: cd apps/docs && pnpm run tsdoc
+        run: pnpm run doc
 
       - name: Commit docs
         uses: EndBug/add-and-commit@v9
