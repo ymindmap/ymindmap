@@ -749,8 +749,8 @@ createNode
 | ---------- | ---------- | ---------- |
 | `addCommands` | `((this: Extension<IOptions, IStorage>, extension: Extension<IOptions, IStorage>) => RawCommands) or undefined` |  |
 | `addNodes` | `((this: Board<any>) => Record<string, NodeType<NodeSpec<any>>>) or undefined` |  |
-| `addOptions` | `((this: Extension<IOptions, IStorage>) => Record<string, any>) or undefined` |  |
-| `addStorage` | `((this: Extension<IOptions, IStorage>) => Record<string, any>) or undefined` |  |
+| `addOptions` | `((this: Extension<IOptions, IStorage>) => IOptions) or undefined` |  |
+| `addStorage` | `((this: Extension<IOptions, IStorage>) => IStorage) or undefined` |  |
 | `addKeymap` | `((this: Extension<IOptions, IStorage>) => Record<string, Command>) or undefined` |  |
 | `onBeforeCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
 | `onCreate` | `((this: Extension<IOptions, IStorage>, board: Board<any>) => void) or undefined` |  |
