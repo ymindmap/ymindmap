@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint \"src/**/*.ts\"",
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview"
