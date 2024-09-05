@@ -3,6 +3,10 @@
   "include": [
     ".",
   ],
+  "compilerOptions": {
+    "declaration": true,
+    "lib": ["ESNext", "DOM"],
+  },
   "exclude": [
     "node_modules"
   ]
